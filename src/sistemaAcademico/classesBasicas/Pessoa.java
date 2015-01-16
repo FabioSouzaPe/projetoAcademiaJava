@@ -80,20 +80,24 @@ public class Pessoa {
 
 		resto = (d1 % 11);
 
-		if (resto < 2)
+		if (resto < 2) {
 			digito1 = 0;
-		else
+		}
+		else {
 			digito1 = 11 - resto;
-
+		}
+		
 		d2 += 2 * digito1;
 
 		resto = (d2 % 11);
 
-		if (resto < 2)
+		if (resto < 2) {
 			digito2 = 0;
-		else
+		}
+		else {
 			digito2 = 11 - resto;
-
+		}
+		
 		String nDigVerific = strCpf.substring(strCpf.length() - 2,
 				strCpf.length());
 

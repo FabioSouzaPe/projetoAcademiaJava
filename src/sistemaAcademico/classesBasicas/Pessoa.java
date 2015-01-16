@@ -60,7 +60,7 @@ public class Pessoa {
 		this.fones = fones;
 	}
 	
-	static public boolean verificaCpf(String strCpf) {
+	public boolean verificaCpf(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
 		int digitoCPF;

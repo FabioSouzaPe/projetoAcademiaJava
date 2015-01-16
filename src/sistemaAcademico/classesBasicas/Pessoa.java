@@ -109,11 +109,5 @@ public class Pessoa {
 
 	      //comparar o digito verificador do cpf com o primeiro resto + o segundo resto.
 	      return nDigVerific.equals(nDigResult);
-	   }
-
-	   /* Use este trecho para testar a classe
-	   public static void main(String[] args) {
-	      System.out.println( CPF("04624193806") );
-	   }
-	   */
+	   }	   
 }

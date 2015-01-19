@@ -1,10 +1,10 @@
 package sistemaAcademico.regrasDeNegocio;
 
-public class VerificaCpf {
+public class RnVerificacoes {
 
-	public VerificaCpf(){}
+	public RnVerificacoes(){}
 
-	public boolean verificaCpf(String strCpf) {
+	public boolean cpf(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
 		int digitoCPF;

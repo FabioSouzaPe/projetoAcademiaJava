@@ -14,13 +14,14 @@ public class Pessoa {
 	private ArrayList<Fone> fones = new ArrayList<Fone>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
-			Endereco endereco, ArrayList<Fone> fones) {
+			Endereco endereco, Escolaridade escolaridade, ArrayList<Fone> fones) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.sexo = sexo;
 		this.endereco = endereco;
+		this.escolaridade = escolaridade;
 		this.fones = fones;
 	}
 	

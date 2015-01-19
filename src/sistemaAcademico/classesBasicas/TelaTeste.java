@@ -1,7 +1,9 @@
 package sistemaAcademico.classesBasicas;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import sistemaAcademico.enuns.Escolaridade;
 import sistemaAcademico.regrasDeNegocio.RnPessoa;
 
 public class TelaTeste {
@@ -38,9 +40,11 @@ public class TelaTeste {
 
 	private static void consultarPessoa() {
 		
+		System.out.println("------------");
 		for (Pessoa p : RnPessoa.consultarPessoas()) {
-			System.out.println(p.getNome());
-			System.out.println(p.getCpf());
+			System.out.println("ID: " + p.getId());
+			System.out.println("Nome: " + p.getNome());
+			System.out.println("CPF: " + p.getCpf());
 			System.out.println("------------");
 		}
 		
@@ -48,98 +52,32 @@ public class TelaTeste {
 
 	private static void cadastrarPessoa() {
 		
-		Pessoa pessoa = new Pessoa();
-		Endereco endereco = new Endereco();
-		Fone fone = new Fone();
-		Scanner scan = new Scanner(System.in);
-
-		System.out.println("Digite o nome da pessoa");
-		pessoa.setNome(scan.nextLine());
-
-		String cpfNumeros;
-		String cpf;
-
-		do {
-			System.out.println("Digite o CPF da pessoa");
-			cpf = scan.nextLine();
-			cpfNumeros = cpf.replaceAll("[^0-9]", "");
-
-			if (RnPessoa.cpfValido(cpfNumeros)) {
-				pessoa.setCpf(cpf);
-			} else {
-				System.out.println("CPF inválido!");
-			}
-		} while (!RnPessoa.cpfValido(cpfNumeros));
-
-		System.out.println("Escolha a o sexo da pessoa: 1 - Masculino e 2 - Feminino");
+		Endereco e1 = new Endereco(0, "a", "b", "c", "d", "e");
+		Fone f1 = new Fone(0, "(81)", "3479-3074");
+		ArrayList<Fone> fl1 = new ArrayList<Fone>();
+		fl1.add(f1);
+		Pessoa p1 = new Pessoa(RnPessoa.consultarPessoas().size()+1, "Mackson Luiz", "101.285.544-95",
+				'm', e1, Escolaridade.TECNICO, fl1);
+		RnPessoa.adicionaPessoa(p1);
 		
-		switch (scan.nextInt()) {
-		case 1:
-			pessoa.setSexo('m');
-			break;
-		case 2:
-			pessoa.setSexo('f');
-			break;
-		default:
-			System.out.println("Opcao Invalida");
-		}
 		
-		scan = new Scanner(System.in);
 		
-		System.out.println("Digite o logradouro da residência da pessoa: ");
-		endereco.setLogradouro(scan.nextLine());
-
-		System.out.println("Digite o número da residência da pessoa: ");
-		endereco.setNumero(scan.nextLine());
-
-		System.out.println("Digite o bairro onde a pessoa mora: ");
-		endereco.setBairro(scan.nextLine());
-
-		System.out.println("Digite a cidade onde a pessoa mora: ");
-		endereco.setCidade(scan.nextLine());
-
-		System.out.println("Digite o estado onde a pessoa mora: ");
-		endereco.setUf(scan.nextLine());
-
-		pessoa.setEndereco(endereco);
-
-		System.out.println("Digite o ddd do telefone: ");
-		fone.setDdd(scan.nextLine());
-
-		System.out.println("Digite o telefone: ");
-		fone.setFone(scan.nextLine());
-
-		pessoa.addFones(fone);
-
-		System.out.println("Deseja adicionar telefones adicionais? 1 - Sim");
-		int escolha = scan.nextInt();
+		Endereco e2 = new Endereco(0, "a", "b", "c", "d", "e");
+		Fone f2 = new Fone(0, "(81)", "3479-3074");
+		ArrayList<Fone> fl2 = new ArrayList<Fone>();
+		fl2.add(f2);
+		Pessoa p2 = new Pessoa(RnPessoa.consultarPessoas().size()+1, "Mackson Luiz", "101.285.544-95",
+				'm', e2, Escolaridade.TECNICO, fl2);
+		RnPessoa.adicionaPessoa(p2);
 		
-		scan = new Scanner(System.in);
-
-		do {
-			switch(escolha){
-			case 1:
-				fone = new Fone();
-				System.out.println("Digite o ddd do telefone: ");
-				fone.setDdd(scan.nextLine());
-
-				System.out.println("Digite o telefone: ");
-				fone.setFone(scan.nextLine());
-
-				pessoa.addFones(fone);
-				
-				System.out.println("Deseja adicionar telefones adicionais? 1 - Sim e 2 - NÃO");
-				escolha = scan.nextInt();
-				
-				break;
-			default:
-				System.out.println("Encerrado");
-			}
-		} while (escolha == 1);
 		
-		RnPessoa.adicionaPessoa(pessoa);
-		
-		scan = new Scanner(System.in);
+		Endereco e3 = new Endereco(0, "a", "b", "c", "d", "e");
+		Fone f3 = new Fone(0, "(81)", "3479-3074");
+		ArrayList<Fone> fl3 = new ArrayList<Fone>();
+		fl2.add(f3);
+		Pessoa p3 = new Pessoa(RnPessoa.consultarPessoas().size()+1, "Zé bilu", "842.621.514-92",
+				'm', e3, Escolaridade.SEGUNDO_GRAU, fl3);
+		RnPessoa.adicionaPessoa(p3);
 	}
 
 }

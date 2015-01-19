@@ -10,7 +10,7 @@ public class RnVerificacoes {
 	public RnVerificacoes(){}
 
 	
-	//Método para validar o CPF
+	//MÃ©todo para validar o CPF
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;

@@ -2,12 +2,15 @@ package sistemaAcademico.classesBasicas;
 
 import java.util.ArrayList;
 
+import sistemaAcademico.enuns.Escolaridade;
+
 public class Pessoa {
 	private int id;
 	private String nome;
 	private String cpf;
 	private char sexo;
 	private Endereco endereco;
+	private Escolaridade escolaridade;
 	private ArrayList<Fone> fones = new ArrayList<Fone>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
@@ -52,6 +55,13 @@ public class Pessoa {
 	}
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+	public Escolaridade getEscolaridade() {
+		return escolaridade;
+	}
+
+	public void setEscolaridade(Escolaridade escolaridade) {
+		this.escolaridade = escolaridade;
 	}
 	public ArrayList<Fone> getFones() {
 		return fones;

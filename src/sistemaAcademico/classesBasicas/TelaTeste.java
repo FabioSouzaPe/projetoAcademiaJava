@@ -14,6 +14,7 @@ public class TelaTeste {
 		do {
 			System.out.println("Opcões:\n");
 			System.out.println("1 - Cadastrar pessoa");
+			System.out.println("2 - Consultar pessoas cadastradas");
 			System.out.println("9 - Sair");
 			
 			opcao = Integer.valueOf(ler.nextInt());
@@ -21,6 +22,11 @@ public class TelaTeste {
 			switch (opcao) {
 			case 1:
 				cadastrarPessoa();
+				ler = new Scanner(System.in);
+				break;
+			case 2:
+				consultarPessoa();
+				ler = new Scanner(System.in);
 				break;
 			default:
 				System.out.println("Opcao Inválida");
@@ -30,7 +36,18 @@ public class TelaTeste {
 		} while (opcao != 9);
 	}
 
+	private static void consultarPessoa() {
+		
+		for (Pessoa p : RnPessoa.consultarPessoas()) {
+			System.out.println(p.getNome());
+			System.out.println(p.getCpf());
+			System.out.println("------------");
+		}
+		
+	}
+
 	private static void cadastrarPessoa() {
+		
 		Pessoa pessoa = new Pessoa();
 		Endereco endereco = new Endereco();
 		Fone fone = new Fone();
@@ -94,7 +111,7 @@ public class TelaTeste {
 
 		pessoa.addFones(fone);
 
-		System.out.println("Deseja adicionar telefones adicionais? 1 - Sim e 2 - NÃO");
+		System.out.println("Deseja adicionar telefones adicionais? 1 - Sim");
 		int escolha = scan.nextInt();
 		
 		scan = new Scanner(System.in);
@@ -116,11 +133,13 @@ public class TelaTeste {
 				
 				break;
 			default:
-				System.out.println("Opcao inválida");
+				System.out.println("Encerrado");
 			}
-		} while (escolha != 2);
+		} while (escolha == 1);
 		
 		RnPessoa.adicionaPessoa(pessoa);
+		
+		scan = new Scanner(System.in);
 	}
 
 }

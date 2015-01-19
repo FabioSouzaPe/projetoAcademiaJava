@@ -1,14 +1,18 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import java.util.ArrayList;
+
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;
 
 public class RnPessoa {
+	
+	static DaoPessoa daoPessoa = new DaoPessoa();
 
 	public RnPessoa() {}
 
+	
 	// Metodo para validar o CPF
-
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
@@ -55,11 +59,10 @@ public class RnPessoa {
 
 	public static boolean sePessoaExiste(String strCpf) {
 
-		DaoPessoa pessoa = new DaoPessoa();
 		boolean verificacao = false;
 		
 		//verifica registro por registro na lista de pessoas se existe um CPF igual
-		for (Pessoa p : pessoa.getListaPessoas()) {
+		for (Pessoa p : daoPessoa.getListaPessoas()) {
 
 			if (p.getCpf().equals(strCpf)) {
 				verificacao = true;
@@ -70,10 +73,7 @@ public class RnPessoa {
 	}
 	
 	public static void adicionaPessoa(Pessoa pessoa){
-		
-		DaoPessoa daoPessoa = new DaoPessoa();
-		
-		
+
 		//Nega se a pessoa existe para adicionar na lista
 		if (!sePessoaExiste(pessoa.getCpf())){
 			daoPessoa.addPessoa(pessoa);
@@ -82,8 +82,14 @@ public class RnPessoa {
 		
 		//Se ja existe exite uma mensagem de aviso
 		else {
-			System.out.println("A pessoa já existe no banco de dados!");
+			System.out.println("A pessoa ja existe no banco de dados!");
 		} 
 
+	}
+
+	public static ArrayList<Pessoa> consultarPessoas() {
+		
+		//Retorna a lista de pessoas cadastradas
+		return daoPessoa.getListaPessoas();
 	}
 }

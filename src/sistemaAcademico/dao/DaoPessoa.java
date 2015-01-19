@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import sistemaAcademico.classesBasicas.Pessoa;
 
-public class DaoPessoa implements DaoPessoaInterface {
+public class DaoPessoa implements DaoPessoaInt {
 	
 	private ArrayList<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 

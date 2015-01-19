@@ -8,7 +8,7 @@ public class RnPessoa {
 	public RnPessoa() {
 	}
 
-	// Método para validar o CPF
+	// MÃ©todo para validar o CPF
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
@@ -58,6 +58,8 @@ public class RnPessoa {
 		DaoPessoa pessoa = new DaoPessoa();
 		boolean verificacao = false;
 
+		
+		//verifica registro por registro na lista de pessoas se existe um CPF igual
 		for (Pessoa p : pessoa.getListaPessoas()) {
 
 			if (p.getCpf().equals(strCpf)) {
@@ -76,14 +78,18 @@ public class RnPessoa {
 	public static void adicionaPessoa(Pessoa pessoa){
 		
 		DaoPessoa daoPessoa = new DaoPessoa();
+		boolean derp = verificaCamposVazios(pessoa);
 		
-		verificaCamposVazios(pessoa);
 		
+		//Nega se a pessoa existe para adicionar na lista
 		if (!sePessoaExiste(pessoa.getCpf())){
 			daoPessoa.addPessoa(pessoa);
 			System.out.println("Pessoa cadastrada com sucesso");
-		} else {
-			System.out.println("A pessoa j� existe no banco de dados!");
+		} 
+		
+		//Se já existe exite uma mensagem de aviso
+		else {
+			System.out.println("A pessoa já existe no banco de dados!");
 		}
 	}
 }

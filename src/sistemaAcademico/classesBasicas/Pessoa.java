@@ -8,7 +8,7 @@ public class Pessoa {
 	private String cpf;
 	private char sexo;
 	private Endereco endereco;
-	private ArrayList<Fone> fones;
+	private ArrayList<Fone> fones = new ArrayList<Fone>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
 			Endereco endereco, ArrayList<Fone> fones) {

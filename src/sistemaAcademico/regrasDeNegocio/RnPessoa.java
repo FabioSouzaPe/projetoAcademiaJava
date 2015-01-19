@@ -78,7 +78,6 @@ public class RnPessoa {
 	public static void adicionaPessoa(Pessoa pessoa){
 		
 		DaoPessoa daoPessoa = new DaoPessoa();
-		boolean derp = verificaCamposVazios(pessoa);
 		
 		
 		//Nega se a pessoa existe para adicionar na lista

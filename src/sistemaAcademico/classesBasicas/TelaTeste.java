@@ -37,14 +37,14 @@ public class TelaTeste {
 		Scanner scan = new Scanner(System.in);
 
 		System.out.println("Digite o nome da pessoa");
-		pessoa.setNome(scan.next());
+		pessoa.setNome(scan.nextLine());
 
 		String cpfNumeros;
 		String cpf;
 
 		do {
 			System.out.println("Digite o CPF da pessoa");
-			cpf = scan.next();
+			cpf = scan.nextLine();
 			cpfNumeros = cpf.replaceAll("[^0-9]", "");
 
 			if (RnPessoa.cpfValido(cpfNumeros)) {
@@ -67,45 +67,53 @@ public class TelaTeste {
 			System.out.println("Opcao Invalida");
 		}
 		
+		scan = new Scanner(System.in);
+		
 		System.out.println("Digite o logradouro da residência da pessoa: ");
-		endereco.setLogradouro(scan.next());
+		endereco.setLogradouro(scan.nextLine());
 
 		System.out.println("Digite o número da residência da pessoa: ");
-		endereco.setNumero(scan.next());
+		endereco.setNumero(scan.nextLine());
 
 		System.out.println("Digite o bairro onde a pessoa mora: ");
-		endereco.setBairro(scan.next());
+		endereco.setBairro(scan.nextLine());
 
 		System.out.println("Digite a cidade onde a pessoa mora: ");
-		endereco.setCidade(scan.next());
+		endereco.setCidade(scan.nextLine());
 
 		System.out.println("Digite o estado onde a pessoa mora: ");
-		endereco.setUf(scan.next());
+		endereco.setUf(scan.nextLine());
 
 		pessoa.setEndereco(endereco);
 
 		System.out.println("Digite o ddd do telefone: ");
-		fone.setDdd(scan.next());
+		fone.setDdd(scan.nextLine());
 
 		System.out.println("Digite o telefone: ");
-		fone.setFone(scan.next());
+		fone.setFone(scan.nextLine());
 
 		pessoa.addFones(fone);
 
 		System.out.println("Deseja adicionar telefones adicionais? 1 - Sim e 2 - NÃO");
 		int escolha = scan.nextInt();
+		
+		scan = new Scanner(System.in);
 
 		do {
 			switch(escolha){
 			case 1:
 				fone = new Fone();
 				System.out.println("Digite o ddd do telefone: ");
-				fone.setDdd(scan.next());
+				fone.setDdd(scan.nextLine());
 
 				System.out.println("Digite o telefone: ");
-				fone.setFone(scan.next());
+				fone.setFone(scan.nextLine());
 
 				pessoa.addFones(fone);
+				
+				System.out.println("Deseja adicionar telefones adicionais? 1 - Sim e 2 - NÃO");
+				escolha = scan.nextInt();
+				
 				break;
 			default:
 				System.out.println("Opcao inválida");

@@ -6,7 +6,7 @@ import sistemaAcademico.classesBasicas.Curso;
 
 public class DaoCurso implements DaoCursoInt{
 
-	public static ArrayList<Curso> curso = new ArrayList<Curso>();
+	private static ArrayList<Curso> curso = new ArrayList<Curso>();
 	
 	
 	@Override
@@ -16,18 +16,33 @@ public class DaoCurso implements DaoCursoInt{
 
 	@Override
 	public boolean cadastrar(Curso curso) {
+		
 		DaoCurso.curso.add(curso);
 		return true;
 	}
 
 	@Override
 	public boolean excluirPorNome(String nome) {
-		DaoCurso dao=new DaoCurso();
+		
 		boolean excluido=false;
 		
-		for(int i =0; i<dao.consultarTudo().size();i++){
-			if(nome.equals(dao.consultarTudo().get(i).getNome())){
-				dao.consultarTudo().remove(i);
+		for(int i =0; i<consultarTudo().size();i++){
+			if(nome.equals(consultarTudo().get(i).getNome())){
+				consultarTudo().remove(i);
+				excluido=true;
+			}
+		}
+		return excluido;
+	}
+
+	@Override
+	public boolean alterarPorNome(String nome) {
+		
+		boolean excluido=false;
+		
+		for(int i =0; i<consultarTudo().size();i++){
+			if(nome.equals(consultarTudo().get(i).getNome())){
+				//dao.consultarTudo().;
 				excluido=true;
 			}
 		}

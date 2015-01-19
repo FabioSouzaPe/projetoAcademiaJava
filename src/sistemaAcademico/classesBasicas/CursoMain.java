@@ -1,11 +1,7 @@
 package sistemaAcademico.classesBasicas;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
-
-import javax.xml.bind.DataBindingException;
-
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
 import sistemaAcademico.regrasDeNegocio.RnCurso;
@@ -13,16 +9,19 @@ import sistemaAcademico.regrasDeNegocio.RnCurso;
 public class CursoMain {
 	 public static void main(String[] args) {
 		boolean continuar = true;
-		DaoCursoInt dao = new DaoCurso();
+		DaoCursoInt dao=new DaoCurso ();
 		RnCurso rn = new RnCurso();
 		
 		
 		while(continuar){
 			Scanner sc1 = new Scanner(System.in);
-			System.out.println("\nPara cadastrar um Curso Digite 1");
-			System.out.println("Para consultar Curso Digite 2");
-			System.out.println("Para excluir um curso Digite 3");
-			System.out.println("Para sair do Sistema digite 0\n");
+			System.out.println("\n -----------------------------------------");
+			System.out.println("| Para sair do Sistema digite --------> 0 |");
+			System.out.println("| Para cadastrar um Curso Digite -----> 1 |");
+			System.out.println("| Para consultar Curso Digite --------> 2 |");
+			System.out.println("| Para excluir um curso Digite -------> 3 |");
+			System.out.println(" -----------------------------------------\n");
+			
 			
 			try{
 				int opcao=sc1.nextInt();
@@ -30,7 +29,8 @@ public class CursoMain {
 					System.out.println("\nPara cadastrar um Curso Digite:\nID da Curso\nNome do Curso\nData de criação do Curso\nTurmas do Curso\n");
 					
 					int id= sc1.nextInt();
-					String nome=sc1.next();
+					sc1.nextLine();
+					String nome=sc1.nextLine();
 					Date d = new Date();
 					Curso c= new Curso(id, nome, d, null);
 					
@@ -66,6 +66,7 @@ public class CursoMain {
 				}else if(opcao==0){
 					continuar=false;
 					System.out.println("Até logo");
+					sc1.close();
 				}else if(opcao==3){
 					System.out.println("Digite o nome do curso a ser excluido:");
 					String nome=sc1.next();

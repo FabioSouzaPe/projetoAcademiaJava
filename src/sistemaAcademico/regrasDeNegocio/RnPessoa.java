@@ -5,10 +5,10 @@ import sistemaAcademico.dao.DaoPessoa;
 
 public class RnPessoa {
 
-	public RnPessoa() {
-	}
+	public RnPessoa() {}
 
-	// MÃ©todo para validar o CPF
+	// Metodo para validar o CPF
+
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
@@ -86,9 +86,10 @@ public class RnPessoa {
 			System.out.println("Pessoa cadastrada com sucesso");
 		} 
 		
-		//Se já existe exite uma mensagem de aviso
+		//Se ja existe exite uma mensagem de aviso
 		else {
 			System.out.println("A pessoa já existe no banco de dados!");
-		}
+		} 
+
 	}
 }

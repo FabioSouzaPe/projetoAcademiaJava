@@ -6,10 +6,15 @@ import java.util.Scanner;
 
 import javax.xml.bind.DataBindingException;
 
+import sistemaAcademico.dao.DaoCurso;
+import sistemaAcademico.dao.DaoCursoInt;
+import sistemaAcademico.regrasDeNegocio.RnCurso;
+
 public class CursoMain {
 	 public static void main(String[] args) {
 		boolean continuar = true;
-		
+		DaoCursoInt dao = new DaoCurso();
+		RnCurso rn = new RnCurso();
 		
 		
 		while(continuar){
@@ -28,9 +33,15 @@ public class CursoMain {
 					String nome=sc1.next();
 					Date d = new Date();
 					Curso c= new Curso(id, nome, d, null);
-					CursoCadastrar cc= new CursoCadastrar();
-					if(cc.cadastrar(c)){
-						System.out.println("Curso Cadastrado com sucesso");
+					
+					if(rn.cursoJaCadastrado(nome)==false){
+						
+						if(dao.cadastrar(c)){
+							System.out.println("Curso Cadastrado com sucesso");
+						}else{
+							System.out.println("O Curso não foi cadastrado");
+						}
+						
 					}else{
 						System.out.println("Este Curso Já foi cadastrado");
 					}
@@ -38,15 +49,15 @@ public class CursoMain {
 					
 					
 				}else if(opcao==2){
-					CursoConsultar cc= new CursoConsultar();
-					if(cc.consultar().size()!=0){
+					
+					if(dao.consultarTudo().size()!=0){
 						
-						for(int i=0; i<cc.consultar().size();i++){
+						for(int i=0; i<dao.consultarTudo().size();i++){
 							System.out.println("------------");
-							System.out.println(cc.consultar().get(i).getId());
-							System.out.println(cc.consultar().get(i).getNome());
-							System.out.println(cc.consultar().get(i).getData());
-							System.out.println(cc.consultar().get(i).getTurma());
+							System.out.println(dao.consultarTudo().get(i).getId());
+							System.out.println(dao.consultarTudo().get(i).getNome());
+							System.out.println(dao.consultarTudo().get(i).getData());
+							System.out.println(dao.consultarTudo().get(i).getTurma());
 							System.out.println("------------");
 						}
 					}else{
@@ -58,11 +69,16 @@ public class CursoMain {
 				}else if(opcao==3){
 					System.out.println("Digite o nome do curso a ser excluido:");
 					String nome=sc1.next();
-					CursoExcluir ce= new CursoExcluir();
-					if(ce.excluir(nome)){
-						System.out.println("O Curso: "+nome+" Foi excluido com sucesso");
+					
+					if(rn.semCurso()==false){
+						if(dao.excluirPorNome(nome)){
+							System.out.println("O Curso: "+nome+" Foi excluido com sucesso");
+						}else{
+							System.out.println("O Curso: "+nome+" NÃO foi excluido, pois pois esse curso não foi cadastrado");
+						}
+						
 					}else{
-						System.out.println("Nenhum curso cadastrado com esse nome");
+						System.out.println("Nenhum curso cadastrado ainda");
 					}
 				}else{
 					System.out.println("Opção Inválida!");

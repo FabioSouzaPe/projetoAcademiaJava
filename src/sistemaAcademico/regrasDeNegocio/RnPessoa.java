@@ -7,7 +7,7 @@ import sistemaAcademico.dao.DaoPessoa;
 
 public class RnPessoa {
 	
-	static DaoPessoa daoPessoa = new DaoPessoa();
+	static DaoPessoaInt daoPessoa = new DaoPessoa();
 
 	public RnPessoa() {}
 

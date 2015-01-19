@@ -1,16 +1,14 @@
 package sistemaAcademico.regrasDeNegocio;
 
-import java.util.List;
-
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;
 
-public class RnVerificacoes {
+public class RnPessoa {
 
-	public RnVerificacoes(){}
+	public RnPessoa() {
+	}
 
-	
-	//Método para validar o CPF
+	// Método para validar o CPF
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
@@ -33,22 +31,20 @@ public class RnVerificacoes {
 
 		if (resto < 2) {
 			digito1 = 0;
-		}
-		else {
+		} else {
 			digito1 = 11 - resto;
 		}
-		
+
 		d2 += 2 * digito1;
 
 		resto = (d2 % 11);
 
 		if (resto < 2) {
 			digito2 = 0;
-		}
-		else {
+		} else {
 			digito2 = 11 - resto;
 		}
-		
+
 		String nDigVerific = strCpf.substring(strCpf.length() - 2,
 				strCpf.length());
 
@@ -56,19 +52,38 @@ public class RnVerificacoes {
 
 		return nDigVerific.equals(nDigResult);
 	}
-	
-	public static boolean sePessoaExiste(String strCpf){
-		
+
+	public static boolean sePessoaExiste(String strCpf) {
+
 		DaoPessoa pessoa = new DaoPessoa();
 		boolean verificacao = false;
-		
+
 		for (Pessoa p : pessoa.getListaPessoas()) {
-			
-			if(p.getCpf().equals(strCpf)){
+
+			if (p.getCpf().equals(strCpf)) {
 				verificacao = true;
-			}			
+			}
 		}
-		
+
 		return verificacao;
+	}
+	
+	public static boolean verificaCamposVazios(Pessoa pessoa){
+		
+		return false;
+	}
+	
+	public static void adicionaPessoa(Pessoa pessoa){
+		
+		DaoPessoa daoPessoa = new DaoPessoa();
+		
+		verificaCamposVazios(pessoa);
+		
+		if (!sePessoaExiste(pessoa.getCpf())){
+			daoPessoa.addPessoa(pessoa);
+			System.out.println("Pessoa cadastrada com sucesso");
+		} else {
+			System.out.println("A pessoa j� existe no banco de dados!");
+		}
 	}
 }

@@ -56,7 +56,7 @@ public class Pessoa {
 	public ArrayList<Fone> getFones() {
 		return fones;
 	}
-	public void setFones(ArrayList<Fone> fones) {
-		this.fones = fones;
+	public void addFones(Fone fone) {
+		this.fones.add(fone);
 	}
 }

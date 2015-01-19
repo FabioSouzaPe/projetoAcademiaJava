@@ -1,9 +1,10 @@
 package sistemaAcademico.dao;
 
 import java.util.ArrayList;
+
 import sistemaAcademico.classesBasicas.Pessoa;
 
-public class DaoPessoa {
+public class DaoPessoa implements DaoPessoaInterface {
 	
 	private ArrayList<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 
@@ -11,7 +12,7 @@ public class DaoPessoa {
 		return listaPessoas;
 	}
 
-	public void setListaPessoas(ArrayList<Pessoa> listaPessoas) {
-		this.listaPessoas = listaPessoas;
+	public void addPessoa(Pessoa pessoa) {
+		this.listaPessoas.add(pessoa);
 	}
 }

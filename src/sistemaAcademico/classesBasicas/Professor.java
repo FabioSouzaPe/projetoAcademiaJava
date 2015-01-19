@@ -6,20 +6,25 @@ import sistemaAcademico.enuns.Titulo;
 
 public class Professor {
 	
+	private int id;
 	private Date admissao;
 	private String departamento;
 	private String instituicao;
-	Titulo titulo;
+	 private Titulo titulo;
+	 private String matricula;
+	 
+	 
 	
-	public Professor(Date admissao,String departamento,String instituicao,Titulo titulo ){
+	public Professor(int id,Date admissao,String departamento,String instituicao,Titulo titulo ){
 		
+		this.id=id;
 		this.admissao = admissao;
         this.departamento = departamento;
         this.instituicao = instituicao;
         this.titulo = titulo;
 	}
 	
-	
+	                                                        
 	
 	
 	public Date getAdmissao() {
@@ -40,6 +45,35 @@ public class Professor {
 	public void setInstituicao(String instituicao) {
 		this.instituicao = instituicao;
 	}
+
+
+
+
+	public Titulo getTitulo() {
+		return titulo;
+	}
+
+
+
+
+	public void setTitulo(Titulo titulo) {
+		this.titulo = titulo;
+	}
+
+
+
+
+	public int getId() {
+		return id;
+	}
+
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	 
 	
 	
 

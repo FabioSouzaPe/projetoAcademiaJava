@@ -1,10 +1,17 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import java.util.List;
+
+import sistemaAcademico.classesBasicas.Pessoa;
+import sistemaAcademico.dao.DaoPessoa;
+
 public class RnVerificacoes {
 
 	public RnVerificacoes(){}
 
-	public boolean cpf(String strCpf) {
+	
+	//Método para validar o CPF
+	public static boolean cpfValido(String strCpf) {
 		int d1, d2;
 		int digito1, digito2, resto;
 		int digitoCPF;
@@ -48,5 +55,20 @@ public class RnVerificacoes {
 		nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
 
 		return nDigVerific.equals(nDigResult);
+	}
+	
+	public static boolean sePessoaExiste(String strCpf){
+		
+		DaoPessoa pessoa = new DaoPessoa();
+		boolean verificacao = false;
+		
+		for (Pessoa p : pessoa.getListaPessoas()) {
+			
+			if(p.getCpf().equals(strCpf)){
+				verificacao = true;
+			}			
+		}
+		
+		return verificacao;
 	}
 }

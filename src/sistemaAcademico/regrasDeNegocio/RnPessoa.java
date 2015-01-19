@@ -57,7 +57,6 @@ public class RnPessoa {
 
 		DaoPessoa pessoa = new DaoPessoa();
 		boolean verificacao = false;
-
 		
 		//verifica registro por registro na lista de pessoas se existe um CPF igual
 		for (Pessoa p : pessoa.getListaPessoas()) {
@@ -68,11 +67,6 @@ public class RnPessoa {
 		}
 
 		return verificacao;
-	}
-	
-	public static boolean verificaCamposVazios(Pessoa pessoa){
-		
-		return false;
 	}
 	
 	public static void adicionaPessoa(Pessoa pessoa){

@@ -11,14 +11,19 @@ public class DaoPublicacao implements DaoPublicacaoInt{
 
 	@Override
 	public void inserir(Publicacao publicacao) {
-		// TODO Auto-generated method stub
-		
+		publicacoes.add(publicacao);
 	}
 
 	@Override
-	public Publicacao pesquisar(String nome)
-			throws PublicacaoInexistenteException {
-		// TODO Auto-generated method stub
+	public Publicacao pesquisar(String nome) throws PublicacaoInexistenteException {
+		if(publicacoes.size() != 0){
+			for(int i = 0; i <= publicacoes.size()-1; i++){
+				if(publicacoes.get(i).getNome().equals(nome)){
+					return publicacoes.get(i);
+				}
+			}
+			throw new PublicacaoInexistenteException();
+		}
 		return null;
 	}
 
@@ -30,14 +35,20 @@ public class DaoPublicacao implements DaoPublicacaoInt{
 
 	@Override
 	public void alterar(Publicacao publicacao) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i <= publicacoes.size()-1; i++) {
+			if(publicacao.getNome().equals(publicacoes.get(i).getNome())){
+				publicacoes.set(i, publicacao);
+			}
+		}
 	}
 
 	@Override
 	public void remover(Publicacao publicacao) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i <= publicacoes.size()-1; i++) {
+			if(publicacao.getNome().equals(publicacoes.get(i).getNome())){
+				publicacoes.remove(i);
+			}
+		}
 	}
 
 }

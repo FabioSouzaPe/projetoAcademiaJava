@@ -1,23 +1,50 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import sistemAcademico.exceptions.HistoricoExistenteException;
+import sistemAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
+import sistemaAcademico.dao.DaoHistoricoEscolar;
 import sistemaAcademico.dao.DaoHistoricoEscolarInt;
-import sistemaAcademico.dao.DaoPublicacao;
 
 public class RnHistoricoEscolar {
 	
-	public DaoHistoricoEscolarInt dao;
+	public DaoHistoricoEscolarInt dao = new DaoHistoricoEscolar();
 	
-	public void cadastrar(HistoricoEscolar historico){
-		if(pesquisar(historico.getAluno()) == null){
+	public void cadastrar(HistoricoEscolar historico) throws HistoricoExistenteException{
+		try{
+			if(pesquisar(historico.getAluno()) == null){
+				dao.inserir(historico);
+			}else{
+				throw new HistoricoExistenteException();
+			}
+		}catch(HistoricoInexistenteException e){
 			dao.inserir(historico);
-		}else{
-			System.out.print("Historico Existente");
 		}
 	}
 	
-	public HistoricoEscolar pesquisar(Aluno aluno){
+	public void remover(HistoricoEscolar historico){
+		try{
+			if(pesquisar(historico.getAluno()) != null){
+				dao.remover(historico);
+			}
+		}catch(HistoricoInexistenteException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void alterar(HistoricoEscolar historico){
+		try{
+			if(pesquisar(historico.getAluno()) != null){
+				dao.alterar(historico);
+			}
+		}catch(HistoricoInexistenteException e){
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	public HistoricoEscolar pesquisar(Aluno aluno) throws HistoricoInexistenteException{
 		return dao.pequisar(aluno);
 	}
 

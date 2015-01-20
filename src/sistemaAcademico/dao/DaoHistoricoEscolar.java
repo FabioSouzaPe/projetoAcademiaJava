@@ -2,6 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 
+import sistemAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 
@@ -10,7 +11,7 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt{
 	public ArrayList<HistoricoEscolar> lista = new ArrayList<HistoricoEscolar>();
 	
 	 public DaoHistoricoEscolar() {
-		lista.add(null);
+		
 	}
 
 	@Override
@@ -20,7 +21,7 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt{
 
 	@Override
 	public void remover(HistoricoEscolar historico) {
-		for(int i = 0; i<lista.size()-1; i ++ ){
+		for(int i = 0; i<=lista.size()-1; i ++ ){
 			if(lista.get(i).getId() == historico.getId()){
 				lista.remove(i);
 			}
@@ -29,19 +30,22 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt{
 
 	@Override
 	public void alterar(HistoricoEscolar historico) {
-		for(int i = 0; i<lista.size()-1; i ++ ){
+		for(int i = 0; i<=lista.size()-1; i ++ ){
 			if(lista.get(i).getId() == historico.getId()){
-				lista.add(historico);
+				lista.set(i, historico);
 			}
 		}
 	}
 
 	@Override
-	public HistoricoEscolar pequisar(Aluno aluno) {
-		for(int i = 0; i < lista.size()-1; i++){
-			if(lista.get(i).getAluno().getMatricula().equals(aluno.getMatricula())){
-				return lista.get(i);
+	public HistoricoEscolar pequisar(Aluno aluno) throws HistoricoInexistenteException{
+		if(lista.size() != 0){
+			for(int i = 0; i <= lista.size()-1; i++){
+				if(lista.get(i).getAluno().getMatricula().equals(aluno.getMatricula())){
+					return lista.get(i);
+				}
 			}
+			throw new HistoricoInexistenteException();
 		}
 		return null;
 	}

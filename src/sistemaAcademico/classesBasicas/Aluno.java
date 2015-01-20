@@ -3,14 +3,13 @@ package sistemaAcademico.classesBasicas;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Aluno extends Pessoa{
+public class Aluno{
 	
 	private String matricula;
 	private ArrayList<Publicacao> publicacoes;
 	private Date data;
 	
 	public Aluno(String matricula, ArrayList<Publicacao> publicacoes, Date data){
-		super();
 		this.matricula = matricula;
 		this.publicacoes = this.publicacoes;
 		this.data = data;

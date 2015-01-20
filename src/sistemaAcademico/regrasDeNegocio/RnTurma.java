@@ -31,7 +31,7 @@ public class RnTurma {
 		if (dao.consultarTurma(turma.getNomeDaTurma()) != null) {
 			
 			dao.cadastrarTurma(turma.getAlunosDaTurma(),turma.getNomeDaTurma(),turma.getProfessorDaTurma(), turma.getDisciplinasDaTurma(), turma.getPeriodoAtual(), turma.getTurnoDaTurma());
-			
+
 		} else throw new TurmaExistenteException();
 		
 	}

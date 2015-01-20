@@ -2,11 +2,10 @@ package sistemAcademico.exceptions;
 
 public class TurmaExistenteException extends Exception {
 
-
-public TurmaExistenteException() {
+	public TurmaExistenteException() {
+		// TODO Auto-generated constructor stub
 	
-	super("Turma ja existe");
-	
-}
-
+		super("Esta turma ja foi cadastrada");
+	}
+		
 }

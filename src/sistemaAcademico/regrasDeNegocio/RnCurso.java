@@ -2,6 +2,10 @@ package sistemaAcademico.regrasDeNegocio;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
 
@@ -32,5 +36,18 @@ public class RnCurso {
 			vazio=true;
 		}
 		return vazio;
+	}
+	
+	public int quantidadeDeTurmas(String nomeCurso){
+		int cont=0;
+		List<Turma> t= new ArrayList<Turma>();
+		t=dao.consultarTurmas(nomeCurso);
+		
+		if(t!=null){
+			for(int i=0; i<t.size();i++){
+				cont++;
+			}
+		}
+		return cont;
 	}
 }

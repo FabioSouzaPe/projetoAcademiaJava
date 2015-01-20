@@ -1,8 +1,10 @@
 package sistemaAcademico.classesBasicas;
 
+import java.util.Date;
+
 public class Frequencia {
-	private int frequencia;
-	private int data;
+	private int id;
+	private Date data;
 	private Turma turma;
 	private boolean presenca;
 	private String avaliacao;
@@ -12,29 +14,29 @@ public class Frequencia {
 	
 	public Frequencia(){}
 	
-	public Frequencia(int frequencia, int data, Turma turma, boolean presenca,
+	public Frequencia(int id, Date data, Turma turma, boolean presenca,
 			String avaliacao) {
 		super();
-		this.frequencia = frequencia;
+		this.id = id;
 		this.data = data;
 		this.turma = turma;
 		this.presenca = presenca;
 		this.avaliacao = avaliacao;
 	}
 	
-	public int getFrequencia() {
-		return frequencia;
+	public int getid() {
+		return id;
 	}
 
-	public void setFrequencia(int frequencia) {
-		this.frequencia = frequencia;
+	public void setid(int id) {
+		this.id = id;
 	}
 
-	public int getData() {
+	public Date getData() {
 		return data;
 	}
 
-	public void setData(int data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 

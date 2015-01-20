@@ -1,5 +1,12 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import java.util.List;
+
+import sistemAcademico.exceptions.AlunoMatriculadoTurmaException;
+import sistemAcademico.exceptions.CursoCheioException;
+import sistemAcademico.exceptions.TurmaCheiaException;
+import sistemAcademico.exceptions.TurmaExistenteException;
+import sistemAcademico.exceptions.TurmaInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Turma;
@@ -13,43 +20,66 @@ public class RnTurma {
 	DaoTurmaInt dao;
 	DaoTurma d = new DaoTurma();	
 	
-	public void cadastrar (Turma turma) {
+	public void cadastrar (Turma turma) throws TurmaExistenteException, CursoCheioException {
+		
+		if (dao.consultarTurmas().size() == 10) {
+			
+			throw new CursoCheioException();
+			
+		}
 		
 		if (dao.consultarTurma(turma.getNomeDaTurma()) != null) {
 			
 			dao.cadastrarTurma(turma.getAlunosDaTurma(),turma.getNomeDaTurma(),turma.getProfessorDaTurma(), turma.getDisciplinasDaTurma(), turma.getPeriodoAtual(), turma.getTurnoDaTurma());
 			
-		} else System.out.println("Turma já existe");
+		} else throw new TurmaExistenteException();
 		
 	}
 	
-	public void matricularAluno (Aluno aluno,Turma turma) {
+	public void matricularAluno (Aluno aluno,Turma turma) throws TurmaCheiaException, AlunoMatriculadoTurmaException {
+		
+		List <Turma> minhasTurmas = dao.consultarTurmas();
+		
+		for (int i =0; i < minhasTurmas.size();i++) {
+			
+			if (minhasTurmas.get(i).getAlunosDaTurma().contains(aluno)) {
+				throw new AlunoMatriculadoTurmaException();	
+			}
+		}
 		
 		if (turma.getAlunosDaTurma().size() <= 50) {
 			turma.getAlunosDaTurma().add(aluno);
-		}
+		} else throw new TurmaCheiaException();
 		
 	}
 	
-	public void remover (Turma turma) {
+	public void remover (Turma turma) throws TurmaInexistenteException {
 		
 		if (dao.consultarTurma(turma.getNomeDaTurma()) != null) {
 			
 			dao.removerTurma(turma);
-		} else System.out.println("Turma nao pode ser removido");
+		} else throw new TurmaInexistenteException();
 	}
 	
 	
-	
-	public void alterar (Turma turmaAtual, String novoNome, Professor novoProfessor, Turno novoTurno, String novoPeriodo) {
+	public void alterar (Turma turmaAtual, String novoNome, Professor novoProfessor, Turno novoTurno, String novoPeriodo) throws TurmaInexistenteException {
 		
 
 		if (dao.consultarTurma(turmaAtual.getNomeDaTurma()) != null) {
 			
 			dao.alterarTurma(turmaAtual,novoNome,novoProfessor, novoTurno,novoPeriodo);
-		} else System.out.println("Turma nao existe");
-		
+		} else throw new TurmaInexistenteException();	
 		
 	}
-
+	
+	public void removerAluno(Aluno aluno,Turma turma) {
+		
+		if (dao.consultarTurma(turma.getNomeDaTurma()) != null) {
+			
+			turma.getAlunosDaTurma().remove(aluno);
+			
+		}
+		
+	}
+	
 }

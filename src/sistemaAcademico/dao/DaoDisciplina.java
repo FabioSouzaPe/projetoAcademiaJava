@@ -41,6 +41,30 @@ public class DaoDisciplina implements DaoDisciplinaInt{
 		return null;
 	}
 		
+	
+	public void alterarDisciplina (String novoNome,Disciplina disciplina) {
+		
+		
+		int j =0;
+		boolean existe = false;
+		while (disciplinas.get(j) != null) {
+			
+			if (disciplinas.get(j).getNome().equalsIgnoreCase(novoNome)) {
+				
+				existe = true;
+			}
+			j++;
+		}
+		
+		if (existe == false) {
+			
+			disciplina.setNome(novoNome);
+			
+		}
+		
+	}
+	
+	
 	}
 
 	

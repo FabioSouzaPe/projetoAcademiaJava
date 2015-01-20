@@ -2,10 +2,10 @@ package sistemaAcademico.regrasDeNegocio;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
 
-import sistemaAcademico.classesBasicas.Turma;
+import sistemAcademico.exceptions.CursoExistenteException;
+import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
 
@@ -15,39 +15,92 @@ public class RnCurso {
 		
 		
 	
-	public boolean cursoJaCadastrado(String nome) {
-		boolean jaCadastrado = false;
-		
-		if (dao.consultarTudo().size() != 0) {
-			for (int i = 0; i < dao.consultarTudo().size(); i++) {
-				if (nome.equals(dao.consultarTudo().get(i).getNome())) {
-					jaCadastrado = true;
-					
+	public int quantidadeDeTurmas(String nomeCurso)throws  CursoInexistenteException{
+		int qtd=0;
+		boolean sucesso=false;
+		if(dao.consultarTudo().size()==0){
+			throw new  CursoInexistenteException();
+		}else{
+			for(int i =0; i<dao.consultarTudo().size();i++){
+				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
+					qtd=dao.consultarTurmas(i, dao.consultarTudo().get(i)).size();
+					sucesso=true;
 				}
 			}
-		}
-
-		return jaCadastrado;
-	}
-
-	public boolean semCurso(){
-		boolean vazio=false;
-		if(dao.consultarTudo().size()==0){
-			vazio=true;
-		}
-		return vazio;
-	}
-	
-	public int quantidadeDeTurmas(String nomeCurso){
-		int cont=0;
-		List<Turma> t= new ArrayList<Turma>();
-		t=dao.consultarTurmas(nomeCurso);
-		
-		if(t!=null){
-			for(int i=0; i<t.size();i++){
-				cont++;
+			if(sucesso==false){
+				throw new  CursoInexistenteException();
 			}
 		}
-		return cont;
+		return qtd;
+	}
+	
+	
+	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException{
+		boolean sucesso=false;
+		
+		if(dao.consultarTudo().size()!=0){
+			
+			for(int i =0; i<dao.consultarTudo().size();i++){
+				if(!curso.getNome().equals(dao.consultarTudo().get(i).getNome())){
+					dao.cadastrar(curso);
+					sucesso=true;
+				}
+					
+			}
+			
+		}else{
+			dao.cadastrar(curso);
+			sucesso=true;
+		}
+		
+		
+		return sucesso;
+	}
+	
+	public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException {
+		
+		boolean sucesso=false;
+		if(dao.consultarTudo().size()==0){
+			throw new  CursoInexistenteException();
+		}else{
+			
+			for(int i =0; i<dao.consultarTudo().size();i++){
+				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
+					dao.excluir(dao.consultarTudo().get(i));
+					sucesso=true;
+				}
+			}
+			if(sucesso==false){
+				throw new  CursoInexistenteException();
+			}
+		}
+		
+		return sucesso;
+		
+	}
+	
+	
+	public boolean verificacaoAlterarCurso(String nomeOld, String nomeNew)throws CursoInexistenteException {
+		
+		boolean sucesso=false;
+		if(dao.consultarTudo().size()==0){
+			throw new  CursoInexistenteException();
+		}else{
+			
+			for(int i =0; i<dao.consultarTudo().size();i++){
+				
+				if(nomeOld.equals(dao.consultarTudo().get(i).getNome())){
+					
+					dao.consultarTudo().get(i).setNome(nomeNew);
+					dao.alterar(i,dao.consultarTudo().get(i));
+					sucesso=true;
+				}
+			}
+			if(sucesso==false){
+				throw new  CursoInexistenteException();
+			}
+		}
+		
+		return sucesso;
 	}
 }

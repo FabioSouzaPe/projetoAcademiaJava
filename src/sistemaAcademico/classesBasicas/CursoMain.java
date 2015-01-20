@@ -1,9 +1,13 @@
 package sistemaAcademico.classesBasicas;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
+import sistemAcademico.exceptions.CursoExistenteException;
+import sistemAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
 import sistemaAcademico.regrasDeNegocio.RnCurso;
@@ -29,29 +33,29 @@ public class CursoMain {
 			
 			try{
 				int opcao=sc1.nextInt();
+				
 				if(opcao==1){
+					
 					System.out.println("\nPara cadastrar um Curso Digite:\nID da Curso\nNome do Curso\nData de criação do Curso\nTurmas do Curso\n");
 					
 					int id= sc1.nextInt();
 					sc1.nextLine();
 					String nome=sc1.nextLine();
 					Date d = new Date();
-					Curso c= new Curso(id, nome, d, null);
-					
-					if(rn.cursoJaCadastrado(nome)==false){
+					List<Turma> t= new ArrayList<Turma>();
+					Curso c= new Curso(id, nome, d,t );
 						
-						if(dao.cadastrar(c)){
+					try{
+						if(rn.verificacaoCadastrarCurso(c)){
 							System.out.println("Curso Cadastrado com sucesso");
 						}else{
-							System.out.println("O Curso não foi cadastrado");
+						System.out.println("Outro problema ao cadastrar curso");
 						}
-						
-					}else{
-						System.out.println("Este Curso Já foi cadastrado");
+					}catch(CursoExistenteException e){
+						System.out.println(e.getMessage());
 					}
 					
-					
-					
+						
 				}else if(opcao==2){
 					
 					if(dao.consultarTudo().size()!=0){
@@ -73,21 +77,29 @@ public class CursoMain {
 					continuar=false;
 					System.out.println("Até logo");
 					sc1.close();
+					
 				}else if(opcao==3){
+					
 					System.out.println("Digite o nome do curso a ser excluido:");
 					sc1.nextLine();
 					String nome=sc1.nextLine();
 					
-					if(rn.semCurso()==false){
-						if(dao.excluirPorNome(nome)){
-							System.out.println("O Curso: "+nome+" Foi excluido com sucesso");
+					try{
+						
+						if(rn.verificacaoExcluirCurso(nome)){
+							System.out.println("Curso excluido com sucesso");
 						}else{
-							System.out.println("O Curso: "+nome+" NÃO foi excluido, pois pois esse curso não foi cadastrado");
+							System.out.println("Outro problema ao excluir curso");
 						}
 						
-					}else{
-						System.out.println("Nenhum curso cadastrado ainda");
+						
+					}catch(CursoInexistenteException e){
+						System.out.println(e.getMessage());
 					}
+					
+					
+						
+					
 				}else if(opcao==4){
 					
 					System.out.println("Entre com o nome antigo");
@@ -95,31 +107,36 @@ public class CursoMain {
 					String nomeOld=sc1.nextLine();
 					System.out.println("Entre com o nome Novo");
 					String nomeNew=sc1.nextLine();
-					if(rn.cursoJaCadastrado(nomeOld)){
-						
-						if(dao.alterarPorNome(nomeOld,nomeNew)){
-							System.out.println("Curso Alterado com sucesso");
-						}else{
-							System.out.println("O Curso não pode ser alterado");
+					
+						try{
+							
+							if(rn.verificacaoAlterarCurso(nomeOld,nomeNew)){
+								System.out.println("Curso Alterado com sucesso");
+							}else{
+								System.out.println("Outro problema ao alterar curso");
+							}
+						}catch(CursoInexistenteException e){
+							System.out.println(e.getMessage());
 						}
-					}else{
-						System.out.println("Nome Antigo informado não está cadastado");
-					}
+						
+					
 					
 				}else if(opcao==5){
 					System.out.println("Entre com o nome do curso para verificar a quantidade de turmas");
 					sc1.nextLine();
 					String nomeCurso=sc1.nextLine();
 					
-					if(rn.cursoJaCadastrado(nomeCurso)){
+					try{
+						
 						int qtd=rn.quantidadeDeTurmas(nomeCurso);
 						System.out.println("Quantidade de Turmas do curso de "+nomeCurso+": "+qtd);
-					}else{
-						System.out.println("Curso informado não está cadastado");
-					}
+						
+					}catch(CursoInexistenteException e){
+						System.out.println(e.getMessage());
+					}	
 					
-				}
-				else{
+					
+				}else{
 					System.out.println("Opção Inválida!");
 				}
 			}catch(Exception e){

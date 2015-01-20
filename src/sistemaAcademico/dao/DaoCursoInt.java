@@ -9,10 +9,10 @@ import sistemaAcademico.classesBasicas.Turma;
 
 public interface DaoCursoInt {
 	
-	public ArrayList<Curso> consultarTudo() /*throws CursoInexistenteException*/;
-	public List<Turma> consultarTurmas(String nomeCurso);
-	public boolean  cadastrar(Curso curso);
-	public boolean excluirPorNome(String nome);
-	public boolean alterarPorNome(String nomeOld, String nomeNew);
+	public ArrayList<Curso> consultarTudo();
+	public List<Turma> consultarTurmas(int index, Curso Curso);
+	public void cadastrar(Curso curso);
+	public void excluir(Curso curso);
+	public void alterar(int index, Curso CursoNew);
 	
 }

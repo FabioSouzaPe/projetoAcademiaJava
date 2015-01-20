@@ -8,10 +8,13 @@ import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;
 import sistemaAcademico.dao.DaoPessoaInt;
+import sistemaAcademico.daoJDBC.DaoPessoaIntJDBC;
+import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
 
 public class RnPessoa {
 	
 	static DaoPessoaInt daoPessoa = new DaoPessoa();
+	static DaoPessoaIntJDBC daoPessoaJDBC = new DaoPessoaJDBC();
 
 	public RnPessoa() {}
 
@@ -80,7 +83,7 @@ public class RnPessoa {
 
 		//Nega se a pessoa existe para adicionar na lista
 		if (!sePessoaExiste(pessoa.getCpf())){
-			daoPessoa.addPessoa(pessoa);
+			daoPessoaJDBC.addPessoa(pessoa);
 			System.out.println("Pessoa cadastrada com sucesso");
 		} 
 		

@@ -1,8 +1,10 @@
 package sistemaAcademico.dao;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import sistemAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
+import sistemaAcademico.classesBasicas.Turma;
 
 public class DaoCurso implements DaoCursoInt{
 
@@ -10,7 +12,11 @@ public class DaoCurso implements DaoCursoInt{
 	
 	
 	@Override
-	public ArrayList<Curso> consultarTudo() {
+	public ArrayList<Curso> consultarTudo() /*throws CursoInexistenteException*/ {
+		if(DaoCurso.curso==null){
+		//	throw new CursoInexistenteException();
+		}
+		
 		return DaoCurso.curso;
 	}
 
@@ -48,6 +54,19 @@ public class DaoCurso implements DaoCursoInt{
 			}
 		}
 		return alterado;
+	}
+
+	@Override
+	public  List<Turma> consultarTurmas(String nomeCurso) {
+		
+		
+		for(int i =0; i< consultarTudo().size();i++){
+			if(nomeCurso.equals(consultarTudo().get(i).getNome())){
+				return consultarTudo().get(i).getTurma();
+			}
+		}
+		
+		return null;
 	}
 
 }

@@ -7,4 +7,6 @@ import sistemaAcademico.classesBasicas.Pessoa;
 public interface DaoPessoaInt {
 	public ArrayList<Pessoa> getListaPessoas();
 	public void addPessoa(Pessoa pessoa);
+	public Pessoa pesquisarPessoa(String cpf);
+	public void removerPessoa(Pessoa p);
 }

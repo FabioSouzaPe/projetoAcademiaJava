@@ -2,8 +2,11 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.util.ArrayList;
 
+import sistemAcademico.exceptions.AlunoExistenteException;
+import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;
+import sistemaAcademico.dao.DaoPessoaInt;
 
 public class RnPessoa {
 	
@@ -91,5 +94,18 @@ public class RnPessoa {
 		
 		//Retorna a lista de pessoas cadastradas
 		return daoPessoa.getListaPessoas();
+	}
+	
+	public static Pessoa pesquisarPessoa(String cpf)/* throws PessoaInexistenteException*/{
+		
+		return daoPessoa.pesquisarPessoa(cpf);
+	}
+
+
+	public static void removerPessoa(String cpf) {
+		
+		Pessoa p = daoPessoa.pesquisarPessoa(cpf);
+		
+		daoPessoa.removerPessoa(p);
 	}
 }

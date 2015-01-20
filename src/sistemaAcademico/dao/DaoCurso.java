@@ -36,17 +36,18 @@ public class DaoCurso implements DaoCursoInt{
 	}
 
 	@Override
-	public boolean alterarPorNome(String nome) {
+	public boolean alterarPorNome(String nomeOld, String nomeNew) {
 		
-		boolean excluido=false;
+		boolean alterado=false;
 		
 		for(int i =0; i<consultarTudo().size();i++){
-			if(nome.equals(consultarTudo().get(i).getNome())){
-				//dao.consultarTudo().;
-				excluido=true;
+			if(nomeOld.equals(consultarTudo().get(i).getNome())){
+				
+				consultarTudo().get(i).setNome(nomeNew);;
+				alterado=true;
 			}
 		}
-		return excluido;
+		return alterado;
 	}
 
 }

@@ -23,6 +23,7 @@ public class CursoMain {
 			System.out.println("| Para consultar Curso Digite --------> 2 |");
 			System.out.println("| Para excluir um curso Digite -------> 3 |");
 			System.out.println("| Para atualizar um curso Digite -----> 4 |");
+			System.out.println("| Para consultar Qtd de Turmas Digite-> 5 |");
 			System.out.println(" -----------------------------------------\n");
 			
 			
@@ -103,6 +104,18 @@ public class CursoMain {
 						}
 					}else{
 						System.out.println("Nome Antigo informado não está cadastado");
+					}
+					
+				}else if(opcao==5){
+					System.out.println("Entre com o nome do curso para verificar a quantidade de turmas");
+					sc1.nextLine();
+					String nomeCurso=sc1.nextLine();
+					
+					if(rn.cursoJaCadastrado(nomeCurso)){
+						int qtd=rn.quantidadeDeTurmas(nomeCurso);
+						System.out.println("Quantidade de Turmas do curso de "+nomeCurso+": "+qtd);
+					}else{
+						System.out.println("Curso informado não está cadastado");
 					}
 					
 				}

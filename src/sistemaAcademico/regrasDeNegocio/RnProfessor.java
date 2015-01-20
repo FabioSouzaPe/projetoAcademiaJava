@@ -1,5 +1,10 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import com.sun.org.apache.bcel.internal.generic.DADD;
+
+import sistemAcademico.exceptions.ProfessorExistenteException;
+import sistemAcademico.exceptions.ProfessorInexistenteException;
+import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.dao.DaoProfessor;
 import sistemaAcademico.dao.DaoProfessorInt;
@@ -9,14 +14,17 @@ import sistemaAcademico.enuns.Titulo;
 
 
 public class RnProfessor {
+	DaoProfessorInt dadosint = new DaoProfessor();
+		
+	//Verificação
 	
 	public boolean verificarProfessorJaCadastrado(Professor professor){
 	
 		boolean jacadastrado = false;
-		DaoProfessorInt dadosint = new DaoProfessor();
+		
 		for (int i = 0; i < dadosint.consultarTudo().size(); i++) {
 			
-			if(dadosint.consultarTudo().get(i).getId() == (professor.getId())){
+			if(dadosint.consultarTudo().get(i).getMatricula() == (professor.getMatricula())){
 				
 				jacadastrado= true;
 				
@@ -25,9 +33,57 @@ public class RnProfessor {
 		}
 		
 		
-		return jacadastrado;
-		
-		
+		return jacadastrado;		
 	
 }
+	//Cadastrar
+	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException{
+		try {
+			if(dadosint.pesquisarprofessor(professor.getMatricula()) == null){
+				dadosint.cadastrarProfessor(professor);
+				
+				
+			}else{
+				throw new ProfessorExistenteException();
+			}	
+			
+		} catch (ProfessorInexistenteException e) {
+			dadosint.cadastrarProfessor(professor);
+		}
+				
+		
+	}
+	
+	 
+ //Remover
+	public void remover(Professor professor) throws ProfessorInexistenteException{
+		try {
+			if(dadosint.pesquisarprofessor(professor.getMatricula()) != null){
+				dadosint.remover(professor);
+				
+			}
+		} catch (ProfessorInexistenteException e) {
+			System.out.println(e.getMessage());
+			
+		}	
+		
+	}
+	//Alterar
+	public void alterar(Professor professor) throws ProfessorInexistenteException{
+		
+		try {
+			
+			if(dadosint.pesquisarprofessor(professor.getMatricula()) != null){
+				dadosint.alterar(professor);
+				
+			}
+			
+		} catch (ProfessorInexistenteException e) {
+			
+			System.out.println(e.getMessage());
+		}
+		
+		
+	}
 }
+

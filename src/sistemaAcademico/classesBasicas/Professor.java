@@ -10,18 +10,19 @@ public class Professor {
 	private Date admissao;
 	private String departamento;
 	private String instituicao;
-	 private Titulo titulo;
-	 private String matricula;
+	private Titulo titulo;
+	private String matricula;
 	 
 	 
 	
-	public Professor(int id,Date admissao,String departamento,String instituicao,Titulo titulo ){
+	public Professor(String matricula,Date admissao,String departamento,String instituicao,Titulo titulo ){
 		
-		this.id=id;
+
 		this.admissao = admissao;
         this.departamento = departamento;
         this.instituicao = instituicao;
         this.titulo = titulo;
+        this.matricula = matricula;
 	}
 	
 	                                                        
@@ -72,6 +73,20 @@ public class Professor {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+
+
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+
+
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 	 
 	

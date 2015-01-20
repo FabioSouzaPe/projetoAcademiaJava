@@ -20,17 +20,14 @@ public class Teste {
 		
 		//SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
 	
-		Professor pro = new Professor(1,data,"POO","Unibratec", Titulo.POSGRADUACAO);
+		Professor pro = new Professor("1234",data,"POO","Unibratec", Titulo.POSGRADUACAO);
 	    DaoProfessorInt dadosprofint = new DaoProfessor();
 	      
 	    //dadosprof.cadastrarProfessor(pro);
 	    
 	    
 	    
-	   Professor prof = new Professor(1,data,"APS","Unibratec",null );
-	   
-	    dadosprofint.alterar(prof);
-	    
+	
 	    //Regra negocio
 	    
 	    RnProfessor rnprof = new RnProfessor();
@@ -42,7 +39,7 @@ public class Teste {
 	    	dadosprofint.cadastrarProfessor(pro);
 	    	for (int i = 0; i < dadosprofint.consultarTudo().size(); i++) {
 	    	
-	    	 	System.out.println(dadosprofint.consultarTudo().get(i).getId());
+	    	 	System.out.println(dadosprofint.consultarTudo().get(i).getMatricula());
 			}
 	   
 	    
@@ -52,9 +49,21 @@ public class Teste {
 	    }
 	    
 	    
+	   //Remover 
+	    if(rnprof.verificarProfessorJaCadastrado(pro) == true ) {
+	    	
+	    for (int i = 0; i < dadosprofint.consultarTudo().size(); i++) {
+			
+	    	if(dadosprofint.consultarTudo().get(i).getMatricula() == (pro.getMatricula())){
+	    		dadosprofint.remover(pro);
+	    		
+	    	}
+	    	
+		}	
+	    	
+	    }
 	    
-	    
-	    
+	   
  
 	}
 

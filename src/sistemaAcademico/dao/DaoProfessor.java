@@ -3,6 +3,8 @@ package sistemaAcademico.dao;
 import java.util.ArrayList;
 
 
+
+import sistemAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 
 public class DaoProfessor implements DaoProfessorInt {
@@ -11,7 +13,10 @@ public class DaoProfessor implements DaoProfessorInt {
  ArrayList< Professor> listaprof = new ArrayList<Professor>();
 		
 	
+ // Cadatrar
 	public void cadastrarProfessor(Professor professor){
+		
+		
 	listaprof.add(professor);
 		
 		
@@ -19,11 +24,11 @@ public class DaoProfessor implements DaoProfessorInt {
 		
 		
 	
-
+ // Alterar
 	public void alterar(Professor professor){
 		
 	for (int i = 0; i < listaprof.size()-1; i++) {
-		if(listaprof.get(i).getId() == professor.getId()){
+		if(listaprof.get(i).getMatricula().equals(professor.getMatricula())){
 		
 			listaprof.set(i, professor);
 		}
@@ -33,11 +38,13 @@ public class DaoProfessor implements DaoProfessorInt {
 		
 	}
 	
+	//Remover
+	
 	public void remover(Professor professor){
 	
 		for (int i = 0; i < listaprof.size(); i++) {
 			
-			if(listaprof.get(i).getId()==professor.getId()){
+			if(listaprof.get(i).getMatricula().equals(professor.getMatricula())){
 				
 			listaprof.remove(professor);	
 				
@@ -50,6 +57,22 @@ public class DaoProfessor implements DaoProfessorInt {
 		
 		
 }
+	
+	public Professor pesquisarprofessor(String matricula) throws ProfessorInexistenteException{
+		if(listaprof.size() != 0 ){
+			for (int i = 0; i < listaprof.size(); i++) {
+			
+				if(listaprof.get(i).getMatricula().equals(matricula) ){
+				
+					return listaprof.get(i);
+				
+				}
+			
+			}
+			throw new ProfessorInexistenteException();
+		}
+		 return null;
+	}
 
 
 

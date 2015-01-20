@@ -73,6 +73,7 @@ public class TelaTeste {
 			System.out.println("Nome: " + p.getNome());
 			System.out.println("CPF: " + p.getCpf());
 			System.out.println("------------");
+			
 		} catch (PessoaInexistenteException e) {
 			System.out.println(e.getMessage());
 		}

@@ -1,6 +1,7 @@
 package sistemaAcademico.regrasDeNegocio;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import sistemAcademico.exceptions.AlunoExistenteException;
 import sistemAcademico.exceptions.PessoaInexistenteException;
@@ -96,16 +97,34 @@ public class RnPessoa {
 		return daoPessoa.getListaPessoas();
 	}
 	
-	public static Pessoa pesquisarPessoa(String cpf)/* throws PessoaInexistenteException*/{
-		
-		return daoPessoa.pesquisarPessoa(cpf);
+	public static Pessoa pesquisarPessoa(String cpf) {
+
+		Pessoa pessoaAchada = null;
+
+		for (int i = 0; i < daoPessoa.getListaPessoas().size(); i++) {
+			if (daoPessoa.getListaPessoas().get(i).getCpf().equals(cpf)) {
+				pessoaAchada = daoPessoa.getListaPessoas().get(i);
+				return pessoaAchada;
+			}
+		}
+		throw new PessoaInexistenteException();
 	}
 
-
 	public static void removerPessoa(String cpf) {
-		
-		Pessoa p = daoPessoa.pesquisarPessoa(cpf);
-		
-		daoPessoa.removerPessoa(p);
+
+		Pessoa p = pesquisarPessoa(cpf);
+
+		Scanner ler = new Scanner(System.in);
+
+		System.out
+				.println("Deseja realmente remover o registro dessa pessoa? 1 - Sim");
+
+		if (ler.nextInt() == 1) {
+			daoPessoa.removerPessoa(p);
+			System.out.println("Pessoa removida");
+		} 
+		else {
+			System.out.println("Cancelado");
+		}
 	}
 }

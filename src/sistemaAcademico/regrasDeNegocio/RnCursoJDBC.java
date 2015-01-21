@@ -5,11 +5,14 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import sistemAcademico.exceptions.CursoExistenteException;
 import sistemAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
+import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.dao.DaoCurso;
+import sistemaAcademico.dao.JDBC.DaoConexaoJDBC;
 import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
 import sistemaAcademico.dao.JDBC.DaoCursoJDBCInt;
 
@@ -41,60 +44,59 @@ public class RnCursoJDBC {
 		boolean sucesso=false;
 		String sql= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
 		ResultSet rs=dao.consultar(sql);
-		if(rs.getRow()==0){
+		
+		if(rs.next()==false){
 			dao.cadastrar(curso);
+			sucesso=true;
+			DaoConexaoJDBC.fecharConexao();
+		}
+		
+		
+		return sucesso;
+	}
+	
+	public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+		
+		boolean sucesso=false;
+		
+		if(dao.excluir(nomeCurso)){
 			sucesso=true;
 		}
 		
-		
-		return sucesso;
-	}
-	
-	/*public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException {
-		
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					dao.excluir(dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
-		}
-		
 		return sucesso;
 		
 	}
 	
 	
-	public boolean verificacaoAlterarCurso(String nomeOld, String nomeNew)throws CursoInexistenteException {
+	public boolean verificacaoAlterarCurso(String cursoNomeOld, String cursoNomeNew)throws CursoInexistenteException, ClassNotFoundException, SQLException {
 		
 		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				
-				if(nomeOld.equals(dao.consultarTudo().get(i).getNome())){
-					
-					dao.consultarTudo().get(i).setNome(nomeNew);
-					dao.alterar(i,dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
+		
+		if(dao.alterar(cursoNomeOld, cursoNomeNew)){
+			sucesso=true;
 		}
 		
 		return sucesso;
 	}
-	*/
+	
+	public ArrayList<Curso> listar() throws ClassNotFoundException, SQLException{
+		
+		ArrayList<Curso> cursoList =new ArrayList<Curso>();
+		
+		String sql= "SELECT * FROM CURSO ";
+		ResultSet rs=dao.consultar(sql);
+		
+		while(rs.next()){
+			    Curso c= new Curso();
+				c.setNome(rs.getString("NOME"));
+				c.setId(rs.getInt("ID"));
+				c.setTurma(new ArrayList<Turma>());
+				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
+				cursoList.add(c);
+		}
+		DaoConexaoJDBC.fecharConexao();
+		
+		return cursoList;
+	}
+	
 }

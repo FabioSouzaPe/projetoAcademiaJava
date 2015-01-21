@@ -23,8 +23,6 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 		PreparedStatement pStmt = conexao.prepareStatement(select) ;
 		ResultSet rs = pStmt.executeQuery();
 		conexao.commit();
-		DaoConexaoJDBC.fecharConexao();
-
 		return rs;
 	}
 
@@ -59,15 +57,42 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean excluir() {
+	public boolean excluir(String cursoNome) throws ClassNotFoundException, SQLException {
 		
-		return false;
+		boolean sucesso=false;
+		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		
+		PreparedStatement pStmt = conexao.prepareStatement("DELETE FROM CURSO WHERE NOME=?");
+		pStmt.setString(1,cursoNome);
+		
+		int rows = pStmt.executeUpdate();
+		conexao.commit();
+		DaoConexaoJDBC.fecharConexao();
+		if(rows==1){
+			sucesso=true;
+		}
+		
+	return sucesso;
 	}
 
 	@Override
-	public boolean alterar() {
+	public boolean alterar(String cursoNomeOld, String cursoNomeNew) throws ClassNotFoundException, SQLException {
 
-		return false;
+		boolean sucesso=false;
+		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		
+		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  CURSO SET NOME=? WHERE NOME=?");
+		pStmt.setString(1,cursoNomeNew);
+		pStmt.setString(2,cursoNomeOld);
+		
+		int rows = pStmt.executeUpdate();
+		conexao.commit();
+		DaoConexaoJDBC.fecharConexao();
+		if(rows==1){
+			sucesso=true;
+		}
+		
+	return sucesso;
 		
 	}
 

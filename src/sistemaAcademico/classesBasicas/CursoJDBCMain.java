@@ -14,7 +14,6 @@ import sistemaAcademico.regrasDeNegocio.RnCursoJDBC;
 public class CursoJDBCMain {
 	 public static void main(String[] args) {
 		boolean continuar = true;
-		DaoCursoJDBCInt dao=new DaoCursoJDBC ();
 		RnCursoJDBC rn = new RnCursoJDBC();
 		
 		
@@ -23,7 +22,7 @@ public class CursoJDBCMain {
 			System.out.println("\n -----------------------------------------");
 			System.out.println("| Para sair do Sistema digite --------> 0 |");
 			System.out.println("| Para cadastrar um Curso Digite -----> 1 |");
-			System.out.println("| Para consultar Curso Digite --------> 2 |");
+			System.out.println("| Para Listar Cursos Digite ----------> 2 |");
 			System.out.println("| Para excluir um curso Digite -------> 3 |");
 			System.out.println("| Para atualizar um curso Digite -----> 4 |");
 			System.out.println("| Para consultar Qtd de Turmas Digite-> 5 |");
@@ -56,18 +55,20 @@ public class CursoJDBCMain {
 						
 				}
 				
-				/*else if(opcao==2){
+				else if(opcao==2){
 					
-					if(dao.consultarTudo().size()!=0){
+					ArrayList<Curso> lista=rn.listar();
+					System.out.println(lista.size());
+					if(lista.size()!=0){
 						
 						SimpleDateFormat currentYear = new SimpleDateFormat("dd/mm/yyyy");
 											
-						for(int i=0; i<dao.consultarTudo().size();i++){
+						for(int i=0; i<lista.size();i++){
 							System.out.println("____________________________________");
-							System.out.println("ID: "+dao.consultarTudo().get(i).getId());
-							System.out.println("Curso: "+dao.consultarTudo().get(i).getNome());
-							System.out.println("Data: "+currentYear.format(dao.consultarTudo().get(i).getData()));
-							System.out.println("Turmas: "+dao.consultarTudo().get(i).getTurma());
+							System.out.println("ID: "+lista.get(i).getId());
+							System.out.println("Curso: "+lista.get(i).getNome());
+							System.out.println("Data: "+currentYear.format(lista.get(i).getData()));
+							System.out.println("Turmas: "+lista.get(i).getTurma());
 							System.out.println("____________________________________");
 						}
 					}else{
@@ -77,8 +78,9 @@ public class CursoJDBCMain {
 					continuar=false;
 					System.out.println("Até logo");
 					sc1.close();
-					
-				}else if(opcao==3){
+				
+				}
+				else if(opcao==3){
 					
 					System.out.println("Digite o nome do curso a ser excluido:");
 					sc1.nextLine();
@@ -89,18 +91,16 @@ public class CursoJDBCMain {
 						if(rn.verificacaoExcluirCurso(nome)){
 							System.out.println("Curso excluido com sucesso");
 						}else{
-							System.out.println("Outro problema ao excluir curso");
+							System.out.println("Curso nao exite");
 						}
 						
 						
-					}catch(CursoInexistenteException e){
+					}catch(Exception e){
 						System.out.println(e.getMessage());
 					}
 					
-					
-						
-					
-				}else if(opcao==4){
+				}
+				else if(opcao==4){
 					
 					System.out.println("Entre com o nome antigo");
 					sc1.nextLine();
@@ -113,15 +113,16 @@ public class CursoJDBCMain {
 							if(rn.verificacaoAlterarCurso(nomeOld,nomeNew)){
 								System.out.println("Curso Alterado com sucesso");
 							}else{
-								System.out.println("Outro problema ao alterar curso");
+								System.out.println("Curso a ser alterado nao existe");
 							}
-						}catch(CursoInexistenteException e){
+						}catch(Exception e){
 							System.out.println(e.getMessage());
 						}
 						
 					
 					
-				}else if(opcao==5){
+				}
+				/*else if(opcao==5){
 					System.out.println("Entre com o nome do curso para verificar a quantidade de turmas");
 					sc1.nextLine();
 					String nomeCurso=sc1.nextLine();

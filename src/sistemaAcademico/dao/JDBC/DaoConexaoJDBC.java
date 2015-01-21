@@ -2,7 +2,7 @@ package sistemaAcademico.dao.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DaoConexaoJDBC {
 	
@@ -10,15 +10,14 @@ public class DaoConexaoJDBC {
 	
 	public static Connection abrirConexao() throws ClassNotFoundException, SQLException {
 		
-		String url = "jdbc:mysql://127.0.0.1:3307/sistemaAcademico";
+		String url = "jdbc:mysql://127.0.0.1:3306/sistemaacademico";
 		String user = "root";
-		String pass = "12345";
+		String pass = "1234";
 		
 		
 			Class.forName("com.mysql.jdbc.Driver");
 			cn = DriverManager.getConnection(url, user,pass);
-		
-	
+			cn.setAutoCommit(false);
 		return cn;
 	}
 	

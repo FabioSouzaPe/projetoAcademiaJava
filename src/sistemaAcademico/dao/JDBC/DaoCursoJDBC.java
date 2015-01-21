@@ -3,7 +3,9 @@ package sistemaAcademico.dao.JDBC;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +17,15 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	
 	
 	@Override
-	public ArrayList<Curso> consultarTudo() {
+	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException {
 		
-		return null;
+		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		PreparedStatement pStmt = conexao.prepareStatement(select) ;
+		ResultSet rs = pStmt.executeQuery();
+		conexao.commit();
+		DaoConexaoJDBC.fecharConexao();
+
+		return rs;
 	}
 
 	@Override
@@ -31,10 +39,13 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 		
 			boolean sucesso=false;
 			Connection conexao =  DaoConexaoJDBC.abrirConexao();
+			java.util.Date dataUtil = curso.getData(); 
+			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
+			
 			
 			PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( NOME,DATA,TURMA) VALUES (?,?,?)") ;
 			pStmt.setString(1,curso.getNome());
-			pStmt.setDate(2,(Date) curso.getData());
+			pStmt.setDate(2,dataSql);
 			pStmt.setInt(3,0);
 			
 			int rows = pStmt.executeUpdate();

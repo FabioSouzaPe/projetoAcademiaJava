@@ -13,7 +13,7 @@ public class Conexao implements ConexaoInt{
     private Connection c;
     
     public Conexao(){
-    	url = "jdbc:mysql://localhost:3306/geekstoredb";
+    	url = "jdbc:mysql://localhost:3306/testejdbc";
     	user = "root";
     	pass = "root";
     }

@@ -20,6 +20,10 @@ public class Publicacao {
 		this.meioDeComunicacao = meioDeComunicacao;
 	}
 	
+	public Publicacao(){
+		
+	}
+	
 	public String toString(){
 		return "Nome: " + nome +
 				"Aluno:" + aluno.getMatricula() + 

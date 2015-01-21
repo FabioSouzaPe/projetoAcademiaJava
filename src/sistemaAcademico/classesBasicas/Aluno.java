@@ -15,6 +15,10 @@ public class Aluno{
 		this.data = data;
 	}
 	
+	public Aluno(){
+		
+	}
+	
 	public String toString(){
 		return "Matricula: " + this.matricula + " Data da matricula: " + this.data;
 	}

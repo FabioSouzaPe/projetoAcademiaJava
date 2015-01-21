@@ -60,7 +60,7 @@ public class TelaTeste {
 		}
 	}
 
-	private static void pesquisarPessoa(){
+	private static void pesquisarPessoa(){		
 		
 		try {
 			Scanner scan = new Scanner(System.in);
@@ -73,10 +73,20 @@ public class TelaTeste {
 			System.out.println("ID: " + p.getId());
 			System.out.println("Nome: " + p.getNome());
 			System.out.println("CPF: " + p.getCpf());
+			System.out.println("Logradouro: " + p.getEndereco().getLogradouro());
+			System.out.println("Numero: " + p.getEndereco().getNumero());
+			System.out.println("Bairro: " + p.getEndereco().getBairro());
+			System.out.println("Cidade: " + p.getEndereco().getCidade());
+			System.out.println("Estado: " + p.getEndereco().getUf());
+			System.out.println("Telefone: " + p.getFones().get(0).getDdd() + " " + p.getFones().get(0).getFone());
 			System.out.println("------------");
 			
 		} catch (PessoaInexistenteException e) {
 			System.out.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -88,10 +98,18 @@ public class TelaTeste {
 				System.out.println("ID: " + p.getId());
 				System.out.println("Nome: " + p.getNome());
 				System.out.println("CPF: " + p.getCpf());
+				System.out.println("Logradouro: " + p.getEndereco().getLogradouro());
+				System.out.println("Numero: " + p.getEndereco().getNumero());
+				System.out.println("Bairro: " + p.getEndereco().getBairro());
+				System.out.println("Cidade: " + p.getEndereco().getCidade());
+				System.out.println("Estado: " + p.getEndereco().getUf());
+				System.out.println("Telefone: " + p.getFones().get(0).getDdd() + " " + p.getFones().get(0).getFone());
 				System.out.println("------------");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e){
 			e.printStackTrace();
 		}
 		
@@ -100,12 +118,12 @@ public class TelaTeste {
 	private static void cadastrarPessoa() {
 
 		try {
-			Endereco e1 = new Endereco(0, "Rua 1", "Bairro 1", "N 1", "Cidade 1", "Uf 1");
-			Fone f1 = new Fone(0, "(81)", "3479-3074");
+			Endereco e1 = new Endereco(0, "Rua 3", "Bairro 3", "N 3", "Cidade 3", "Uf 3");
+			Fone f1 = new Fone(0, "(81)", "3464-8400");
 			ArrayList<Fone> fl1 = new ArrayList<Fone>();
 			fl1.add(f1);
 			Pessoa p1 = new Pessoa(RnPessoa.consultarPessoas().size() + 1,
-					"Mackson Luiz", "101.285.544-95", 'm', e1,
+					"Joaquim Petronio dos Santos", "101.285.544-95", 'm', e1,
 					Escolaridade.TECNICO, fl1);
 			RnPessoa.adicionaPessoa(p1);
 
@@ -116,7 +134,7 @@ public class TelaTeste {
 			Pessoa p2 = new Pessoa(RnPessoa.consultarPessoas().size() + 1,
 					"Mackson Luiz", "101.285.544-95", 'm', e2,
 					Escolaridade.TECNICO, fl2);
-			RnPessoa.adicionaPessoa(p2);*/
+			RnPessoa.adicionaPessoa(p2);
 
 			Endereco e3 = new Endereco(0, "Rua 2", "Bairro 2", "N 2", "Cidade 2", "Uf 2");
 			Fone f3 = new Fone(0, "(81)", "9146-5367");
@@ -127,9 +145,11 @@ public class TelaTeste {
 			Pessoa p3 = new Pessoa(RnPessoa.consultarPessoas().size() + 1,
 					"Zé bilu", "842.621.514-92", 'm', e3,
 					Escolaridade.ENSINO_MEDIO, fl3);
-			RnPessoa.adicionaPessoa(p3);
+			RnPessoa.adicionaPessoa(p3);*/
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e){
 			e.printStackTrace();
 		}
 	}

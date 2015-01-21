@@ -6,19 +6,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.mysql.jdbc.Statement;
 
+import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
 
 public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	@Override
-	public ArrayList<Pessoa> getListaPessoas() throws SQLException {
+	public List<Pessoa> getListaPessoas() throws SQLException, ClassNotFoundException {
 
-		ArrayList<Pessoa> listaPessoas = new ArrayList<Pessoa>();
+		List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 		Pessoa p;
+		Endereco en;
+		Fone f;
 
 		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
 
@@ -26,7 +30,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 			Connection cn = c.conectar();
 
-			String selectSQL = "select id, nome, cpf, sexo from `sistema_academico`.`pessoa`";
+			String selectSQL = "SELECT * FROM sistema_academico.busca_pessoa";
 			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
 
 			ResultSet rs = pStmt.executeQuery(selectSQL);
@@ -34,12 +38,27 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			while (rs.next()) {
 
 				p = new Pessoa();
+				en = new Endereco();
+				f = new Fone();
 
 				p.setId(Integer.parseInt(rs.getString(1)));
 				p.setNome(rs.getString(2));
 				p.setCpf(rs.getString(3));
 				p.setSexo(rs.getString(4).charAt(0));
-
+				
+				en.setLogradouro(rs.getString(5));
+				en.setBairro(rs.getString(6));
+				en.setNumero(rs.getString(7));
+				en.setCidade(rs.getString(8));
+				en.setUf(rs.getString(9));
+				
+				p.setEndereco(en);
+				
+				f.setDdd(rs.getString(10));
+				f.setFone(rs.getString(11));
+				
+				p.addFones(f);
+				
 				listaPessoas.add(p);
 			}
 
@@ -55,7 +74,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 	}
 
 	@Override
-	public void addPessoa(Pessoa pessoa) throws SQLException {
+	public void addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException {
 
 		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
 
@@ -131,6 +150,86 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 	@Override
 	public void removerPessoa(Pessoa p) {
 
+	}
+
+	@Override
+	public boolean verificaSeCadastrado(String cpf) throws ClassNotFoundException, SQLException {
+		
+		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
+		boolean verifica = false;
+		
+		try {
+
+			Connection cn = c.conectar();
+
+			String selectSQL = "SELECT * FROM pessoa where cpf = '" + cpf + "'";
+			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+			
+			ResultSet rs = pStmt.executeQuery(selectSQL);
+			
+			if(rs.next()){
+				verifica = rs.getBoolean(1);
+			}
+			
+			cn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			c.desconectar();
+		}
+		
+		return verifica;
+	}
+
+	@Override
+	public Pessoa buscaPorCpf(String cpf) throws ClassNotFoundException, SQLException {
+		
+		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
+		Pessoa p = new Pessoa();
+		Endereco en = new Endereco();
+		Fone f = new Fone();
+
+		try {
+
+			Connection cn = c.conectar();
+
+			String selectSQL = "SELECT * FROM busca_pessoa where cpf = '" + cpf + "'";
+			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+
+			ResultSet rs = pStmt.executeQuery(selectSQL);
+
+			while (rs.next()) {
+
+				p.setId(Integer.parseInt(rs.getString(1)));
+				p.setNome(rs.getString(2));
+				p.setCpf(rs.getString(3));
+				p.setSexo(rs.getString(4).charAt(0));
+				
+				en.setLogradouro(rs.getString(5));
+				en.setBairro(rs.getString(6));
+				en.setNumero(rs.getString(7));
+				en.setCidade(rs.getString(8));
+				en.setUf(rs.getString(9));
+				
+				p.setEndereco(en);
+				
+				f.setDdd(rs.getString(10));
+				f.setFone(rs.getString(11));
+				
+				p.addFones(f);
+
+			}
+
+			cn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			c.desconectar();
+		}
+
+		return p;
 	}
 
 }

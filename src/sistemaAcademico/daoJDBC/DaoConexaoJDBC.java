@@ -18,23 +18,23 @@ public class DaoConexaoJDBC implements DaoConexaoIntJDBC {
 		pass = "12345";
 	}
 
-	public Connection conectar() throws SQLException {
+	public Connection conectar() throws SQLException, ClassNotFoundException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			c = DriverManager.getConnection(url, user, pass);
 		} catch (ClassNotFoundException e) {
-			throw new SQLException();
+			throw new ClassNotFoundException();
 		} catch (SQLException e) {
 			throw new SQLException();
 		}
 		return c;
 	}
 
-	public void desconectar() throws SQLException {
+	public void desconectar() throws SQLException, ClassNotFoundException {
 		try {
 			c.close();
 		} catch (SQLException e) {
-			throw new SQLException();
+			throw new ClassNotFoundException();
 		} catch (NullPointerException e) {
 			throw new SQLException();
 		}

@@ -2,6 +2,7 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import sistemAcademico.exceptions.AlunoExistenteException;
@@ -65,22 +66,24 @@ public class RnPessoa {
 		return nDigVerific.equals(nDigResult);
 	}
 
-	public static boolean sePessoaExiste(String strCpf) {
-
-		boolean verificacao = false;
+	public static boolean sePessoaExiste(String strCpf) throws ClassNotFoundException, SQLException {
 		
 		//verifica registro por registro na lista de pessoas se existe um CPF igual
-		for (Pessoa p : daoPessoa.getListaPessoas()) {
+		
+		/*
+		for (Pessoa p : daoPessoaJDBC.getListaPessoas()) {
 
 			if (p.getCpf().equals(strCpf)) {
 				verificacao = true;
 			}
 		}
-
-		return verificacao;
+*/
+		
+		
+		return daoPessoaJDBC.verificaSeCadastrado(strCpf);
 	}
 	
-	public static void adicionaPessoa(Pessoa pessoa) throws SQLException{
+	public static void adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException{
 
 		//Nega se a pessoa existe para adicionar na lista
 		if (!sePessoaExiste(pessoa.getCpf())){
@@ -95,26 +98,26 @@ public class RnPessoa {
 
 	}
 
-	public static ArrayList<Pessoa> consultarPessoas() throws SQLException {
+	public static List<Pessoa> consultarPessoas() throws SQLException, ClassNotFoundException {
 		
 		//Retorna a lista de pessoas cadastradas
 		return daoPessoaJDBC.getListaPessoas();
 	}
 	
-	public static Pessoa pesquisarPessoa(String cpf) {
+	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException {
+		
 
 		Pessoa pessoaAchada = null;
 
-		for (int i = 0; i < daoPessoa.getListaPessoas().size(); i++) {
-			if (daoPessoa.getListaPessoas().get(i).getCpf().equals(cpf)) {
-				pessoaAchada = daoPessoa.getListaPessoas().get(i);
-				return pessoaAchada;
-			}
+		pessoaAchada = daoPessoaJDBC.buscaPorCpf(cpf);
+		if (pessoaAchada.getId() != 0){
+			return pessoaAchada;
+		} else {
+			throw new PessoaInexistenteException();
 		}
-		throw new PessoaInexistenteException();
 	}
 
-	public static void removerPessoa(String cpf) {
+	/*public static void removerPessoa(String cpf) {
 
 		Pessoa p = pesquisarPessoa(cpf);
 
@@ -130,5 +133,5 @@ public class RnPessoa {
 		else {
 			System.out.println("Cancelado");
 		}
-	}
+	}*/
 }

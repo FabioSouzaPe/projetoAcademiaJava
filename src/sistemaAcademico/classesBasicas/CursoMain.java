@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import sistemAcademico.exceptions.CursoExistenteException;
-import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.exceptions.CursoExistenteException;
+import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
 import sistemaAcademico.regrasDeNegocio.RnCurso;

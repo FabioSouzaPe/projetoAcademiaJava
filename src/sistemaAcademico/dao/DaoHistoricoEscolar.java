@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.HistoricoInexistenteException;
+import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 

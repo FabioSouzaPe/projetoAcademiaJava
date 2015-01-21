@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.AlunoInexistenteException;
+import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 
 public class DaoAluno implements DaoAlunoInt{

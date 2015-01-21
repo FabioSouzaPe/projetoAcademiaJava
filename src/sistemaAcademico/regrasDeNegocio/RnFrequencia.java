@@ -1,8 +1,8 @@
 package sistemaAcademico.regrasDeNegocio;
 
 import sistemaAcademico.classesBasicas.Frequencia;
-import sistemaAcademico.dao.JDBC.DaoFrequenciaJDBC;
-import sistemaAcademico.dao.JDBC.DaoFrequenciaJDBCInt;
+import sistemaAcademico.daoJDBC.DaoFrequenciaJDBC;
+import sistemaAcademico.daoJDBC.DaoFrequenciaJDBCInt;
 
 public class RnFrequencia {
 	DaoFrequenciaJDBCInt dao= new DaoFrequenciaJDBC();

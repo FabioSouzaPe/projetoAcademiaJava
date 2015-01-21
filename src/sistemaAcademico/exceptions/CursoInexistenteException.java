@@ -1,4 +1,4 @@
-package sistemAcademico.exceptions;
+package sistemaAcademico.exceptions;
 
 public class CursoInexistenteException extends Exception{
 

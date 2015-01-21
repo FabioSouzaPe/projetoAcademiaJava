@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
 

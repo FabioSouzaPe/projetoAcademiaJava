@@ -2,11 +2,11 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.util.List;
 
-import sistemAcademico.exceptions.AlunoMatriculadoTurmaException;
-import sistemAcademico.exceptions.CursoCheioException;
-import sistemAcademico.exceptions.TurmaCheiaException;
-import sistemAcademico.exceptions.TurmaExistenteException;
-import sistemAcademico.exceptions.TurmaInexistenteException;
+import sistemaAcademico.exceptions.AlunoMatriculadoTurmaException;
+import sistemaAcademico.exceptions.CursoCheioException;
+import sistemaAcademico.exceptions.TurmaCheiaException;
+import sistemaAcademico.exceptions.TurmaExistenteException;
+import sistemaAcademico.exceptions.TurmaInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Turma;

@@ -1,7 +1,7 @@
 package sistemaAcademico.regrasDeNegocio;
 
-import sistemAcademico.exceptions.HistoricoExistenteException;
-import sistemAcademico.exceptions.HistoricoInexistenteException;
+import sistemaAcademico.exceptions.HistoricoExistenteException;
+import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 import sistemaAcademico.dao.DaoHistoricoEscolar;

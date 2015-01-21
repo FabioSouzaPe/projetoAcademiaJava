@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.PublicacaoInexistenteException;
+import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.classesBasicas.Publicacao;
 
 public interface DaoPublicacaoInt {

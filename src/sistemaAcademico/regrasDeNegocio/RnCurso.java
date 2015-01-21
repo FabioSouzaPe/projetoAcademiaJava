@@ -5,12 +5,12 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.SQLException;
 
-import sistemAcademico.exceptions.CursoExistenteException;
-import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.exceptions.CursoExistenteException;
+import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
-import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
+import sistemaAcademico.daoJDBC.DaoCursoJDBC;
 
 public class RnCurso {
 	

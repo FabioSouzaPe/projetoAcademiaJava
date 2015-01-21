@@ -1,10 +1,10 @@
-package sistemAcademico.daoJdbc;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import sistemAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;

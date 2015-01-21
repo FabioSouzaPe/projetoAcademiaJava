@@ -3,7 +3,7 @@ package sistemaAcademico.conexao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import sistemAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class Conexao implements ConexaoInt{
 

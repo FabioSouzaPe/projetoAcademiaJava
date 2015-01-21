@@ -49,10 +49,4 @@ public class Curso {
 		this.data = data;
 	}
 
-	
-	
-<<<<<<< HEAD
-=======
-	
->>>>>>> origin/projetoAcademiaJava_16012015_edson
 }

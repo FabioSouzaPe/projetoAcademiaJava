@@ -1,7 +1,7 @@
 package sistemaAcademico.regrasDeNegocio;
 
-import sistemAcademico.exceptions.PublicacaoExistenteException;
-import sistemAcademico.exceptions.PublicacaoInexistenteException;
+import sistemaAcademico.exceptions.PublicacaoExistenteException;
+import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.dao.DaoPublicacao;
 import sistemaAcademico.dao.DaoPublicacaoInt;

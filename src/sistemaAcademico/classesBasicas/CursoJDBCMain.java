@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 
-import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
-import sistemaAcademico.dao.JDBC.DaoCursoJDBCInt;
+import sistemaAcademico.daoJDBC.DaoCursoJDBC;
+import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
 import sistemaAcademico.regrasDeNegocio.RnCursoJDBC;
 
 public class CursoJDBCMain {

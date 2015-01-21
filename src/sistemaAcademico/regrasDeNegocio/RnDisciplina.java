@@ -1,8 +1,8 @@
 package sistemaAcademico.regrasDeNegocio;
 
 
-import sistemAcademico.exceptions.DisciplinaExistenteException;
-import sistemAcademico.exceptions.DisciplinaInexistenteException;
+import sistemaAcademico.exceptions.DisciplinaExistenteException;
+import sistemaAcademico.exceptions.DisciplinaInexistenteException;
 import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.dao.DaoDisciplina;
 import sistemaAcademico.dao.DaoDisciplinaInt;

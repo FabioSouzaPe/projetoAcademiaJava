@@ -1,6 +1,6 @@
 package sistemaAcademico.dao;
 
-import sistemAcademico.exceptions.HistoricoInexistenteException;
+import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 

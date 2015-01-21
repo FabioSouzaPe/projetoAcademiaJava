@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.CursoExistenteException;
-import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.exceptions.CursoExistenteException;
+import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.dao.DaoCurso;
-import sistemaAcademico.dao.JDBC.DaoConexaoJDBC;
-import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
-import sistemaAcademico.dao.JDBC.DaoCursoJDBCInt;
+import sistemaAcademico.daoJDBC.DaoConexaoJDBC;
+import sistemaAcademico.daoJDBC.DaoCursoJDBC;
+import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
 
 public class RnCursoJDBC {
 	

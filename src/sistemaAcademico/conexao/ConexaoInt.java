@@ -2,7 +2,7 @@ package sistemaAcademico.conexao;
 
 import java.sql.Connection;
 
-import sistemAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public interface ConexaoInt {
 	

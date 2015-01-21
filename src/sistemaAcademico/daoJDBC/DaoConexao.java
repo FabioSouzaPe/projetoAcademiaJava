@@ -15,9 +15,9 @@ public class DaoConexao implements DaoConexaoInt {
 	public DaoConexao() {
 		
 		// TODO Auto-generated constructor stub
-		String url = "jdbc:mysql://localhost:3306/sistema_academico";
-		String user = "root";
-		String pass = "teste";
+		 url = "jdbc:mysql://localhost:3306/sistema_academico";
+		 usuario = "root";
+		 senha = "teste";
 	
 	}
 	
@@ -28,16 +28,15 @@ public class DaoConexao implements DaoConexaoInt {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			c = DriverManager.getConnection(url,usuario,senha);
+			
 		} catch (ClassNotFoundException e) {
-			
 			throw new SQLException();
-			
+		
 		} catch (SQLException e) {
 			
 			
 			throw new SQLException();
 		}
-		
 		// TODO Auto-generated method stub
 		return c;
 	}

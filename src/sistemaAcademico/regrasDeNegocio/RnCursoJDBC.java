@@ -20,61 +20,50 @@ public class RnCursoJDBC {
 	
 	DaoCursoJDBCInt dao = new DaoCursoJDBC();
 		
-	/*public int quantidadeDeTurmas(String nomeCurso)throws  CursoInexistenteException{
-		int qtd=0;
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					qtd=dao.consultarTurmas(i, dao.consultarTudo().get(i)).size();
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
-		}
-		return qtd;
-	}
-	*/
+	
 	
 	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
+		boolean sucesso=false;
+		//String sql= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
+		//ResultSet rs=dao.consultar(sql);
+		
+		//if(rs.next()==false){
+			dao.cadastrar(curso);
+			sucesso=true;
+			DaoConexaoJDBC.fecharConexao();
+		//}
+		
+		
+		return sucesso;
+	}
+	
+	public boolean verificacaoExcluirCurso(int id)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+		
+		boolean sucesso=false;
+		
+		if(dao.excluir(id)){
+			sucesso=true;
+		}
+		
+		return sucesso;
+		
+	}
+	
+	
+	public boolean verificacaoAlterarCurso(int id, Curso curso)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+		
 		boolean sucesso=false;
 		String sql= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
 		ResultSet rs=dao.consultar(sql);
 		
 		if(rs.next()==false){
-			dao.cadastrar(curso);
-			sucesso=true;
-			DaoConexaoJDBC.fecharConexao();
+			if(dao.alterar(id, curso)){
+				sucesso=true;
+			}
+		}else{
+			//esse nome ja foi cadastrado
 		}
 		
-		
-		return sucesso;
-	}
-	
-	public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException, ClassNotFoundException, SQLException {
-		
-		boolean sucesso=false;
-		
-		if(dao.excluir(nomeCurso)){
-			sucesso=true;
-		}
-		
-		return sucesso;
-		
-	}
-	
-	
-	public boolean verificacaoAlterarCurso(String cursoNomeOld, String cursoNomeNew)throws CursoInexistenteException, ClassNotFoundException, SQLException {
-		
-		boolean sucesso=false;
-		
-		if(dao.alterar(cursoNomeOld, cursoNomeNew)){
-			sucesso=true;
-		}
 		
 		return sucesso;
 	}
@@ -90,7 +79,6 @@ public class RnCursoJDBC {
 			    Curso c= new Curso();
 				c.setNome(rs.getString("NOME"));
 				c.setId(rs.getInt("ID"));
-				c.setTurma(new ArrayList<Turma>());
 				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
 				cursoList.add(c);
 		}

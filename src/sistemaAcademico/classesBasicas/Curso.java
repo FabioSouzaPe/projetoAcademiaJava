@@ -7,18 +7,16 @@ public class Curso {
 	private int id;
 	private String nome;
 	private Date data;
-	private List<Turma> turma;
+	
 	
 	
 	public Curso(){	}
 
 
-	public Curso(int id, String nome, Date data, List<Turma> turma) {
-		super();
+	public Curso(int id, String nome, Date data ) {
 		this.id = id;
 		this.nome = nome;
 		this.data = data;
-		this.turma = turma;
 	}
 
 
@@ -51,15 +49,6 @@ public class Curso {
 		this.data = data;
 	}
 
-
-	public List<Turma> getTurma() {
-		return turma;
-	}
-
-
-	public void setTurma(List<Turma> turma) {
-		this.turma = turma;
-	}
 	
 	
 	

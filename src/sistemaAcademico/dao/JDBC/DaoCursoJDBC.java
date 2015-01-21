@@ -41,10 +41,9 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 			
 			
-			PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( NOME,DATA,TURMA) VALUES (?,?,?)") ;
+			PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( NOME,DATA) VALUES (?,?)") ;
 			pStmt.setString(1,curso.getNome());
 			pStmt.setDate(2,dataSql);
-			pStmt.setInt(3,0);
 			
 			int rows = pStmt.executeUpdate();
 			conexao.commit();
@@ -57,13 +56,13 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean excluir(String cursoNome) throws ClassNotFoundException, SQLException {
+	public boolean excluir(int id) throws ClassNotFoundException, SQLException {
 		
 		boolean sucesso=false;
 		Connection conexao =  DaoConexaoJDBC.abrirConexao();
 		
-		PreparedStatement pStmt = conexao.prepareStatement("DELETE FROM CURSO WHERE NOME=?");
-		pStmt.setString(1,cursoNome);
+		PreparedStatement pStmt = conexao.prepareStatement("DELETE FROM CURSO WHERE ID=?");
+		pStmt.setInt(1,id);
 		
 		int rows = pStmt.executeUpdate();
 		conexao.commit();
@@ -76,14 +75,14 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean alterar(String cursoNomeOld, String cursoNomeNew) throws ClassNotFoundException, SQLException {
+	public boolean alterar(int id, Curso c) throws ClassNotFoundException, SQLException {
 
 		boolean sucesso=false;
 		Connection conexao =  DaoConexaoJDBC.abrirConexao();
 		
-		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  CURSO SET NOME=? WHERE NOME=?");
-		pStmt.setString(1,cursoNomeNew);
-		pStmt.setString(2,cursoNomeOld);
+		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  CURSO SET NOME=? WHERE ID=?");
+		pStmt.setString(1,c.getNome());
+		pStmt.setInt(2,id);
 		
 		int rows = pStmt.executeUpdate();
 		conexao.commit();

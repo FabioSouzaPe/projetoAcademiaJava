@@ -40,7 +40,7 @@ public class CursoJDBCMain {
 					String nome=sc1.nextLine();
 					Date d = new Date();
 					List<Turma> t= new ArrayList<Turma>();
-					Curso c= new Curso(0, nome, d, t );
+					Curso c= new Curso(0,nome, d );
 						
 					try{
 						if(rn.verificacaoCadastrarCurso(c)){
@@ -68,7 +68,6 @@ public class CursoJDBCMain {
 							System.out.println("ID: "+lista.get(i).getId());
 							System.out.println("Curso: "+lista.get(i).getNome());
 							System.out.println("Data: "+currentYear.format(lista.get(i).getData()));
-							System.out.println("Turmas: "+lista.get(i).getTurma());
 							System.out.println("____________________________________");
 						}
 					}else{
@@ -82,13 +81,12 @@ public class CursoJDBCMain {
 				}
 				else if(opcao==3){
 					
-					System.out.println("Digite o nome do curso a ser excluido:");
-					sc1.nextLine();
-					String nome=sc1.nextLine();
+					System.out.println("Digite o ID do curso a ser excluido:");
+					int id=sc1.nextInt();
 					
 					try{
 						
-						if(rn.verificacaoExcluirCurso(nome)){
+						if(rn.verificacaoExcluirCurso(id)){
 							System.out.println("Curso excluido com sucesso");
 						}else{
 							System.out.println("Curso nao exite");
@@ -102,15 +100,16 @@ public class CursoJDBCMain {
 				}
 				else if(opcao==4){
 					
-					System.out.println("Entre com o nome antigo");
-					sc1.nextLine();
-					String nomeOld=sc1.nextLine();
+					System.out.println("Entre com o ID do curso");
+					int id=sc1.nextInt();
 					System.out.println("Entre com o nome Novo");
+					sc1.nextLine();
 					String nomeNew=sc1.nextLine();
-					
+					Curso curso = new Curso();
+					curso.setNome(nomeNew);
 						try{
 							
-							if(rn.verificacaoAlterarCurso(nomeOld,nomeNew)){
+							if(rn.verificacaoAlterarCurso(id,curso)){
 								System.out.println("Curso Alterado com sucesso");
 							}else{
 								System.out.println("Curso a ser alterado nao existe");
@@ -122,26 +121,7 @@ public class CursoJDBCMain {
 					
 					
 				}
-				/*else if(opcao==5){
-					System.out.println("Entre com o nome do curso para verificar a quantidade de turmas");
-					sc1.nextLine();
-					String nomeCurso=sc1.nextLine();
-					
-					try{
-						
-						int qtd=rn.quantidadeDeTurmas(nomeCurso);
-						System.out.println("Quantidade de Turmas do curso de "+nomeCurso+": "+qtd);
-						
-					}catch(CursoInexistenteException e){
-						System.out.println(e.getMessage());
-					}	
-					
-					
-				}else{
-					System.out.println("Opção Inválida!");
-				}
 				
-				*/
 			}catch(Exception e){
 				System.out.println(e.getMessage());
 			}

@@ -5,12 +5,11 @@ import com.sun.org.apache.bcel.internal.generic.DADD;
 import sistemAcademico.exceptions.ErroConexaoException;
 import sistemAcademico.exceptions.ProfessorExistenteException;
 import sistemAcademico.exceptions.ProfessorInexistenteException;
-
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.dao.DaoProfessor;
 import sistemaAcademico.dao.DaoProfessorInt;
-import sistemaAcademico.daojdbc.DaoProfessorIntJDBC;
-import sistemaAcademico.daojdbc.DaoProfessorJDBC;
+import sistemaAcademico.daoJDBC.DaoProfessorIntJDBC;
+import sistemaAcademico.daoJDBC.DaoProfessorJDBC;
 import sistemaAcademico.enuns.Titulo;
 
 

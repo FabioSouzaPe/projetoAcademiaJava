@@ -12,6 +12,8 @@ public class Pessoa {
 	private Endereco endereco;
 	private Escolaridade escolaridade;
 	private ArrayList<Fone> fones = new ArrayList<Fone>();
+	private ArrayList<Aluno> alunos = new ArrayList<Aluno>();
+	private ArrayList<Professor> professores = new ArrayList<Professor>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
 			Endereco endereco, Escolaridade escolaridade, ArrayList<Fone> fones) {

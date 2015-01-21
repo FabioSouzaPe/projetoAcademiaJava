@@ -1,5 +1,6 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -79,7 +80,7 @@ public class RnPessoa {
 		return verificacao;
 	}
 	
-	public static void adicionaPessoa(Pessoa pessoa){
+	public static void adicionaPessoa(Pessoa pessoa) throws SQLException{
 
 		//Nega se a pessoa existe para adicionar na lista
 		if (!sePessoaExiste(pessoa.getCpf())){
@@ -94,10 +95,10 @@ public class RnPessoa {
 
 	}
 
-	public static ArrayList<Pessoa> consultarPessoas() {
+	public static ArrayList<Pessoa> consultarPessoas() throws SQLException {
 		
 		//Retorna a lista de pessoas cadastradas
-		return daoPessoa.getListaPessoas();
+		return daoPessoaJDBC.getListaPessoas();
 	}
 	
 	public static Pessoa pesquisarPessoa(String cpf) {

@@ -4,31 +4,42 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DaoConexaoJDBC {
-	
-	private static Connection cn;
+public class DaoConexaoJDBC implements DaoConexaoIntJDBC {
 
-	public static Connection conectar(){
-		try {
-			String url = "jdbc:mysql://localhost:3307/sistemaacademico";
-			String user = "root";
-			String pass = "12345";
-			
-			Class.forName("com.mysql.jdbc.Driver");
-			cn = DriverManager.getConnection(url, user, pass);
-		} catch (ClassNotFoundException e){
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return cn;
-	}
+	String url;
+	String user;
+	String pass;
 	
-	public static void desconectar(){
-		try {
-			cn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	Connection c;
+
+	public DaoConexaoJDBC() {
+		url = "jdbc:mysql://localhost:3307/sistema_academico";
+		user = "root";
+		pass = "12345";
 	}
+
+	public Connection conectar() throws SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			c = DriverManager.getConnection(url, user, pass);
+		} catch (ClassNotFoundException e) {
+			throw new SQLException();
+		} catch (SQLException e) {
+			throw new SQLException();
+		}
+		return c;
+	}
+
+	public void desconectar() throws SQLException {
+		try {
+			c.close();
+		} catch (SQLException e) {
+			throw new SQLException();
+		} catch (NullPointerException e) {
+			throw new SQLException();
+		}
+		
+		c = null;
+	}
+
 }

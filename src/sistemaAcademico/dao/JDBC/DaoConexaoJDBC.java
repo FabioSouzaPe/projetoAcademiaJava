@@ -10,9 +10,9 @@ public class DaoConexaoJDBC {
 	
 	public static Connection abrirConexao() throws ClassNotFoundException, SQLException {
 		
-		String url = "jdbc:mysql://127.0.0.1:3306/sistemaacademico";
+		String url = "jdbc:mysql://127.0.0.1:3307/sistemaacademico";
 		String user = "root";
-		String pass = "1234";
+		String pass = "12345";
 		
 		
 			Class.forName("com.mysql.jdbc.Driver");

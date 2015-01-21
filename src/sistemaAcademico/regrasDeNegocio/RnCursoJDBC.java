@@ -1,0 +1,90 @@
+package sistemaAcademico.regrasDeNegocio;
+
+
+
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sistemAcademico.exceptions.CursoExistenteException;
+import sistemAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.classesBasicas.Curso;
+import sistemaAcademico.classesBasicas.Turma;
+import sistemaAcademico.dao.DaoCurso;
+import sistemaAcademico.dao.JDBC.DaoConexaoJDBC;
+import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
+import sistemaAcademico.dao.JDBC.DaoCursoJDBCInt;
+
+public class RnCursoJDBC {
+	
+	DaoCursoJDBCInt dao = new DaoCursoJDBC();
+		
+	
+	
+	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
+		boolean sucesso=false;
+		//String sql= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
+		//ResultSet rs=dao.consultar(sql);
+		
+		//if(rs.next()==false){
+			dao.cadastrar(curso);
+			sucesso=true;
+			DaoConexaoJDBC.fecharConexao();
+		//}
+		
+		
+		return sucesso;
+	}
+	
+	public boolean verificacaoExcluirCurso(int id)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+		
+		boolean sucesso=false;
+		
+		if(dao.excluir(id)){
+			sucesso=true;
+		}
+		
+		return sucesso;
+		
+	}
+	
+	
+	public boolean verificacaoAlterarCurso(int id, Curso curso)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+		
+		boolean sucesso=false;
+		String sql= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
+		ResultSet rs=dao.consultar(sql);
+		
+		if(rs.next()==false){
+			if(dao.alterar(id, curso)){
+				sucesso=true;
+			}
+		}else{
+			//esse nome ja foi cadastrado
+		}
+		
+		
+		return sucesso;
+	}
+	
+	public ArrayList<Curso> listar() throws ClassNotFoundException, SQLException{
+		
+		ArrayList<Curso> cursoList =new ArrayList<Curso>();
+		
+		String sql= "SELECT * FROM CURSO ";
+		ResultSet rs=dao.consultar(sql);
+		
+		while(rs.next()){
+			    Curso c= new Curso();
+				c.setNome(rs.getString("NOME"));
+				c.setId(rs.getInt("ID"));
+				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
+				cursoList.add(c);
+		}
+		DaoConexaoJDBC.fecharConexao();
+		
+		return cursoList;
+	}
+	
+}

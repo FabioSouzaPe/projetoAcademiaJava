@@ -1,13 +1,20 @@
 package sistemaAcademico.classesBasicas;
 
 
+//import java.util.Date;
+
+//import sistemaAcademico.dao.DaoProfessor;
+//import sistemaAcademico.dao.DaoProfessorInt;
 import java.util.Date;
 
-import sistemaAcademico.dao.DaoProfessor;
+import javax.swing.JOptionPane;
+
 import sistemaAcademico.dao.DaoProfessorInt;
+import sistemaAcademico.daojdbc.DaoProfessorIntJDBC;
+import sistemaAcademico.daojdbc.DaoProfessorJDBC;
 import sistemaAcademico.enuns.Titulo;
-import sistemaAcademico.regrasDeNegocio.RnProfessor;
-import sun.security.provider.VerificationProvider;
+//import sistemaAcademico.regrasDeNegocio.RnProfessor;
+//import sun.security.provider.VerificationProvider;
 
 public class Teste {
 
@@ -15,55 +22,33 @@ public class Teste {
 		// TODO Auto-generated method stub
 		
 		
-	//	System.out.println("selecione a opção:");
-		Date data = new Date();
 		
-		//SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+		
+		
+		DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
+		Professor professor = new Professor();
+		
+		Date data = new Date();
+	/*
+		professor.setMatricula("124");
 	
-		Professor pro = new Professor("1234",data,"POO","Unibratec", Titulo.POSGRADUACAO);
-	    DaoProfessorInt dadosprofint = new DaoProfessor();
-	      
-	    //dadosprof.cadastrarProfessor(pro);
-	    
-	    
-	    
-	
-	    //Regra negocio
-	    
-	    RnProfessor rnprof = new RnProfessor();
-	    
-	    if(rnprof.verificarProfessorJaCadastrado(pro) == false){
-	    	
-	    	System.out.println("OK,pode cadastrar");
-	    	
-	    	dadosprofint.cadastrarProfessor(pro);
-	    	for (int i = 0; i < dadosprofint.consultarTudo().size(); i++) {
-	    	
-	    	 	System.out.println(dadosprofint.consultarTudo().get(i).getMatricula());
-			}
-	   
-	    
-	    	
-	    }else{
-	    	System.out.println("ja cadastrado");
-	    }
-	    
-	    
-	   //Remover 
-	    if(rnprof.verificarProfessorJaCadastrado(pro) == true ) {
-	    	
-	    for (int i = 0; i < dadosprofint.consultarTudo().size(); i++) {
-			
-	    	if(dadosprofint.consultarTudo().get(i).getMatricula() == (pro.getMatricula())){
-	    		dadosprofint.remover(pro);
-	    		
-	    	}
-	    	
-		}	
-	    	
-	    }
-	    
-	   
+		professor.setAdmissao(data);		
+		professor.setDepartamento("POO");
+		professor.setInstituicao("Nassau");
+		professor.setTitulo(Titulo.POSGRADUACAO);
+		*/
+		//dados.cadastrarProfessor(professor);
+		dados.consultarTudo();
+		
+		//dados.alterar(professor);
+		
+		//dados.remover(professor);
+		
+		
+		
+		
+		
+		
  
 	}
 

@@ -14,7 +14,9 @@ public class Professor {
 	private String matricula;
 	 
 	 
-	
+	public Professor(){
+		
+	}
 	public Professor(String matricula,Date admissao,String departamento,String instituicao,Titulo titulo ){
 		
 

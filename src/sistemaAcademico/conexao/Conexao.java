@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import sistemAcademico.exceptions.ErroConexaoException;
+
 public class Conexao  implements ConexaoInt{
 	
 	 String url;
@@ -14,13 +16,13 @@ public class Conexao  implements ConexaoInt{
 	 
 	 
 	 public Conexao(){
-		 url= "jdbc:mysql://localhost:3307/teste";
+		 url= "jdbc:mysql://localhost:3307/TesteProfessorjdbc";
 		 user = "root";
 	      pass = "root";
 	 }
 
 	@Override
-	public Connection conectar() throws SQLException {
+	public Connection conectar() throws ErroConexaoException {
 		
 		try {
 			
@@ -28,24 +30,24 @@ public class Conexao  implements ConexaoInt{
 			con=DriverManager.getConnection(url,user,pass);
 			
 		} catch (ClassNotFoundException e) {
-			throw new SQLException();
+			throw new ErroConexaoException();
 		}catch (SQLException e){
-		   throw new SQLException();	
+		   throw new ErroConexaoException();	
 		}
 		// 
 		return con;
 	}
 
 	@Override
-	public void desconectar() throws SQLException {
+	public void desconectar() throws ErroConexaoException {
 		try {
 			con.close();
 			
 		} catch (SQLException e) {
-			throw new SQLException();
+			throw new ErroConexaoException();
 			
 		}catch (NullPointerException e) {
-			throw new SQLException();
+			throw new ErroConexaoException();
 		}
 		con=null;
 	}

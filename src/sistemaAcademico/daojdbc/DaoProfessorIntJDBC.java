@@ -8,11 +8,11 @@ import sistemaAcademico.classesBasicas.Professor;
 
 public interface DaoProfessorIntJDBC {
 	
-	public void cadastrarProfessor(Professor professor) throws ErroConexaoException;	
+	public void cadastrarProfessor(Professor professor) ;	
 	
-	public void alterar(Professor professor) throws ErroConexaoException;
+	public void alterar(Professor professor);
 	
-	public void remover(Professor professor) throws ErroConexaoException;
+	public void remover(Professor professor);
 	
 	public ArrayList<Professor>consultarTudo();
 	

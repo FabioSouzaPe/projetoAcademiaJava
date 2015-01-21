@@ -3,18 +3,19 @@ package sistemaAcademico.regrasDeNegocio;
 
 
 
+import java.sql.SQLException;
+
 import sistemAcademico.exceptions.CursoExistenteException;
 import sistemAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.dao.DaoCurso;
 import sistemaAcademico.dao.DaoCursoInt;
+import sistemaAcademico.dao.JDBC.DaoCursoJDBC;
 
 public class RnCurso {
 	
 	DaoCursoInt dao = new DaoCurso();
 		
-		
-	
 	public int quantidadeDeTurmas(String nomeCurso)throws  CursoInexistenteException{
 		int qtd=0;
 		boolean sucesso=false;
@@ -35,7 +36,7 @@ public class RnCurso {
 	}
 	
 	
-	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException{
+	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
 		boolean sucesso=false;
 		
 		if(dao.consultarTudo().size()!=0){

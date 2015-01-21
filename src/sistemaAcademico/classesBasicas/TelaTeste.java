@@ -49,7 +49,7 @@ public class TelaTeste {
 	}
 
 	private static void removerPessoa() {
-		try {
+		/*try {
 			Scanner scan = new Scanner(System.in);
 			System.out
 					.println("Digite o CPF da pessoa que desenha remover do registro: ");
@@ -57,7 +57,7 @@ public class TelaTeste {
 			RnPessoa.removerPessoa(scan.nextLine());
 		} catch (PessoaInexistenteException e) {
 			System.out.println(e.getMessage());
-		}
+		}*/
 	}
 
 	private static void pesquisarPessoa(){		

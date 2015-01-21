@@ -1,0 +1,7 @@
+.classpath
+.classpath
+.settings/org.eclipse.jdt.core.prefs
+src/sistemaAcademico/conexao/ConexaoInt.java
+src/sistemaAcademico/conexao/Conexao.java
+src/sistemaAcademico/classesBasicas/Teste.java
+src/sistemaAcademico/enuns/Titulo.java

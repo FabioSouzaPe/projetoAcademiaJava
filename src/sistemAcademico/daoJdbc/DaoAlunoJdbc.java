@@ -13,11 +13,11 @@ import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 
-public class DaoJdbcAluno {
+public class DaoAlunoJdbc {
 	
 	private ConexaoInt conexao;
 	
-	public DaoJdbcAluno(){
+	public DaoAlunoJdbc(){
 		conexao = new Conexao();
 	}
 	
@@ -99,10 +99,5 @@ public class DaoJdbcAluno {
 		}
 	}
 	
-	public void alterar(Aluno aluno){
-		
-		String sql = "UPDATE aluno set fk_publicacao=?";
-		
-	}
 
 }

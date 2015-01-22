@@ -13,15 +13,17 @@ public class DaoConexaoJDBC implements DaoConexaoIntJDBC {
 	Connection c;
 
 	public DaoConexaoJDBC() {
-		url = "jdbc:mysql://localhost:3307/sistema_academico";
+		url = "jdbc:mysql://localhost:3306/sistema_academico";
 		user = "root";
-		pass = "12345";
+		pass = "1234";
 	}
 
 	public Connection conectar() throws SQLException, ClassNotFoundException {
 		try {
+			
 			Class.forName("com.mysql.jdbc.Driver");
 			c = DriverManager.getConnection(url, user, pass);
+			c.setAutoCommit(false);
 		} catch (ClassNotFoundException e) {
 			throw new ClassNotFoundException();
 		} catch (SQLException e) {

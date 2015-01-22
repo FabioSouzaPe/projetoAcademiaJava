@@ -1,5 +1,6 @@
 package sistemaAcademico.classesBasicas;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -27,23 +28,8 @@ public class FrequenciaMainJDBC {
 				
 			switch(opcao){
 			case 1:
-				
-				 HashMap<Integer,Boolean> presenca = new HashMap<Integer,Boolean>();
-				 presenca.put(1, true);//Edson
-				 presenca.put(2, true);//Michel
-				 presenca.put(3, false);//Alan
-				 presenca.put(4, true);//Rafael
-				 presenca.put(5, false);//Falvio
-			
-				 
-				 HashMap<Integer,String> avaliacao = new HashMap<Integer,String>();
-				 avaliacao.put(1, "Bom");//Edson
-				 avaliacao.put(2, "Bom");//Michel
-				 avaliacao.put(3, "Ruim");//Fred
-				 avaliacao.put(4, "Bom");//Rafael
-				 avaliacao.put(5, "Bom");//Falvio
-				
-				Frequencia frequencia= new Frequencia(0, new Date(), new Turma(), presenca, avaliacao);
+				ArrayList<Frequencia> f = new ArrayList<Frequencia>();
+				Frequencia frequencia= new Frequencia();
 				
 				
 				//rn.registarFrequencia(frequencia);

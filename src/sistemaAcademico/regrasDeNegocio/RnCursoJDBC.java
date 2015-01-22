@@ -3,6 +3,7 @@ package sistemaAcademico.regrasDeNegocio;
 
 
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,8 +11,7 @@ import java.util.ArrayList;
 import sistemaAcademico.exceptions.CursoExistenteException;
 import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
-import sistemaAcademico.classesBasicas.Turma;
-import sistemaAcademico.dao.DaoCurso;
+import sistemaAcademico.daoJDBC.DaoConexaoIntJDBC;
 import sistemaAcademico.daoJDBC.DaoConexaoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
@@ -30,7 +30,8 @@ public class RnCursoJDBC {
 		//if(rs.next()==false){
 			dao.cadastrar(curso);
 			sucesso=true;
-			DaoConexaoJDBC.fecharConexao();
+			DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+			daoCon.conectar();
 		//}
 		
 		
@@ -78,11 +79,12 @@ public class RnCursoJDBC {
 		while(rs.next()){
 			    Curso c= new Curso();
 				c.setNome(rs.getString("NOME"));
-				c.setId(rs.getInt("ID"));
+				c.setId(rs.getInt("IDCURSO"));
 				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
 				cursoList.add(c);
 		}
-		DaoConexaoJDBC.fecharConexao();
+		DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+		daoCon.conectar();
 		
 		return cursoList;
 	}

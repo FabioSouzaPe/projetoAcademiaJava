@@ -1,14 +1,10 @@
-package sistemaAcademico.dao.JDBC;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
 
@@ -19,7 +15,8 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	@Override
 	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException {
 		
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		DaoConexaoJDBC daoCon = new DaoConexaoJDBC();
+		Connection conexao =  daoCon .conectar();
 		PreparedStatement pStmt = conexao.prepareStatement(select) ;
 		ResultSet rs = pStmt.executeQuery();
 		conexao.commit();
@@ -36,7 +33,8 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	public boolean cadastrar(Curso curso) throws ClassNotFoundException, SQLException {
 		
 			boolean sucesso=false;
-			Connection conexao =  DaoConexaoJDBC.abrirConexao();
+			DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+			Connection conexao =  daoCon.conectar();
 			java.util.Date dataUtil = curso.getData(); 
 			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 			
@@ -47,7 +45,7 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 			
 			int rows = pStmt.executeUpdate();
 			conexao.commit();
-			DaoConexaoJDBC.fecharConexao();
+			daoCon.desconectar();
 			if(rows==1){
 				sucesso=true;
 			}
@@ -59,14 +57,15 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	public boolean excluir(int id) throws ClassNotFoundException, SQLException {
 		
 		boolean sucesso=false;
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+		Connection conexao =  daoCon.conectar();
 		
-		PreparedStatement pStmt = conexao.prepareStatement("DELETE FROM CURSO WHERE ID=?");
+		PreparedStatement pStmt = conexao.prepareStatement("DELETE FROM CURSO WHERE IDCURSO=?");
 		pStmt.setInt(1,id);
 		
 		int rows = pStmt.executeUpdate();
 		conexao.commit();
-		DaoConexaoJDBC.fecharConexao();
+		daoCon.desconectar();
 		if(rows==1){
 			sucesso=true;
 		}
@@ -78,15 +77,16 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	public boolean alterar(int id, Curso c) throws ClassNotFoundException, SQLException {
 
 		boolean sucesso=false;
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+		Connection conexao =  daoCon.conectar();
 		
-		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  CURSO SET NOME=? WHERE ID=?");
+		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  CURSO SET NOME=? WHERE IDCURSO=?");
 		pStmt.setString(1,c.getNome());
 		pStmt.setInt(2,id);
 		
 		int rows = pStmt.executeUpdate();
 		conexao.commit();
-		DaoConexaoJDBC.fecharConexao();
+		daoCon.desconectar();
 		if(rows==1){
 			sucesso=true;
 		}

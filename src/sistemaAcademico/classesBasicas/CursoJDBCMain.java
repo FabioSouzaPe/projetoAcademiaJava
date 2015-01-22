@@ -1,5 +1,7 @@
 package sistemaAcademico.classesBasicas;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +9,10 @@ import java.util.List;
 import java.util.Scanner;
 
 
+
+
+import sistemaAcademico.daoJDBC.DaoConexaoIntJDBC;
+import sistemaAcademico.daoJDBC.DaoConexaoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
 import sistemaAcademico.regrasDeNegocio.RnCursoJDBC;
@@ -18,6 +24,8 @@ public class CursoJDBCMain {
 		
 		
 		while(continuar){
+		
+			
 			Scanner sc1 = new Scanner(System.in);
 			System.out.println("\n -----------------------------------------");
 			System.out.println("| Para sair do Sistema digite --------> 0 |");
@@ -25,7 +33,6 @@ public class CursoJDBCMain {
 			System.out.println("| Para Listar Cursos Digite ----------> 2 |");
 			System.out.println("| Para excluir um curso Digite -------> 3 |");
 			System.out.println("| Para atualizar um curso Digite -----> 4 |");
-			System.out.println("| Para consultar Qtd de Turmas Digite-> 5 |");
 			System.out.println(" -----------------------------------------\n");
 			
 			
@@ -58,7 +65,6 @@ public class CursoJDBCMain {
 				else if(opcao==2){
 					
 					ArrayList<Curso> lista=rn.listar();
-					System.out.println(lista.size());
 					if(lista.size()!=0){
 						
 						SimpleDateFormat currentYear = new SimpleDateFormat("dd/mm/yyyy");

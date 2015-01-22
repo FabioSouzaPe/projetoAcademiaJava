@@ -1,4 +1,4 @@
-package sistemaAcademico.dao.JDBC;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,18 +14,20 @@ public class DaoFrequenciaJDBC implements DaoFrequenciaJDBCInt{
 	public boolean cadastrarFrequencia(Frequencia frequencia) throws SQLException, ClassNotFoundException {
 		
 		boolean sucesso=false;
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
+		Connection conexao =  daoCon.conectar();
 		java.util.Date dataUtil = frequencia.getData(); 
 		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 		
 		
-		PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( DATA, AVALIACAO, TURMA_ID, ALUNO_ID, PRESENCA) VALUES (?,?,?,?,?)") ;
-		pStmt.setDate(1,dataSql);
+		PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( PRESENCA, AVALIACAO, MATRICULAALUNO, IDTURMA, DATA ) VALUES (?,?,?,?,?)") ;
+		
+		pStmt.setDate(5,dataSql);
 		//pStmt.setString(1,frequencia.getAvaliacao());
 		
 		int rows = pStmt.executeUpdate();
 		conexao.commit();
-		DaoConexaoJDBC.fecharConexao();
+		daoCon.desconectar();
 		if(rows==1){
 			sucesso=true;
 		}

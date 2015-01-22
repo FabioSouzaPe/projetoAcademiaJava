@@ -13,9 +13,9 @@ public class DaoConexaoJDBC implements DaoConexaoIntJDBC {
 	Connection c;
 
 	public DaoConexaoJDBC() {
-		url = "jdbc:mysql://localhost:3306/sistema_academico";
+		url = "jdbc:mysql://localhost:3307/sistema_academico";
 		user = "root";
-		pass = "1234";
+		pass = "12345";
 	}
 
 	public Connection conectar() throws SQLException, ClassNotFoundException {

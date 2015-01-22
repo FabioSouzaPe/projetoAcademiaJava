@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.ErroConexaoException;
+
 import sistemAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.conexao.Conexao;
@@ -143,15 +143,55 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
-		return listaprof;
+	
 	}
 
 	@Override
-	public Professor pesquisarprofessor(String matricula)
-			throws ProfessorInexistenteException {
-		// TODO Auto-generated method stub
-		return null;
+	public Professor pesquisarprofessor(String matricula)throws ProfessorInexistenteException {
+		    
+		ConexaoInt conexao = new Conexao();
+			ArrayList<Professor> retorno = new ArrayList<Professor>();
+			 String sql = "select * from Professor where MatriculaProfessor = ?";
+
+			
+			try {
+				PreparedStatement pst = conexao.conectar().prepareStatement(sql);
+				
+				ResultSet rs = pst.executeQuery();
+	            while (rs.next()) {
+	                Professor p = new Professor();              			
+	                p.setMatricula(rs.getString("MatriculaProfessor"));               
+	                p.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
+	                p.setDepartamento(rs.getString("Departamento"));
+	                p.setInstituicao(rs.getString("Instituicao"));
+	                //Para pode listar os Titulos. realizando uma veirificação
+	                for (Titulo tituloAux : Titulo.values()) {
+	                	
+	                	if (tituloAux.getcodigo() == rs.getInt("titulo")) {
+							
+	                		p.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
+						}
+	                	
+						
+					}
+	                retorno.add(p);
+	            }
+							
+				
+				
+				conexao.desconectar();
+				
+			
+				
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}catch (ConexaoException e) {
+				System.out.println(e.getMessage());
+			}
+			
+	
 	}
+	
 	
 	
 

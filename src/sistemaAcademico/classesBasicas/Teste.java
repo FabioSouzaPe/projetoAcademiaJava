@@ -19,16 +19,16 @@ public class Teste {
 		
 		Date data = new Date();
 	
-		professor.setMatricula("12");
+		professor.setMatricula("123");
 	
 		professor.setAdmissao(data);		
 		professor.setDepartamento("POO");
 		professor.setInstituicao("Nassau");
 		professor.setTitulo(Titulo.DOUTORADO);
 		
-		//dados.remover(professor);
+		dados.remover(professor);
 		
-		dados.cadastrarProfessor(professor);
+		//dados.cadastrarProfessor(professor);
 		
 		
 		ArrayList<Professor> retorno = new ArrayList<Professor>();

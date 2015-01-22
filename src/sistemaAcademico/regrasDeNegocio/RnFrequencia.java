@@ -65,4 +65,15 @@ public class RnFrequencia {
 		}
 		return listaDeFrequencia;
 	}
+	
+	
+	public boolean verificarAtualizarFrequencia(Frequencia f) throws ClassNotFoundException, SQLException{
+		
+		boolean sucesso=false;
+		if(dao.alterarFrequencia(f)){
+			sucesso=true;
+		}
+		
+		return sucesso;
+	}
 }

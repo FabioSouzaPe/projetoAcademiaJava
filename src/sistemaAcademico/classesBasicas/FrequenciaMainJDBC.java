@@ -91,6 +91,18 @@ public class FrequenciaMainJDBC {
 				}
 				break;
 			case 3:
+				Frequencia frequencia4= new Frequencia();
+				Aluno a = new  Aluno();
+				a.setMatricula("2015.2");
+				frequencia4.setAluno(a);
+				frequencia4.setData(new Date());
+				frequencia4.setPresenca(true);
+				if(rn.verificarAtualizarFrequencia(frequencia4)){
+					System.out.println("Presença alterada com sucesso");
+				}else{
+					System.out.println("Ainda não foi realaizada a ferquencia para esta data");
+				}
+				
 				break;
 			case 0:
 				run=false;

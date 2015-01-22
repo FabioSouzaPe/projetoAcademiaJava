@@ -11,13 +11,16 @@ import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Turma;
+import sistemaAcademico.conexao.Conexao;
+import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.dao.DaoTurmaInt;
 import sistemaAcademico.enuns.Turno;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class DaoTurmaJDBC implements DaoTurmaInt{
 
 	
-	private DaoConexao conexao = new DaoConexao();
+	private ConexaoInt conexao = new Conexao();
 	private PreparedStatement pst;
 	private String SQLDelete = "Delete FROM Turma WHERE nomeTurma = ? ";
 	private String SQLInsert = "INSERT INTO Turma (nomeTurma,professorTurma,turnoTurma,periodoTurma)values (?,?,?,?)";
@@ -29,7 +32,12 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			List<Disciplina> d, String periodo, Turno t) {
 		
 		try {
-			pst = conexao.conectar().prepareStatement(SQLInsert);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLInsert);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Conectou");
 			pst.setString(1, nome);
 			pst.setString(2,p.getProf());
@@ -48,7 +56,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			try {
 				
 				conexao.desconectar();
-			} catch (SQLException e){
+			} catch (ConexaoException e){
 				
 				
 					}
@@ -59,7 +67,12 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 	public void removerTurma(Turma turmaRemovida) {
 		
 		try {
-			pst = conexao.conectar().prepareStatement(SQLDelete);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLDelete);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			pst.setString(1, turmaRemovida.getNomeDaTurma());
 			pst.executeUpdate();
 			
@@ -73,7 +86,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			try {
 				
 				conexao.desconectar();
-			} catch (SQLException e){
+			} catch (ConexaoException e){
 				System.out.println(e.getMessage());
 		}
 
@@ -89,7 +102,12 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 		
 		try {
 			
-			pst = conexao.conectar().prepareStatement(SQLSelectOne);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLSelectOne);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			pst.setString(1, nome);
 			ResultSet s = pst.executeQuery();
 			if (s.next()){
@@ -110,7 +128,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			try {
 				
 				conexao.desconectar();
-			} catch (SQLException e){
+			} catch (ConexaoException e){
 
 				System.out.println(e.getMessage());
 		}
@@ -126,7 +144,12 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 		List<Turma> t = new ArrayList();
 		Turma turma = new Turma();	
 		try {
-			pst = conexao.conectar().prepareStatement(SQLSelectAll);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLSelectAll);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//pst.setString(1, turmaRemovida.getNomeDaTurma());
 			st = pst.executeQuery();
 			
@@ -140,7 +163,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			try {
 				
 				conexao.desconectar();
-			} catch (SQLException e){
+			} catch (ConexaoException e){
 				System.out.println(e.getMessage());
 		}
 
@@ -171,7 +194,12 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 		// TODO Auto-generated method stub
 		//ResultSet st;
 		try {
-			pst = conexao.conectar().prepareStatement(SQLUpdate);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLUpdate);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//pst.setString(1, turmaRemovida.getNomeDaTurma());
 			pst.executeQuery();
 			
@@ -185,7 +213,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			try {
 				
 				conexao.desconectar();
-			} catch (SQLException e){
+			} catch (ConexaoException e){
 				System.out.println(e.getMessage());
 		}
 		

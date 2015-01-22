@@ -43,7 +43,7 @@ public class CursoMain {
 					String nome=sc1.nextLine();
 					Date d = new Date();
 					List<Turma> t= new ArrayList<Turma>();
-					Curso c= new Curso(id, nome, d,t );
+					Curso c = new Curso();
 						
 					try{
 						if(rn.verificacaoCadastrarCurso(c)){
@@ -67,7 +67,7 @@ public class CursoMain {
 							System.out.println("ID: "+dao.consultarTudo().get(i).getId());
 							System.out.println("Curso: "+dao.consultarTudo().get(i).getNome());
 							System.out.println("Data: "+currentYear.format(dao.consultarTudo().get(i).getData()));
-							System.out.println("Turmas: "+dao.consultarTudo().get(i).getTurma());
+						
 							System.out.println("____________________________________");
 						}
 					}else{

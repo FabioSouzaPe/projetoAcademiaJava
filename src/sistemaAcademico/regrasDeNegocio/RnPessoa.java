@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import sistemAcademico.exceptions.AlunoExistenteException;
+
 import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;

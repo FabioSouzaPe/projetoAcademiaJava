@@ -11,52 +11,20 @@ import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.enuns.Titulo;
+import sistemaAcademico.exceptions.ConexaoException;
 
 
 
 public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	
-	
-	
+		
 	 ArrayList< Professor> listaprof = new ArrayList<Professor>();
 	
-	/*
-	public Titulo reconverter(int a){
-		
-		switch (a) {
-		case 1:
-			return Titulo.POSGRADUACAO ;
-		case 2:
-			return Titulo.MESTRADO;
-		case 3:
-			return Titulo.DOUTORADO;
-				
-		}
-		 
-		 return null;
-	}
-	 
-	 
-	 public int convertetitulo(Titulo titulo){
-		 
-		switch (titulo) {
-		case POSGRADUACAO:
-			return 1;
-		case MESTRADO:
-			return 2;
-		case DOUTORADO:
-			return 3;
-				
-		}
-		 
-		 return 0;
-	 }
-	 */
-  
+	
 	@Override
 	public void cadastrarProfessor(Professor professor){
 		 ConexaoInt conexao = new Conexao();
-		String sql="insert into professor(Matricula,Admissao,Departamento,Instituicao,Titulo) values(?,?,?,?,?);";
+		String sql="insert into professor(MatriculaProfessor,Admissao,Departamento,Instituicao,Titulo) values(?,?,?,?,?);";
 		
 		//Comando para poder set a data de Admissão
 				java.util.Date dataUtil = professor.getAdmissao(); 
@@ -75,7 +43,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		}catch (ErroConexaoException e) {
+		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
 	}
@@ -83,7 +51,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	@Override
 	public void alterar(Professor professor) {
 		 ConexaoInt conexao = new Conexao();
-		String sql="update Professor  set Departamento=? , set Instituicao=?,set Titulo= ? where Matricula = ?";
+		String sql="update Professor  set Departamento=? , set Instituicao=?,set Titulo= ? where MatriculaProfessor = ?";
 		
 		//Comando para poder set a data de Admissão
 		//java.util.Date dataUtil = professor.getAdmissao(); 
@@ -105,7 +73,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		}catch (ErroConexaoException e) {
+		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
 	}
@@ -113,7 +81,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	@Override
 	public void remover(Professor professor) {
 		 ConexaoInt conexao = new Conexao();
-		String sql="DELETE FROM Professor WHERE Matricula=?";
+		String sql="DELETE FROM Professor WHERE MatriculaProfessor=?";
 		
 		
 		try {
@@ -127,7 +95,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		}catch (ErroConexaoException e) {
+		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
 		
@@ -147,7 +115,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Professor p = new Professor();              			
-                p.setMatricula(rs.getString("Matricula"));               
+                p.setMatricula(rs.getString("MatriculaProfessor"));               
                 p.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
                 p.setDepartamento(rs.getString("Departamento"));
                 p.setInstituicao(rs.getString("Instituicao"));
@@ -172,7 +140,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		}catch (ErroConexaoException e) {
+		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
 		return listaprof;

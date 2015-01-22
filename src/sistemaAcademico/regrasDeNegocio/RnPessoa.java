@@ -21,7 +21,6 @@ public class RnPessoa {
 
 	public RnPessoa() {}
 
-	
 	// Metodo para validar o CPF
 	public static boolean cpfValido(String strCpf) {
 		int d1, d2;

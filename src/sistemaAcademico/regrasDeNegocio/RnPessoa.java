@@ -1,17 +1,18 @@
 package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import sistemAcademico.exceptions.AlunoExistenteException;
 import sistemAcademico.exceptions.PessoaInexistenteException;
+import sistemaAcademico.classesBasicas.Endereco;
+import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.dao.DaoPessoa;
 import sistemaAcademico.dao.DaoPessoaInt;
 import sistemaAcademico.daoJDBC.DaoPessoaIntJDBC;
 import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class RnPessoa {
 	
@@ -68,34 +69,17 @@ public class RnPessoa {
 
 	public static boolean sePessoaExiste(String strCpf) throws ClassNotFoundException, SQLException {
 		
-		//verifica registro por registro na lista de pessoas se existe um CPF igual
-		
-		/*
-		for (Pessoa p : daoPessoaJDBC.getListaPessoas()) {
-
-			if (p.getCpf().equals(strCpf)) {
-				verificacao = true;
-			}
-		}
-*/
-		
-		
 		return daoPessoaJDBC.verificaSeCadastrado(strCpf);
 	}
 	
-	public static void adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException{
-
-		//Nega se a pessoa existe para adicionar na lista
-		if (!sePessoaExiste(pessoa.getCpf())){
-			daoPessoaJDBC.addPessoa(pessoa);
-			System.out.println("Pessoa cadastrada com sucesso");
-		} 
+	public static int adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException{
+		int id = 0;
 		
-		//Se ja existe exite uma mensagem de aviso
-		else {
-			System.out.println("A pessoa ja existe no banco de dados!");
+		//Verifica se a pessoa já existe no banco de dados, se não exister, invoca o método de adicionar pessoa;
+		if (!sePessoaExiste(pessoa.getCpf())){
+			id = daoPessoaJDBC.addPessoa(pessoa);
 		} 
-
+		return id;
 	}
 
 	public static List<Pessoa> consultarPessoas() throws SQLException, ClassNotFoundException {
@@ -105,7 +89,6 @@ public class RnPessoa {
 	}
 	
 	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException {
-		
 
 		Pessoa pessoaAchada = null;
 
@@ -117,21 +100,10 @@ public class RnPessoa {
 		}
 	}
 
-	/*public static void removerPessoa(String cpf) {
-
-		Pessoa p = pesquisarPessoa(cpf);
-
-		Scanner ler = new Scanner(System.in);
-
-		System.out
-				.println("Deseja realmente remover o registro dessa pessoa? 1 - Sim");
-
-		if (ler.nextInt() == 1) {
-			daoPessoa.removerPessoa(p);
-			System.out.println("Pessoa removida");
-		} 
-		else {
-			System.out.println("Cancelado");
-		}
-	}*/
+	public static void alterarPessoa(Pessoa p, Endereco en) throws ClassNotFoundException, SQLException {
+		daoPessoaJDBC.alterarEnderecoPessoa(p, en);
+	}
+	public static void alterarPessoa(Pessoa p, Fone f) throws ClassNotFoundException, SQLException {
+		daoPessoaJDBC.alterarFonePessoa(p, f);
+	}
 }

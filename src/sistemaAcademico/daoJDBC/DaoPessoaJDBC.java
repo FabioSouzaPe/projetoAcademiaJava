@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
-
 import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
+
+import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
@@ -28,10 +29,8 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 		try {
 
-			Connection cn = c.conectar();
-
-			String selectSQL = "SELECT * FROM sistema_academico.busca_pessoa";
-			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+			String selectSQL = "SELECT * FROM busca_pessoa";
+			PreparedStatement pStmt = c.conectar().prepareStatement(selectSQL);
 
 			ResultSet rs = pStmt.executeQuery(selectSQL);
 
@@ -45,24 +44,25 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				p.setNome(rs.getString(2));
 				p.setCpf(rs.getString(3));
 				p.setSexo(rs.getString(4).charAt(0));
+
+				en.setCep(rs.getString(5));
+				en.setLogradouro(rs.getString(6));
+				en.setBairro(rs.getString(7));
+				en.setNumero(rs.getString(8));
+				en.setCidade(rs.getString(9));
+				en.setUf(rs.getString(10));
 				
-				en.setLogradouro(rs.getString(5));
-				en.setBairro(rs.getString(6));
-				en.setNumero(rs.getString(7));
-				en.setCidade(rs.getString(8));
-				en.setUf(rs.getString(9));
+				f.setDdd(rs.getString(11));
+				f.setFone(rs.getString(12));
+				
+				en.setId(rs.getInt(13));
+				f.setId(rs.getInt(14));
 				
 				p.setEndereco(en);
-				
-				f.setDdd(rs.getString(10));
-				f.setFone(rs.getString(11));
-				
 				p.addFones(f);
 				
 				listaPessoas.add(p);
 			}
-
-			cn.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,28 +73,53 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		return listaPessoas;
 	}
 
+	@SuppressWarnings("finally")
 	@Override
-	public void addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException {
+	public int addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException {
 
 		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
 
+		int id = 0;
+		
+		String insertSQL;
+		PreparedStatement pStmt;
+		ResultSet rs;
+		
 		try {
+			
+			id = buscaEndereco(pessoa.getEndereco().getCep(), c.conectar());
+			
+			if (id == 0) {
 
-			Connection cn = c.conectar();
+				insertSQL = "insert into endereco (`Cep`, `Logradouro`, `Bairro`, `Numero`, `Cidade`, `UF`) VALUES (?,?,?,?,?,?)";
 
-			int id;
-			String insertSQL;
-			PreparedStatement pStmt;
-			ResultSet rs;
+				pStmt = c.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 
-			insertSQL = "insert into `sistema_academico`.`pessoa` (`nome`, `cpf`, `sexo`) VALUES (?,?,?)";
+				pStmt.setString(1, pessoa.getEndereco().getCep());
+				pStmt.setString(2, pessoa.getEndereco().getLogradouro());
+				pStmt.setString(3, pessoa.getEndereco().getBairro());
+				pStmt.setString(4, pessoa.getEndereco().getNumero());
+				pStmt.setString(5, pessoa.getEndereco().getCidade());
+				pStmt.setString(6, pessoa.getEndereco().getUf());
 
-			pStmt = cn.prepareStatement(insertSQL,
-					Statement.RETURN_GENERATED_KEYS);
+				pStmt.executeUpdate();
+
+				rs = pStmt.getGeneratedKeys();
+
+				rs.next();
+				id = rs.getInt(1);
+				rs.close();
+				
+			}
+
+			insertSQL = "insert into pessoa (`Nome`, `Sexo`, `CPF`, `IdEndereco`) VALUES (?,?,?,?)";
+
+			pStmt = c.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 
 			pStmt.setString(1, pessoa.getNome());
-			pStmt.setString(2, pessoa.getCpf());
-			pStmt.setString(3, String.valueOf(pessoa.getSexo()));
+			pStmt.setString(2, String.valueOf(pessoa.getSexo()));
+			pStmt.setString(3, pessoa.getCpf());
+			pStmt.setInt(4, id);
 
 			pStmt.executeUpdate();
 
@@ -103,28 +128,14 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			rs.next();
 			id = rs.getInt(1);
 			rs.close();
-			
-			insertSQL = "insert into `sistema_academico`.`endereco` (`logradouro`, `bairro`, `numero`, `cidade`, "
-					+ "`uf`, `id_pessoa` ) VALUES (?,?,?,?,?,?)";
-
-			pStmt = cn.prepareStatement(insertSQL);
-
-			pStmt.setString(1, pessoa.getEndereco().getLogradouro());
-			pStmt.setString(2, pessoa.getEndereco().getBairro());
-			pStmt.setString(3, pessoa.getEndereco().getNumero());
-			pStmt.setString(4, pessoa.getEndereco().getCidade());
-			pStmt.setString(5, pessoa.getEndereco().getUf());
-			pStmt.setInt(6, id);
-			
-			pStmt.executeUpdate();
 
 			Iterator<Fone> it = pessoa.getFones().iterator();
 			
 			Fone f;
 			
-			insertSQL = "insert into `sistema_academico`.`fone` (`ddd`, `numero`, `id_pessoa`) VALUES (?,?,?)";
-			
-			pStmt = cn.prepareStatement(insertSQL);
+			insertSQL = "INSERT INTO fone (`DDD`, `Fone`, `IdPessoa`) VALUES (?,?,?)";
+
+			pStmt = c.conectar().prepareStatement(insertSQL);
 
 			while (it.hasNext()) {
 				
@@ -136,8 +147,33 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				
 				pStmt.executeUpdate();
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			c.desconectar();
+			return id;
+		}
+	}
 
-			cn.close();
+	public void alterarEnderecoPessoa(Pessoa p, Endereco en) throws ClassNotFoundException, SQLException {
+
+		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
+		
+		try {
+			
+			String updateSQL = "UPDATE endereco SET Cep = ?, Logradouro = ?, Bairro = ?, Numero = ?, Cidade = ?, UF = ? WHERE IdEndereco = ?";
+			
+			PreparedStatement pStmt = c.conectar().prepareStatement(updateSQL);
+
+			pStmt.setString(1, en.getCep());
+			pStmt.setString(2, en.getLogradouro());
+			pStmt.setString(3, en.getBairro());
+			pStmt.setString(4, en.getNumero());
+			pStmt.setString(5, en.getCidade());
+			pStmt.setString(6, en.getUf());
+			pStmt.setInt(7, p.getEndereco().getId());
+			
+			pStmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -147,12 +183,29 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	}
 
-	@Override
-	public void removerPessoa(Pessoa p) {
+	public void alterarFonePessoa(Pessoa p, Fone f) throws ClassNotFoundException, SQLException{
+		
+		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
+		
+		String updateSQL = "UPDATE fone SET DDD = ?, Fone = ? WHERE IdFone = ?";
+		
+		try {
 
+			PreparedStatement pStmt = c.conectar().prepareStatement(updateSQL);
+
+			pStmt.setString(1, f.getDdd());
+			pStmt.setString(2, f.getFone());
+			pStmt.setInt(3, p.getFones().get(0).getId());
+			
+			pStmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			c.desconectar();
+		}
 	}
-
-	@Override
+	
 	public boolean verificaSeCadastrado(String cpf) throws ClassNotFoundException, SQLException {
 		
 		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
@@ -192,10 +245,8 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 		try {
 
-			Connection cn = c.conectar();
-
 			String selectSQL = "SELECT * FROM busca_pessoa where cpf = '" + cpf + "'";
-			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+			PreparedStatement pStmt = c.conectar().prepareStatement(selectSQL);
 
 			ResultSet rs = pStmt.executeQuery(selectSQL);
 
@@ -205,23 +256,24 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				p.setNome(rs.getString(2));
 				p.setCpf(rs.getString(3));
 				p.setSexo(rs.getString(4).charAt(0));
+
+				en.setCep(rs.getString(5));
+				en.setLogradouro(rs.getString(6));
+				en.setBairro(rs.getString(7));
+				en.setNumero(rs.getString(8));
+				en.setCidade(rs.getString(9));
+				en.setUf(rs.getString(10));
 				
-				en.setLogradouro(rs.getString(5));
-				en.setBairro(rs.getString(6));
-				en.setNumero(rs.getString(7));
-				en.setCidade(rs.getString(8));
-				en.setUf(rs.getString(9));
+				f.setDdd(rs.getString(11));
+				f.setFone(rs.getString(12));
+				
+				en.setId(rs.getInt(13));
+				f.setId(rs.getInt(14));
 				
 				p.setEndereco(en);
-				
-				f.setDdd(rs.getString(10));
-				f.setFone(rs.getString(11));
-				
 				p.addFones(f);
 
 			}
-
-			cn.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -230,6 +282,29 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		}
 
 		return p;
+	}
+	
+	@SuppressWarnings("finally")
+	public int buscaEndereco(String cep, Connection cn){
+		
+		int id = 0;
+		
+		try {
+			
+			String selectSQL = "SELECT * FROM endereco where Cep = '" + cep + "'";
+			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+			
+			ResultSet rs = pStmt.executeQuery(selectSQL);
+			
+			if(rs.next()){
+				id = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			return id;
+		}
 	}
 
 }

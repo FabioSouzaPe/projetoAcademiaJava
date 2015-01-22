@@ -52,18 +52,11 @@ public class DaoFrequenciaJDBC implements DaoFrequenciaJDBCInt{
 	}
 
 	@Override
-	public boolean alterarFrequencia(Frequencia frequencia) throws ClassNotFoundException, SQLException {
+	public boolean alterarFrequencia(String sql) throws ClassNotFoundException, SQLException {
 		boolean sucesso=false;
 		DaoConexaoIntJDBC daoCon = new DaoConexaoJDBC();
 		Connection conexao =  daoCon.conectar();
-		java.util.Date dataUtil = frequencia.getData(); 
-		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
-		
-		PreparedStatement pStmt = conexao.prepareStatement("UPDATE  FREQUENCIA SET  PRESENCA=? WHERE DATA=? AND MATRICULAALUNO=?");
-		pStmt.setBoolean(1, frequencia.getPresenca());
-		pStmt.setDate(2,dataSql);
-		pStmt.setString(3, frequencia.getAluno().getMatricula());
-		
+		PreparedStatement pStmt = conexao.prepareStatement(sql);
 		int rows = pStmt.executeUpdate();
 		conexao.commit();
 		daoCon.desconectar();

@@ -70,7 +70,19 @@ public class RnFrequencia {
 	public boolean verificarAtualizarFrequencia(Frequencia f) throws ClassNotFoundException, SQLException{
 		
 		boolean sucesso=false;
-		if(dao.alterarFrequencia(f)){
+		String sql;
+		java.util.Date dataUtil = f.getData(); 
+		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
+		
+		if(f.getAvaliacao()==null && f.getPresenca()!=null){
+			 sql="UPDATE  FREQUENCIA SET  PRESENCA="+f.getPresenca()+" WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
+		}else if(f.getPresenca()==null && f.getAvaliacao()!=null){
+			sql="UPDATE  FREQUENCIA SET  AVALIACAO='"+f.getAvaliacao()+"'  WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
+		}
+		else{
+			sql="UPDATE  FREQUENCIA SET  PRESENCA="+f.getPresenca()+" , AVALIACAO='"+f.getAvaliacao()+"' WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
+		}
+		if(dao.alterarFrequencia(sql)){
 			sucesso=true;
 		}
 		

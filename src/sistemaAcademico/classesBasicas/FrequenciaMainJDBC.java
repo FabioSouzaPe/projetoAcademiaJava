@@ -96,7 +96,8 @@ public class FrequenciaMainJDBC {
 				a.setMatricula("2015.2");
 				frequencia4.setAluno(a);
 				frequencia4.setData(new Date());
-				frequencia4.setPresenca(true);
+				frequencia4.setPresenca(false);
+				frequencia4.setAvaliacao("bom");
 				if(rn.verificarAtualizarFrequencia(frequencia4)){
 					System.out.println("Presença alterada com sucesso");
 				}else{
@@ -105,6 +106,7 @@ public class FrequenciaMainJDBC {
 				
 				break;
 			case 0:
+				sc1.close();
 				run=false;
 				break;
 			default:

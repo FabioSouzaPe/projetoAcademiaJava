@@ -11,6 +11,6 @@ public interface DaoFrequenciaJDBCInt {
 	
 	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException;
 	public boolean cadastrarFrequencia(Frequencia frequencia)throws SQLException, ClassNotFoundException;
-	public boolean alterarFrequencia(Frequencia frequencia) throws ClassNotFoundException, SQLException;
+	public boolean alterarFrequencia(String sql) throws ClassNotFoundException, SQLException;
 	public boolean ListarFrequencia(Turma turma, Date data);
 }

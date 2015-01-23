@@ -21,9 +21,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 	public List<Pessoa> getListaPessoas() throws SQLException, ClassNotFoundException {
 
 		List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
-		Pessoa p;
-		Endereco en;
-		Fone f;
+		Pessoa pessoa;
+		Endereco endereco;
+		Fone fone;
 		int quantidadeDeLinhas;
 		
 		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
@@ -35,30 +35,29 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			
 			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(selectSQL);
 
-			ResultSet rs = preparedStatement.executeQuery(selectSQL);
+			ResultSet resultSet = preparedStatement.executeQuery(selectSQL);
 
-			while (rs.next()) {
-				p = new Pessoa();
-				en = new Endereco();
-//				f = new Fone();
+			while (resultSet.next()) {
+				pessoa = new Pessoa();
+				endereco = new Endereco();
 
-				p.setId(Integer.parseInt(rs.getString(1)));
-				p.setNome(rs.getString(2));
-				p.setCpf(rs.getString(3));
-				p.setSexo(rs.getString(4).charAt(0));
+				pessoa.setId(Integer.parseInt(resultSet.getString(1)));
+				pessoa.setNome(resultSet.getString(2));
+				pessoa.setCpf(resultSet.getString(3));
+				pessoa.setSexo(resultSet.getString(4).charAt(0));
 
-				en.setCep(rs.getString(5));
-				en.setLogradouro(rs.getString(6));
-				en.setBairro(rs.getString(7));
-				en.setNumero(rs.getString(8));
-				en.setCidade(rs.getString(9));
-				en.setUf(rs.getString(10));
-				en.setId(rs.getInt(13));
-				p.setEndereco(en);
+				endereco.setCep(resultSet.getString(5));
+				endereco.setLogradouro(resultSet.getString(6));
+				endereco.setBairro(resultSet.getString(7));
+				endereco.setNumero(resultSet.getString(8));
+				endereco.setCidade(resultSet.getString(9));
+				endereco.setUf(resultSet.getString(10));
+				endereco.setId(resultSet.getInt(13));
+				pessoa.setEndereco(endereco);
 
 				
 				preparedStatement = conexao.conectar().prepareStatement(countSQL);
-				preparedStatement.setInt(1, p.getId());
+				preparedStatement.setInt(1, pessoa.getId());
 
 				ResultSet resultSetLinhas = preparedStatement.executeQuery();
 
@@ -67,19 +66,19 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				resultSetLinhas.close();
 				
 				for (int i = 0; i < quantidadeDeLinhas; i++) {
-					f = new Fone();
+					fone = new Fone();
 
-					f.setDdd(rs.getString(11));
-					f.setFone(rs.getString(12));
-					f.setId(rs.getInt(14));
-					p.addFones(f);
+					fone.setDdd(resultSet.getString(11));
+					fone.setFone(resultSet.getString(12));
+					fone.setId(resultSet.getInt(14));
+					pessoa.addFones(fone);
 					
-					if(quantidadeDeLinhas > 1) {
-						rs.next();
+					if(1 < quantidadeDeLinhas - 1) {
+						resultSet.next();
 					}
 				}
 				
-				listaPessoas.add(p);
+				listaPessoas.add(pessoa);
 
 			}
 
@@ -101,8 +100,8 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		int id = 0;
 		
 		String insertSQL;
-		PreparedStatement pStmt;
-		ResultSet rs;
+		PreparedStatement preparedStatement;
+		ResultSet resultSet;
 		
 		try {
 			
@@ -112,59 +111,59 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 				insertSQL = "insert into endereco (`Cep`, `Logradouro`, `Bairro`, `Numero`, `Cidade`, `UF`) VALUES (?,?,?,?,?,?)";
 
-				pStmt = conexao.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+				preparedStatement = conexao.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 
-				pStmt.setString(1, pessoa.getEndereco().getCep());
-				pStmt.setString(2, pessoa.getEndereco().getLogradouro());
-				pStmt.setString(3, pessoa.getEndereco().getBairro());
-				pStmt.setString(4, pessoa.getEndereco().getNumero());
-				pStmt.setString(5, pessoa.getEndereco().getCidade());
-				pStmt.setString(6, pessoa.getEndereco().getUf());
+				preparedStatement.setString(1, pessoa.getEndereco().getCep());
+				preparedStatement.setString(2, pessoa.getEndereco().getLogradouro());
+				preparedStatement.setString(3, pessoa.getEndereco().getBairro());
+				preparedStatement.setString(4, pessoa.getEndereco().getNumero());
+				preparedStatement.setString(5, pessoa.getEndereco().getCidade());
+				preparedStatement.setString(6, pessoa.getEndereco().getUf());
 
-				pStmt.executeUpdate();
+				preparedStatement.executeUpdate();
 
-				rs = pStmt.getGeneratedKeys();
+				resultSet = preparedStatement.getGeneratedKeys();
 
-				rs.next();
-				id = rs.getInt(1);
-				rs.close();
+				resultSet.next();
+				id = resultSet.getInt(1);
+				resultSet.close();
 				
 			}
 
 			insertSQL = "insert into pessoa (`Nome`, `Sexo`, `CPF`, `IdEndereco`) VALUES (?,?,?,?)";
 
-			pStmt = conexao.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement = conexao.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 
-			pStmt.setString(1, pessoa.getNome());
-			pStmt.setString(2, String.valueOf(pessoa.getSexo()));
-			pStmt.setString(3, pessoa.getCpf());
-			pStmt.setInt(4, id);
+			preparedStatement.setString(1, pessoa.getNome());
+			preparedStatement.setString(2, String.valueOf(pessoa.getSexo()));
+			preparedStatement.setString(3, pessoa.getCpf());
+			preparedStatement.setInt(4, id);
 
-			pStmt.executeUpdate();
+			preparedStatement.executeUpdate();
 
-			rs = pStmt.getGeneratedKeys();
+			resultSet = preparedStatement.getGeneratedKeys();
 			
-			rs.next();
-			id = rs.getInt(1);
-			rs.close();
+			resultSet.next();
+			id = resultSet.getInt(1);
+			resultSet.close();
 
-			Iterator<Fone> it = pessoa.getFones().iterator();
+			Iterator<Fone> iterator = pessoa.getFones().iterator();
 			
-			Fone f;
+			Fone fone;
 			
 			insertSQL = "INSERT INTO fone (`DDD`, `Fone`, `IdPessoa`) VALUES (?,?,?)";
 
-			pStmt = conexao.conectar().prepareStatement(insertSQL);
+			preparedStatement = conexao.conectar().prepareStatement(insertSQL);
 
-			while (it.hasNext()) {
+			while (iterator.hasNext()) {
 				
-				f = it.next();
+				fone = iterator.next();
 
-				pStmt.setString(1, f.getDdd());
-				pStmt.setString(2, f.getFone());
-				pStmt.setInt(3, id);
+				preparedStatement.setString(1, fone.getDdd());
+				preparedStatement.setString(2, fone.getFone());
+				preparedStatement.setInt(3, id);
 				
-				pStmt.executeUpdate();
+				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -174,7 +173,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		}
 	}
 
-	public void alterarEnderecoPessoa(Pessoa p, Endereco en) throws ClassNotFoundException, SQLException {
+	public void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException {
 
 		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
 		
@@ -182,17 +181,17 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			
 			String updateSQL = "UPDATE endereco SET Cep = ?, Logradouro = ?, Bairro = ?, Numero = ?, Cidade = ?, UF = ? WHERE IdEndereco = ?";
 			
-			PreparedStatement pStmt = conexao.conectar().prepareStatement(updateSQL);
+			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(updateSQL);
 
-			pStmt.setString(1, en.getCep());
-			pStmt.setString(2, en.getLogradouro());
-			pStmt.setString(3, en.getBairro());
-			pStmt.setString(4, en.getNumero());
-			pStmt.setString(5, en.getCidade());
-			pStmt.setString(6, en.getUf());
-			pStmt.setInt(7, p.getEndereco().getId());
+			preparedStatement.setString(1, endereco.getCep());
+			preparedStatement.setString(2, endereco.getLogradouro());
+			preparedStatement.setString(3, endereco.getBairro());
+			preparedStatement.setString(4, endereco.getNumero());
+			preparedStatement.setString(5, endereco.getCidade());
+			preparedStatement.setString(6, endereco.getUf());
+			preparedStatement.setInt(7, endereco.getId());
 			
-			pStmt.executeUpdate();
+			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -202,7 +201,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	}
 
-	public void alterarFonePessoa(Pessoa p, Fone f) throws ClassNotFoundException, SQLException{
+	public void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException{
 		
 		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
 		
@@ -210,53 +209,28 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		
 		try {
 
-			PreparedStatement pStmt = conexao.conectar().prepareStatement(updateSQL);
+			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(updateSQL);
 
-			pStmt.setString(1, f.getDdd());
-			pStmt.setString(2, f.getFone());
-			pStmt.setInt(3, p.getFones().get(0).getId());
+			preparedStatement.setString(1, fone.getDdd());
+			preparedStatement.setString(2, fone.getFone());
+			preparedStatement.setInt(3, fone.getId());
 			
-			pStmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			conexao.desconectar();
-		}
-	}
-	
-	public boolean verificaSeCadastrado(String cpf) throws ClassNotFoundException, SQLException {
-		
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
-		boolean verifica = false;
-		
-		try {
-			
-			String selectSQL = "SELECT * FROM pessoa where cpf = '" + cpf + "'";
-			PreparedStatement pStmt = conexao.conectar().prepareStatement(selectSQL);
-			
-			ResultSet rs = pStmt.executeQuery(selectSQL);
-			
-			if(rs.next()){
-				verifica = rs.getBoolean(1);
-			}
+			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
 		}
-		
-		return verifica;
 	}
 
 	@Override
 	public Pessoa buscaPorCpf(String cpf) throws ClassNotFoundException, SQLException {
 		
 		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
-		Pessoa p = new Pessoa();
-		Endereco en = new Endereco();
-		Fone f;
+		Pessoa pessoa = new Pessoa();
+		Endereco endereco = new Endereco();
+		Fone fone;
 		int quantidadeDeLinhas;
 
 		try {
@@ -267,27 +241,27 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			
 			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(selectSQL);
 
-			ResultSet rs = preparedStatement.executeQuery(selectSQL);
+			ResultSet resultSet = preparedStatement.executeQuery(selectSQL);
 
-			while (rs.next()) {
+			while (resultSet.next()) {
 
-				p.setId(Integer.parseInt(rs.getString(1)));
-				p.setNome(rs.getString(2));
-				p.setCpf(rs.getString(3));
-				p.setSexo(rs.getString(4).charAt(0));
+				pessoa.setId(Integer.parseInt(resultSet.getString(1)));
+				pessoa.setNome(resultSet.getString(2));
+				pessoa.setCpf(resultSet.getString(3));
+				pessoa.setSexo(resultSet.getString(4).charAt(0));
 
-				en.setCep(rs.getString(5));
-				en.setLogradouro(rs.getString(6));
-				en.setBairro(rs.getString(7));
-				en.setNumero(rs.getString(8));
-				en.setCidade(rs.getString(9));
-				en.setUf(rs.getString(10));
-				en.setId(rs.getInt(13));
-				p.setEndereco(en);
+				endereco.setCep(resultSet.getString(5));
+				endereco.setLogradouro(resultSet.getString(6));
+				endereco.setBairro(resultSet.getString(7));
+				endereco.setNumero(resultSet.getString(8));
+				endereco.setCidade(resultSet.getString(9));
+				endereco.setUf(resultSet.getString(10));
+				endereco.setId(resultSet.getInt(13));
+				pessoa.setEndereco(endereco);
 
 				
 				preparedStatement = conexao.conectar().prepareStatement(countSQL);
-				preparedStatement.setInt(1, p.getId());
+				preparedStatement.setInt(1, pessoa.getId());
 
 				ResultSet resultSetLinhas = preparedStatement.executeQuery();
 
@@ -296,14 +270,14 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				resultSetLinhas.close();
 				
 				for (int i = 0; i < quantidadeDeLinhas; i++) {
-					f = new Fone();
+					fone = new Fone();
 
-					f.setDdd(rs.getString(11));
-					f.setFone(rs.getString(12));
-					f.setId(rs.getInt(14));
-					p.addFones(f);
+					fone.setDdd(resultSet.getString(11));
+					fone.setFone(resultSet.getString(12));
+					fone.setId(resultSet.getInt(14));
+					pessoa.addFones(fone);
 					
-					rs.next();
+					resultSet.next();
 				}
 
 			}
@@ -314,23 +288,23 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			conexao.desconectar();
 		}
 
-		return p;
+		return pessoa;
 	}
 	
 	@SuppressWarnings("finally")
-	public int buscaEndereco(String cep, Connection cn){
+	public int buscaEndereco(String cep, Connection connection){
 		
 		int id = 0;
 		
 		try {
 			
 			String selectSQL = "SELECT * FROM endereco where Cep = '" + cep + "'";
-			PreparedStatement pStmt = cn.prepareStatement(selectSQL);
+			PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
 			
-			ResultSet rs = pStmt.executeQuery(selectSQL);
+			ResultSet resultSet = preparedStatement.executeQuery(selectSQL);
 			
-			if(rs.next()){
-				id = rs.getInt(1);
+			if(resultSet.next()){
+				id = resultSet.getInt(1);
 			}
 
 		} catch (SQLException e) {
@@ -338,6 +312,69 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} finally {
 			return id;
 		}
+	}
+
+	@Override
+	public void adicionaFone(Fone fone, int id) throws ClassNotFoundException,
+			SQLException {
+
+		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+
+		try {
+			String insertSQL = "INSERT INTO fone (`DDD`, `Fone`, `IdPessoa`) VALUES (?,?,?)";
+			PreparedStatement preparedStatement = conexao.conectar()
+					.prepareStatement(insertSQL);
+
+			preparedStatement.setString(1, fone.getDdd());
+			preparedStatement.setString(2, fone.getFone());
+			preparedStatement.setInt(3, id);
+
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			conexao.desconectar();
+		}
+
+	}
+
+	
+	@Override
+	public void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException {
+		
+		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+
+		try {
+			String deleteSQL = "DELETE FROM fone WHERE IdPessoa = " + idPessoa;
+			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
+
+			//preparedStatement.setInt(1, id);
+
+			preparedStatement.executeUpdate();
+			
+			
+			deleteSQL = "DELETE FROM pessoa WHERE IdPessoa = " + idPessoa;
+			preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
+
+			//preparedStatement.setInt(1, id);
+
+			preparedStatement.executeUpdate();
+			
+			deleteSQL = "DELETE FROM endereco WHERE IdEndereco = " + idEndereco;
+			preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
+
+			//preparedStatement.setInt(1, id);
+
+			preparedStatement.executeUpdate();
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			conexao.desconectar();
+		}
+
 	}
 
 }

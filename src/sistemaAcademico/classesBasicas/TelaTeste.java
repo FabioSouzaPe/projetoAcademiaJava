@@ -23,6 +23,7 @@ public class TelaTeste {
 			System.out.println("2 - Consultar pessoas cadastradas");
 			System.out.println("3 - Pesquisar pessoa cadastrada");
 			System.out.println("4 - Alterar dados de uma pessoa");
+			System.out.println("5 - Remover pessoa do banco de dados");
 			System.out.println("9 - Sair");
 			
 			opcao = Integer.valueOf(ler.nextInt());
@@ -47,12 +48,34 @@ public class TelaTeste {
 			case 4:
 				alterarPessoa();
 				break;
+			case 5:	
+				removerPessoa();
+				break;
 			default:
 				System.out.println("Opcao Inválida");
 				break;
 			}
 			
 		} while (opcao != 9);
+	}
+
+	private static void removerPessoa() {
+		try {
+
+			Scanner scan = new Scanner(System.in);
+			System.out.println("Digite o CPF da pessoa que desenha remover do registro: ");
+
+			Pessoa p = RnPessoa.pesquisarPessoa(scan.nextLine());
+			
+			RnPessoa.removerPessoa(p.getId(), p.getEndereco().getId());
+
+		} catch (PessoaInexistenteException e) {
+			System.out.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void alterarPessoa() {
@@ -90,25 +113,50 @@ public class TelaTeste {
 				System.out.println("Digite o novo UF: ");
 				en.setUf(scan.nextLine());
 				
+				en.setId(p.getEndereco().getId());
+				
 				p.setEndereco(en);
 				
-				RnPessoa.alterarPessoa(p, en);
+				RnPessoa.alterarPessoa(en);
 				
 				System.out.println("Dados Alterados");
 			} 
 			
 			else if (opcao == 2)  {
 				
-				Fone f = new Fone();
-				scan = new Scanner(System.in);
+				System.out.println("Telefones cadastrados: " + p.getFones().size());
+				System.out.println("Qual ação deseja? - 1 Cadastrar novo Número, 2 - Alterar um dos números");
 				
-				System.out.println("Digite o novo DDD: ");
+				opcao =  new Scanner(System.in).nextInt();
+				
+				Fone f = new Fone();
+				
+				System.out.println("Digite o DDD: ");
 				f.setDdd(new Scanner(System.in).nextLine());
 				
-				System.out.println("Digite o novo Fone: ");
+				System.out.println("Digite o Fone: ");
 				f.setFone(new Scanner(System.in).nextLine());
 				
-				RnPessoa.alterarPessoa(p, f);
+				switch (opcao){
+					case 1:
+						RnPessoa.adicionaFone(f, p.getId());
+						break;
+					case 2:
+						
+						System.out.println("Qual deseja alterar?");
+						
+						for (int i = 0; i < p.getFones().size(); i++){
+							System.out.println("Fone " + (i+1) + ": " + p.getFones().get(i).getDdd() +
+									" " + p.getFones().get(i).getFone());
+						}
+						
+						opcao = new Scanner(System.in).nextInt();
+						
+						f.setId(p.getFones().get(opcao-1).getId());
+						
+						RnPessoa.alterarPessoa(f);
+						break;
+				}
 				
 				System.out.println("Dados Alterados");
 				
@@ -167,6 +215,7 @@ public class TelaTeste {
 				System.out.println("ID: " + p.getId());
 				System.out.println("Nome: " + p.getNome());
 				System.out.println("CPF: " + p.getCpf());
+				System.out.println("Sexo: " + p.getSexo());
 				System.out.println("CEP: " + p.getEndereco().getCep());
 				System.out.println("Logradouro: " + p.getEndereco().getLogradouro());
 				System.out.println("Numero: " + p.getEndereco().getNumero());
@@ -190,18 +239,16 @@ public class TelaTeste {
 	private static void cadastrarPessoa() throws MySQLIntegrityConstraintViolationException {
 		int teste;
 		try {
-			Endereco e1 = new Endereco(0, "54340-795", "Rua 1", "Bairro 1",
-					"N 1", "Cidade 1", "Uf 1");
-			Fone f1 = new Fone(0, "(81)", "3464-8400");
-			Fone f2 = new Fone(0, "(81)", "4002-8922");
-			ArrayList<Fone> fl1 = new ArrayList<Fone>();
-			fl1.add(f1);
-			fl1.add(f2);
-			Pessoa p1 = new Pessoa(RnPessoa.consultarPessoas().size() + 1,
-					"Mackson Luiz Izário de Lima", "194.570.102-13", 'm', e1,
-					fl1);
+			Endereco e1 = new Endereco(0, "54340-430", "Rua 5", "Bairro 5",
+					"N 5", "Cidade 5", "Uf 5");
+			Fone f1 = new Fone(0, "(81)", "2548-5412");
+			Fone f2 = new Fone(0, "(81)", "5152-5122");
+			Fone f3 = new Fone(0, "(81)", "2522-5428");
+			Pessoa p1 = new Pessoa(0,
+					"Larissa Arlequina de Souza", "986.544.263-90", 'F', e1,
+					f1, f2, f3);
 
-			if (RnPessoa.cpfValido(p1.getCpf().replaceAll("[^0-9]", ""))) {
+			if (RnPessoa.cpfValido(p1.getCpf())) {
 				teste = RnPessoa.adicionaPessoa(p1);
 				if (teste == 0) {
 					System.out.println("Pessoa já existe no banco de dados!");

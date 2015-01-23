@@ -15,14 +15,18 @@ public class Pessoa {
 	private ArrayList<Professor> professores = new ArrayList<Professor>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
-			Endereco endereco, ArrayList<Fone> fones) {
+			Endereco endereco,Fone... fones) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.sexo = sexo;
 		this.endereco = endereco;
-		this.fones = fones;
+		
+		for (Fone fone : fones) {
+			addFones(fone);
+		}
+		
 	}
 	
 	public Pessoa(){}

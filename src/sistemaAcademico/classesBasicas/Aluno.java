@@ -7,11 +7,13 @@ public class Aluno{
 	
 	private String matricula;
 	private ArrayList<Publicacao> publicacoes;
+	private HistoricoEscolar historico;
 	private Date data;
 	
-	public Aluno(String matricula, ArrayList<Publicacao> publicacoes, Date data){
+	public Aluno(String matricula, ArrayList<Publicacao> publicacoes,HistoricoEscolar historico,Date data){
 		this.matricula = matricula;
 		this.publicacoes = this.publicacoes;
+		this.historico = historico;
 		this.data = data;
 	}
 	
@@ -46,6 +48,14 @@ public class Aluno{
 
 	public void setData(Date data) {
 		this.data = data;
+	}
+	
+	public HistoricoEscolar getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(HistoricoEscolar historico) {
+		this.historico = historico;
 	}
 	
 }

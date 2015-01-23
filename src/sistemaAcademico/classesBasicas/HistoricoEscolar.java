@@ -9,8 +9,8 @@ public class HistoricoEscolar {
 	
 	private int id;
 	private Date data;
+	private Disciplina disciplina;
 	private Aluno aluno;
-	private ArrayList<Disciplina> disciplinas;
 	private String obs;
 	private double conficienteRedimento;
 	private SituacaoAluno situacao;
@@ -35,20 +35,12 @@ public class HistoricoEscolar {
 		this.data = data;
 	}
 
-	public Aluno getAluno() {
-		return aluno;
+	public Disciplina getDisciplina() {
+		return disciplina;
 	}
 
-	public void setAluno(Aluno aluno) {
-		this.aluno = aluno;
-	}
-
-	public ArrayList<Disciplina> getDisciplinas() {
-		return disciplinas;
-	}
-
-	public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
-		this.disciplinas = disciplinas;
+	public void setDisciplina(Disciplina disciplina) {
+		this.disciplina = disciplina;
 	}
 
 	public String getObs() {
@@ -75,6 +67,12 @@ public class HistoricoEscolar {
 		this.situacao = situacao;
 	}
 
-	
+	public Aluno getAluno() {
+		return aluno;
+	}
+
+	public void setAluno(Aluno aluno) {
+		this.aluno = aluno;
+	}
 	
 }

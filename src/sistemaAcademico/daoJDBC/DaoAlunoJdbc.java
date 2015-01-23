@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.classesBasicas.Aluno;
-import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 
-public class DaoAlunoJdbc {
+public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 	
 	private ConexaoInt conexao;
 	
@@ -21,30 +21,31 @@ public class DaoAlunoJdbc {
 		conexao = new Conexao();
 	}
 	
-	public void inserir(Aluno aluno, int chave){
+	public void inserir(Aluno aluno, int chaveHistorico, int chavePessoa) throws ConexaoException, SQLException{
 		java.util.Date data = aluno.getData();
 		Date sqldata = new Date(data.getTime());
-		String sql = "INSERT INTO aluno(matricula, data, fk_pessoa) VALUES(?,?,?)";
+		String sql = "INSERT INTO aluno(matricula, DataAdmissao, IdPessoa, IdHistorico) VALUES(?,?,?,?)";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, aluno.getMatricula());
-			pst.setInt(3, chave);
 			pst.setDate(2, sqldata);
+			pst.setInt(3, chaveHistorico);
+			pst.setInt(4, chaveHistorico);
 			pst.executeUpdate();
 		}catch(ConexaoException e){
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		} catch (SQLException ec) {
-			System.out.println(ec.getMessage());
+			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
 			}catch(ConexaoException e){
-				System.out.println(e.getMessage());
+				throw new ConexaoException();
 			}
 		}
 	}
 	
-	public void remover(Aluno aluno){
+	public void remover(Aluno aluno) throws ConexaoException, SQLException{
 		
 		String sql = "DELETE FROM aluno WHERE matricula=?";
 		try{
@@ -52,26 +53,26 @@ public class DaoAlunoJdbc {
 			pst.setString(1, aluno.getMatricula());
 			pst.executeUpdate();
 		} catch (ConexaoException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
 			}catch(ConexaoException e){
-				System.out.println(e.getMessage());
+				throw new ConexaoException();
 			}
 		}
 		
 	}
 	
-	public Aluno pesquisar(String matricula) throws ConexaoException{
+	public Aluno pesquisar(String matricula) throws ConexaoException, AlunoInexistenteException, SQLException{
 		Aluno aluno = null;
 		ArrayList<Publicacao> publicacoes = new ArrayList<Publicacao>();
 		String sqlPubli = "SELECT nome FROM publicacao p "
 				+ "INNER JOIN aluno a ON p.chave = a.matricula WHERE matricula=?";
 		
-		String sqlAluno = "SELCT + FROM aluno where matricula=?";
+		String sqlAluno = "SELCT * FROM aluno where matricula=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sqlAluno);
 			pst.setString(1, matricula);
@@ -91,13 +92,42 @@ public class DaoAlunoJdbc {
 				aluno.setPublicacoes(publicacoes);
 				return aluno;
 			}
-			throw new NullPointerException();
+			throw new AlunoInexistenteException();
 		}catch(ConexaoException e){
 			throw new ConexaoException();
 		}catch(SQLException e){
-			throw new ConexaoException();
+			throw new SQLException();
+		}finally{
+			try{
+				conexao.desconectar();
+			}catch(ConexaoException e){
+				throw new ConexaoException();
+			}
 		}
 	}
 	
+	public void alterar(Aluno aluno) throws ConexaoException, SQLException{
+		
+		String sql = ("UPDATE aluno set data=? where matricula=? ");
+		try{
+			java.util.Date data = aluno.getData();
+			Date sqldata = new Date(data.getTime());
+			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
+			pst.setDate(1, sqldata);
+			pst.setString(2, aluno.getMatricula());
+			pst.executeUpdate();
+		} catch (ConexaoException e) {
+			throw new ConexaoException();
+		} catch (SQLException e) {
+			throw new SQLException();
+		}finally{
+			try{
+				conexao.desconectar();
+			}catch(ConexaoException e){
+				throw new ConexaoException();
+			}
+		}
+		
+	}
 
 }

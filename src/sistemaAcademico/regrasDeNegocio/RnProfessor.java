@@ -6,9 +6,11 @@ import sistemAcademico.exceptions.ErroConexaoException;
 import sistemAcademico.exceptions.ProfessorExistenteException;
 import sistemAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
-
+import sistemaAcademico.dao.DaoProfessor;
+import sistemaAcademico.dao.DaoProfessorInt;
 import sistemaAcademico.daoJDBC.DaoProfessorIntJDBC;
 import sistemaAcademico.daoJDBC.DaoProfessorJDBC;
+import sistemaAcademico.exceptions.ConexaoException;
 
 
 
@@ -17,7 +19,7 @@ import sistemaAcademico.daoJDBC.DaoProfessorJDBC;
 public class RnProfessor {
 	//DaoProfessorInt dadosint = new DaoProfessor();
 	
-	DaoProfessorIntJDBC dadosint = new DaoProfessorJDBC();
+	DaoProfessorInt dadosint = new DaoProfessor();
 		
 	//Verificação
 	
@@ -40,7 +42,7 @@ public class RnProfessor {
 	
 }
 	//Cadastrar
-	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException, ErroConexaoException{
+	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException, ErroConexaoException, ConexaoException{
 		try {
 			if(dadosint.pesquisarprofessor(professor.getMatricula()) == null){
 				dadosint.cadastrarProfessor(professor);

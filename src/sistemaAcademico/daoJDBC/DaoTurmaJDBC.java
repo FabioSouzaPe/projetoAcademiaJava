@@ -40,9 +40,9 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 			}
 			System.out.println("Conectou");
 			pst.setString(1, nome);
-			pst.setString(2,p.getProf());
-			pst.setString(3, t.name());
-			pst.setString(4, periodo);
+			
+			pst.setString(2, t.name());
+			pst.setString(3, periodo);
 			pst.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -234,7 +234,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			/*
 			if (novoProfessor != null) {
 				
 				try {
@@ -253,7 +253,7 @@ public class DaoTurmaJDBC implements DaoTurmaInt{
 					e.printStackTrace();
 				}
 			}
-			
+			*/
 		}
 			
 			

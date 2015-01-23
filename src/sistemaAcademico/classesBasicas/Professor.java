@@ -12,12 +12,13 @@ public class Professor {
 	private String instituicao;
 	private Titulo titulo;
 	private String matricula;
+	private Pessoa pessoa;
 	 
 	 
 	public Professor(){
 		
 	}
-	public Professor(String matricula,Date admissao,String departamento,String instituicao,Titulo titulo ){
+	public Professor(String matricula,Date admissao,String departamento,String instituicao,Titulo titulo,Pessoa pessoa ){
 		
 
 		this.admissao = admissao;
@@ -25,6 +26,7 @@ public class Professor {
         this.instituicao = instituicao;
         this.titulo = titulo;
         this.matricula = matricula;
+        this.pessoa=pessoa;
 	}
 	
 	                                                        
@@ -95,14 +97,12 @@ public class Professor {
 	
 
 	
-	private String prof;
-
-	public String getProf() {
-		return prof;
+	
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
-
-	public void setProf(String prof) {
-		this.prof = prof;
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 	
 	

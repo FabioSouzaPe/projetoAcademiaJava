@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-import sistemAcademico.exceptions.ProfessorInexistenteException;
+import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
@@ -22,7 +22,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	
 	
 	@Override
-	public void cadastrarProfessor(Professor professor){
+	public void cadastrarProfessor(Professor professor) throws ConexaoException{
 		 ConexaoInt conexao = new Conexao();
 		String sql="insert into professor(MatriculaProfessor,Admissao,Departamento,Instituicao,Titulo) values(?,?,?,?,?);";
 		
@@ -42,16 +42,16 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}catch (ConexaoException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}
 	}
 
 	@Override
-	public void alterar(Professor professor) {
+	public void alterar(Professor professor) throws ConexaoException {
 		 ConexaoInt conexao = new Conexao();
-		String sql="update Professor  set Departamento=? , set Instituicao=?,set Titulo= ? where MatriculaProfessor = ?";
+		String sql="update Professor  set Departamento=?,Instituicao=?,Titulo= ? where MatriculaProfessor = ? ";
 		
 		//Comando para poder set a data de Admissão
 		//java.util.Date dataUtil = professor.getAdmissao(); 
@@ -61,25 +61,25 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			
 			
-			pst.setString(2,professor.getDepartamento());
-			pst.setString(3,professor.getInstituicao());
-		    //pst.setInt(4,convertetitulo(professor.getTitulo()));
-			pst.setString(4,professor.getTitulo().name());
-			pst.setString(5,professor.getMatricula());
+			pst.setString(1,professor.getDepartamento());
+			pst.setString(2,professor.getInstituicao());
+			
+			pst.setInt(3,professor.getTitulo().getcodigo());			
+			pst.setString(4,professor.getMatricula());	            
 						
 			pst.executeUpdate();
-			
+			System.out.println("Alterado com sucesso");
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}catch (ConexaoException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}
 	}
 
 	@Override
-	public void remover(Professor professor) {
+	public void remover(Professor professor) throws ConexaoException {
 		 ConexaoInt conexao = new Conexao();
 		String sql="DELETE FROM Professor WHERE MatriculaProfessor=?";
 		
@@ -94,97 +94,102 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}catch (ConexaoException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}
 		
 	}
 
-	@Override
-	public ArrayList<Professor> consultarTudo() {
+	public ArrayList<Professor> consultarTudo() throws ConexaoException {
 		ConexaoInt conexao = new Conexao();
 		
 		ArrayList<Professor> retorno = new ArrayList<Professor>();
-		String sql="Select * from Professor";
-
+		String sql="select MatriculaProfessor,nome,Admissao,Departamento,Instituicao,titulo from pessoa"
+                +" inner join professor on pessoa.IdPessoa = professor.IdPessoa ";
+		Professor professor;
 		
 		try {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
-			
-			ResultSet rs = pst.executeQuery();
+
+			ResultSet rs = pst.executeQuery(sql);
             while (rs.next()) {
-                Professor p = new Professor();              			
-                p.setMatricula(rs.getString("MatriculaProfessor"));               
-                p.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
-                p.setDepartamento(rs.getString("Departamento"));
-                p.setInstituicao(rs.getString("Instituicao"));
+                professor = new Professor();              			
+                professor.setMatricula(rs.getString("MatriculaProfessor"));               
+                professor.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
+                professor.setDepartamento(rs.getString("Departamento"));
+                professor.setInstituicao(rs.getString("Instituicao"));
+                Pessoa pessoa= new Pessoa();
+                pessoa.setNome((rs.getString("Nome")));
+                professor.setPessoa(pessoa);
+               
                 //Para pode listar os Titulos. realizando uma veirificação
                 for (Titulo tituloAux : Titulo.values()) {
                 	
                 	if (tituloAux.getcodigo() == rs.getInt("titulo")) {
 						
-                		p.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
+                		professor.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
 					}
                 	
 					
 				}
-                retorno.add(p);
+                retorno.add(professor);
             }
 						
 			
 			
 			conexao.desconectar();
-			return retorno;
+		
 		
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}catch (ConexaoException e) {
-			System.out.println(e.getMessage());
+			throw new ConexaoException();
 		}
 		
-		return listaprof;
+		return retorno;
 	
 	}
 
 	@Override
-	public Professor pesquisarprofessor(String matricula)throws ProfessorInexistenteException {
-	    Professor p = null;
+	public Professor pesquisarprofessor(String matricula)throws ConexaoException {
+	 
+	    Professor professor  = new Professor(); 
 		ConexaoInt conexao = new Conexao();
 			//ArrayList<Professor> retorno = new ArrayList<Professor>();
 			 String sql = "select * from Professor where MatriculaProfessor = ?";
 
-			
-			try {
+			 try {
 				PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 				pst.setString(1, matricula);
 				ResultSet rs = pst.executeQuery();
 	            while (rs.next()) {
-	                 p = new Professor();              			
-	                p.setMatricula(rs.getString("MatriculaProfessor"));               
-	                p.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
-	                p.setDepartamento(rs.getString("Departamento"));
-	                p.setInstituicao(rs.getString("Instituicao"));
+	            	             			
+	            	professor.setMatricula(rs.getString("MatriculaProfessor"));               
+	            	professor.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
+	            	professor.setDepartamento(rs.getString("Departamento"));
+	                professor.setInstituicao(rs.getString("Instituicao"));
 	                //Para pode listar os Titulos. realizando uma veirificação
 	                for (Titulo tituloAux : Titulo.values()) {
 	                	
 	                	if (tituloAux.getcodigo() == rs.getInt("titulo")) {
 							
-	                		p.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
+	                		professor.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
 						}
-	                							
+	                	 				
 					}
-	                return p;
-	            }						
+	           
+	            }		
+	            
 				conexao.desconectar();	
 							
 			} catch (SQLException e) {
-				System.out.println(e.getMessage());
+				throw new ConexaoException();
 			}catch (ConexaoException e) {
-				System.out.println(e.getMessage());
+				throw new ConexaoException();
 			}
-			return p;
+			return professor;
 		
 			
 		 

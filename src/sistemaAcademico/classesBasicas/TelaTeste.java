@@ -144,7 +144,10 @@ public class TelaTeste {
 			System.out.println("Bairro: " + p.getEndereco().getBairro());
 			System.out.println("Cidade: " + p.getEndereco().getCidade());
 			System.out.println("Estado: " + p.getEndereco().getUf());
-			System.out.println("Telefone: " + p.getFones().get(0).getDdd() + " " + p.getFones().get(0).getFone());
+			
+			for (Fone fone : p.getFones()) {
+				System.out.println("Telefone: " + fone.getDdd() + " " + fone.getFone());
+			}
 			System.out.println("------------");
 			
 		} catch (PessoaInexistenteException e) {
@@ -170,7 +173,10 @@ public class TelaTeste {
 				System.out.println("Bairro: " + p.getEndereco().getBairro());
 				System.out.println("Cidade: " + p.getEndereco().getCidade());
 				System.out.println("Estado: " + p.getEndereco().getUf());
-				System.out.println("Telefone: " + p.getFones().get(0).getDdd() + " " + p.getFones().get(0).getFone());
+				
+				for (Fone fone : p.getFones()) {
+					System.out.println("Telefone: " + fone.getDdd() + " " + fone.getFone());
+				}
 				System.out.println("------------");
 			}
 		} catch (SQLException e) {
@@ -184,13 +190,15 @@ public class TelaTeste {
 	private static void cadastrarPessoa() throws MySQLIntegrityConstraintViolationException {
 		int teste;
 		try {
-			Endereco e1 = new Endereco(0, "54340-405", "Rua 3", "Bairro 3",
-					"N 3", "Cidade 3", "Uf 3");
+			Endereco e1 = new Endereco(0, "54340-795", "Rua 1", "Bairro 1",
+					"N 1", "Cidade 1", "Uf 1");
 			Fone f1 = new Fone(0, "(81)", "3464-8400");
+			Fone f2 = new Fone(0, "(81)", "4002-8922");
 			ArrayList<Fone> fl1 = new ArrayList<Fone>();
 			fl1.add(f1);
+			fl1.add(f2);
 			Pessoa p1 = new Pessoa(RnPessoa.consultarPessoas().size() + 1,
-					"Joaquim Petronio dos Santos", "101.285.544-95", 'm', e1,
+					"Mackson Luiz Izário de Lima", "194.570.102-13", 'm', e1,
 					fl1);
 
 			if (RnPessoa.cpfValido(p1.getCpf().replaceAll("[^0-9]", ""))) {

@@ -13,6 +13,7 @@ import sistemaAcademico.dao.DaoPessoa;
 import sistemaAcademico.dao.DaoPessoaInt;
 import sistemaAcademico.daoJDBC.DaoPessoaIntJDBC;
 import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
+import sistemaAcademico.exceptions.ConexaoException;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.sun.corba.se.impl.io.OptionalDataException;
@@ -78,11 +79,13 @@ public class RnPessoa {
 		}
 	}
 	
-	public static int adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException{
+	public static int adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException, ConexaoException{
 		int id = 0;
 		
-		//Verifica se a pessoa já existe no banco de dados, se não exister, invoca o método de adicionar pessoa;
-		//Pessoa p = daoPessoaJDBC.buscaPorCpf(pessoa.getCpf());
+		/*Tenta encontrar a pessoa pelo cpf, se não encontrar
+		 * abre uma exception e pula a parte de inserção no banco
+		 * 
+		*/ 
 		
 		try {
 			boolean b = pesquisarPessoa(pessoa.getCpf()) == null;
@@ -101,13 +104,16 @@ public class RnPessoa {
 		return id;
 	}
 
-	public static List<Pessoa> consultarPessoas() throws SQLException, ClassNotFoundException {
+	public static List<Pessoa> consultarPessoas() throws SQLException, ClassNotFoundException, ConexaoException {
 		
-		//Retorna a lista de pessoas cadastradas
+		/*
+		 * Chama o DAO que faz uma lista das pessoas cadastradas, que retorna para esse métido
+		 * que por sua vez retorna para quem o chamou
+		 */
 		return daoPessoaJDBC.getListaPessoas();
 	}
 	
-	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException {
+	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException {
 
 		Pessoa pessoaAchada = null;
 
@@ -119,17 +125,17 @@ public class RnPessoa {
 		}
 	}
 
-	public static void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException {
+	public static void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException, ConexaoException {
 		daoPessoaJDBC.alterarPessoa(endereco);
 	}
-	public static void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException {
+	public static void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException, ConexaoException {
 		daoPessoaJDBC.alterarPessoa(fone);
 	}
-	public static void adicionaFone(Fone fone, int id) throws ClassNotFoundException, SQLException{
-		daoPessoaJDBC.adicionaFone(fone, id);
+	public static void adicionaFone(Fone fone, int idPessoa) throws ClassNotFoundException, SQLException, ConexaoException{
+		daoPessoaJDBC.adicionaFone(fone, idPessoa);
 	}
 
-	public static void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException {
+	public static void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException, ConexaoException {
 		daoPessoaJDBC.removerPessoa(idPessoa, idEndereco);
 	}
 }

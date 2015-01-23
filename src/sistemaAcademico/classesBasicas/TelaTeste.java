@@ -8,6 +8,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.enuns.Escolaridade;
+import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.regrasDeNegocio.RnPessoa;
 
 public class TelaTeste {
@@ -75,6 +76,9 @@ public class TelaTeste {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -82,7 +86,7 @@ public class TelaTeste {
 		try {
 			
 			Scanner scan = new Scanner(System.in);
-			System.out.println("Digite o CPF da pessoa que desenha remover do registro: ");
+			System.out.println("Digite o CPF da pessoa que desenha alterar: ");
 			
 			Pessoa p = RnPessoa.pesquisarPessoa(scan.nextLine());
 			
@@ -170,6 +174,9 @@ public class TelaTeste {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -204,6 +211,9 @@ public class TelaTeste {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -231,6 +241,8 @@ public class TelaTeste {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		} catch (ConexaoException e) {
 			e.printStackTrace();
 		}
 		
@@ -262,6 +274,9 @@ public class TelaTeste {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

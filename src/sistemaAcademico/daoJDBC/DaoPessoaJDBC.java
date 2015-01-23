@@ -11,6 +11,9 @@ import java.util.List;
 import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
+import sistemaAcademico.conexao.Conexao;
+import sistemaAcademico.conexao.ConexaoInt;
+import sistemaAcademico.exceptions.ConexaoException;
 
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
@@ -18,7 +21,7 @@ import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	@Override
-	public List<Pessoa> getListaPessoas() throws SQLException, ClassNotFoundException {
+	public List<Pessoa> getListaPessoas() throws SQLException, ClassNotFoundException, ConexaoException {
 
 		List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 		Pessoa pessoa;
@@ -26,7 +29,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		Fone fone;
 		int quantidadeDeLinhas;
 		
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 
 		try {
 
@@ -81,8 +84,14 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				listaPessoas.add(pessoa);
 
 			}
+			
+			preparedStatement.close();
+			resultSet.close();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -93,9 +102,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	@SuppressWarnings("finally")
 	@Override
-	public int addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException {
+	public int addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException, ConexaoException {
 
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 
 		int id = 0;
 		
@@ -165,6 +174,10 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				
 				preparedStatement.executeUpdate();
 			}
+			
+			preparedStatement.close();
+			resultSet.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -173,9 +186,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		}
 	}
 
-	public void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException {
+	public void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException, ConexaoException {
 
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 		
 		try {
 			
@@ -192,8 +205,13 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			preparedStatement.setInt(7, endereco.getId());
 			
 			preparedStatement.executeUpdate();
+			
+			preparedStatement.close();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -201,9 +219,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	}
 
-	public void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException{
+	public void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException, ConexaoException{
 		
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 		
 		String updateSQL = "UPDATE fone SET DDD = ?, Fone = ? WHERE IdFone = ?";
 		
@@ -216,8 +234,13 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			preparedStatement.setInt(3, fone.getId());
 			
 			preparedStatement.executeUpdate();
+			
+			preparedStatement.close();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -225,9 +248,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 	}
 
 	@Override
-	public Pessoa buscaPorCpf(String cpf) throws ClassNotFoundException, SQLException {
+	public Pessoa buscaPorCpf(String cpf) throws ClassNotFoundException, SQLException, ConexaoException {
 		
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 		Pessoa pessoa = new Pessoa();
 		Endereco endereco = new Endereco();
 		Fone fone;
@@ -279,10 +302,17 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 					
 					resultSet.next();
 				}
+				
+				resultSet.close();
+				resultSetLinhas.close();
+				preparedStatement.close();
 
 			}
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -307,6 +337,9 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				id = resultSet.getInt(1);
 			}
 
+			resultSet.close();
+			preparedStatement.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -315,10 +348,10 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 	}
 
 	@Override
-	public void adicionaFone(Fone fone, int id) throws ClassNotFoundException,
-			SQLException {
+	public void adicionaFone(Fone fone, int idPessoa) throws ClassNotFoundException,
+			SQLException, ConexaoException {
 
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 
 		try {
 			String insertSQL = "INSERT INTO fone (`DDD`, `Fone`, `IdPessoa`) VALUES (?,?,?)";
@@ -327,11 +360,16 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 			preparedStatement.setString(1, fone.getDdd());
 			preparedStatement.setString(2, fone.getFone());
-			preparedStatement.setInt(3, id);
+			preparedStatement.setInt(3, idPessoa);
 
 			preparedStatement.executeUpdate();
+			
+			preparedStatement.close();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -341,15 +379,13 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	
 	@Override
-	public void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException {
+	public void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException, ConexaoException {
 		
-		DaoConexaoIntJDBC conexao = new DaoConexaoJDBC();
+		ConexaoInt conexao = new Conexao();
 
 		try {
 			String deleteSQL = "DELETE FROM fone WHERE IdPessoa = " + idPessoa;
 			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
-
-			//preparedStatement.setInt(1, id);
 
 			preparedStatement.executeUpdate();
 			
@@ -357,19 +393,22 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			deleteSQL = "DELETE FROM pessoa WHERE IdPessoa = " + idPessoa;
 			preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
 
-			//preparedStatement.setInt(1, id);
 
 			preparedStatement.executeUpdate();
 			
 			deleteSQL = "DELETE FROM endereco WHERE IdEndereco = " + idEndereco;
 			preparedStatement = conexao.conectar().prepareStatement(deleteSQL);
 
-			//preparedStatement.setInt(1, id);
 
 			preparedStatement.executeUpdate();
 			
+			preparedStatement.close();
+			
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();

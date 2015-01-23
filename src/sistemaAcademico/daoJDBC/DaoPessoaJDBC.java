@@ -300,14 +300,14 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 					fone.setId(resultSet.getInt(14));
 					pessoa.addFones(fone);
 					
-					resultSet.next();
+					if(1 < quantidadeDeLinhas - 1) {
+						resultSet.next();
+					}
 				}
-				
-				resultSet.close();
-				resultSetLinhas.close();
-				preparedStatement.close();
-
 			}
+			
+			resultSet.close();
+			preparedStatement.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

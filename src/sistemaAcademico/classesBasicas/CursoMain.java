@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import sistemaAcademico.regrasDeNegocio.RnCurso;
 
-public class CursoJDBCMain {
+public class CursoMain {
 	 public static void main(String[] args) {
 		boolean continuar = true;
 		RnCurso rn = new RnCurso();

@@ -10,7 +10,7 @@ import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.regrasDeNegocio.RnFrequencia;
 
 
-public class FrequenciaMainJDBC {
+public class FrequenciaMain {
 	
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ConexaoException {

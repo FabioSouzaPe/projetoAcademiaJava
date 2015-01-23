@@ -8,45 +8,54 @@ import java.util.Date;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Frequencia;
 import sistemaAcademico.classesBasicas.Turma;
-import sistemaAcademico.daoJDBC.DaoFrequenciaJDBC;
-import sistemaAcademico.daoJDBC.DaoFrequenciaJDBCInt;
+import sistemaAcademico.daoJDBC.DaoGenerico;
+import sistemaAcademico.daoJDBC.IDaoGenerico;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class RnFrequencia {
-	DaoFrequenciaJDBCInt dao= new DaoFrequenciaJDBC();
 	
-	public boolean verificarCadastrarFrequencia(ArrayList<Frequencia> f) throws ClassNotFoundException, SQLException{
-		boolean sucesso=false;
-		
-		if(f.size()>=1){
+	IDaoGenerico dao= new DaoGenerico();
+	
+	//monta o script que irá cadastrar a frequencia de cadas aluno
+	public boolean montarScriptCadastrarFrequencia(Frequencia frequencia) throws ClassNotFoundException, SQLException, ConexaoException{
 			
-			java.util.Date dataUtil = f.get(0).getData(); 
+			boolean sucesso=false;
+			
+			java.util.Date dataUtil = frequencia.getData(); 
 			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
+	
+			String select="SELECT DATA FROM FREQUENCIA WHERE DATA='"+dataSql+"' AND MATRICULAALUNO="+frequencia.getAluno().getMatricula();
+			ResultSet rs=dao.dql(select);
 			
-			String select="SELECT DATA FROM FREQUENCIA WHERE DATA='"+dataSql+"'";
-			ResultSet rs=dao.consultar(select);
-			
-			if(rs.next()==false){//verifica se ja foi realizada a frequencia na data que está vindo no obj Frequencia
-				for(int i=0; i< f.size();i++){
-					sucesso=dao.cadastrarFrequencia(f.get(i));
-				}
+			//verifica se ja foi realizada alguma frequencia na data que está vindo no obj Frequencia
+			if(rs.next()==false){
+					
+					boolean presenca= frequencia.getPresenca();
+					String avaliacao= frequencia.getAvaliacao();
+					String matriulaAluno=frequencia.getAluno().getMatricula();
+					int idTurma=frequencia.getTurma().getId();
+					java.sql.Date converteDataSql = new java.sql.Date(frequencia.getData().getTime()); 
+					
+					String insert=
+						"INSERT INTO FREQUENCIA ( PRESENCA, AVALIACAO, MATRICULAALUNO, IDTURMA, DATA ) VALUES "
+						+ "("+presenca+",'"+avaliacao+"','"+matriulaAluno+"',"+idTurma+",'"+converteDataSql+"')" ;
+					
+					sucesso=dao.dml(insert);
 			}
-		}else{
-			System.out.println("nunhuma freqencia passada");
-		}
 		
 		return sucesso;
 	}
 	
-	public ArrayList<Frequencia> verificarListarFrequencia(Date d) throws ClassNotFoundException, SQLException{
+	//monta o script que irá consultar a frequencia de todos os alunos de uma deteminada turma e retorna um Array de Frequencias
+	public ArrayList<Frequencia> montarScriptListarFrequencia(Frequencia frequencia, Date data) throws ClassNotFoundException, SQLException, ConexaoException{
 		
 		ArrayList<Frequencia> listaDeFrequencia=new ArrayList<Frequencia>();
 		
-		
-		java.util.Date dataUtil = d; 
+		java.util.Date dataUtil = data; 
 		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 		
-		String select="SELECT * FROM FREQUENCIA WHERE DATA='"+dataSql+"'";
-		ResultSet rs=dao.consultar(select);
+		String select="SELECT * FROM FREQUENCIA WHERE DATA='"+dataSql+"' AND IDTURMA="+frequencia.getTurma().getId();
+		ResultSet rs=dao.dql(select);
 		
 		while(rs.next()){
 			Frequencia f = new Frequencia();
@@ -63,26 +72,32 @@ public class RnFrequencia {
 			f.setId(rs.getInt("IDTURMA"));
 			listaDeFrequencia.add(f);
 		}
+		//desconecta a conexao aberta em DaoGenerico no metodo dql
+		DaoGenerico.daoConDQL.desconectar();
 		return listaDeFrequencia;
 	}
 	
 	
-	public boolean verificarAtualizarFrequencia(Frequencia f) throws ClassNotFoundException, SQLException{
+	public boolean montarScriptAtualizarFrequencia(Frequencia f) throws ClassNotFoundException, SQLException, ConexaoException{
 		
 		boolean sucesso=false;
 		String sql;
 		java.util.Date dataUtil = f.getData(); 
 		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 		
+		//se for atualizar somente a presença
 		if(f.getAvaliacao()==null && f.getPresenca()!=null){
 			 sql="UPDATE  FREQUENCIA SET  PRESENCA="+f.getPresenca()+" WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
-		}else if(f.getPresenca()==null && f.getAvaliacao()!=null){
+		}
+		//se for atualizar somente a avaliação
+		else if(f.getPresenca()==null && f.getAvaliacao()!=null){
 			sql="UPDATE  FREQUENCIA SET  AVALIACAO='"+f.getAvaliacao()+"'  WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
 		}
+		//se for atualizar presença e avaliação
 		else{
 			sql="UPDATE  FREQUENCIA SET  PRESENCA="+f.getPresenca()+" , AVALIACAO='"+f.getAvaliacao()+"' WHERE DATA='"+dataSql+"' AND MATRICULAALUNO='"+f.getAluno().getMatricula()+"'";
 		}
-		if(dao.alterarFrequencia(sql)){
+		if(dao.dml(sql)){
 			sucesso=true;
 		}
 		

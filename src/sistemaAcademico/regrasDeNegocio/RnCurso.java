@@ -1,107 +1,86 @@
 package sistemaAcademico.regrasDeNegocio;
 
 
-
-
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.CursoExistenteException;
 import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
-import sistemaAcademico.dao.DaoCurso;
-import sistemaAcademico.dao.DaoCursoInt;
-import sistemaAcademico.daoJDBC.DaoCursoJDBC;
+import sistemaAcademico.daoJDBC.DaoGenerico;
+import sistemaAcademico.daoJDBC.IDaoGenerico;
 
 public class RnCurso {
 	
-	DaoCursoInt dao = new DaoCurso();
+	IDaoGenerico dao = new DaoGenerico();
 		
-	public int quantidadeDeTurmas(String nomeCurso)throws  CursoInexistenteException{
-		int qtd=0;
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					qtd=dao.consultarTurmas(i, dao.consultarTudo().get(i)).size();
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
-		}
-		return qtd;
-	}
 	
-	
-	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
+	public boolean montarScriptCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException, ConexaoException{
+		
 		boolean sucesso=false;
 		
-		if(dao.consultarTudo().size()!=0){
+		if(curso!=null){
+			java.util.Date dataUtil = curso.getData(); 
+			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(!curso.getNome().equals(dao.consultarTudo().get(i).getNome())){
-					dao.cadastrar(curso);
-					sucesso=true;
-				}
-					
-			}
+			String insert=("INSERT INTO CURSO ( NOME,DATA) VALUES ('"+curso.getNome()+"','"+dataSql+"')") ;
 			
-		}else{
-			dao.cadastrar(curso);
-			sucesso=true;
-		}
-		
-		
-		return sucesso;
-	}
-	
-	public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException {
-		
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					dao.excluir(dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
-		}
-		
-		return sucesso;
-		
-	}
-	
-	
-	public boolean verificacaoAlterarCurso(String nomeOld, String nomeNew)throws CursoInexistenteException {
-		
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				
-				if(nomeOld.equals(dao.consultarTudo().get(i).getNome())){
-					
-					dao.consultarTudo().get(i).setNome(nomeNew);
-					dao.alterar(i,dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
+			/*
+			 * não foi necessario uma verificação se o nome do curso já está cadastrado ,
+			 *  pois o atributo NOME estar como UNIQUE no Banco.
+			 */
+			sucesso=dao.dml(insert);
 		}
 		
 		return sucesso;
 	}
+	
+	public boolean montarScriptExcluirCurso(Curso curso)throws CursoInexistenteException, ClassNotFoundException, SQLException, ConexaoException {
+		
+		boolean sucesso=false;
+		
+		if(curso!=null){
+			String delete="DELETE FROM CURSO WHERE IDCURSO="+curso.getId();
+			sucesso=dao.dml(delete);	
+		}
+		
+		return sucesso;
+	}
+	
+	
+	public boolean montarScriptAlterarCurso( Curso curso)throws CursoInexistenteException, ClassNotFoundException, SQLException, ConexaoException {
+		
+		boolean sucesso=false;
+		String select= "SELECT * FROM CURSO WHERE NOME='"+curso.getNome()+"'";
+		ResultSet rs=dao.dql(select);
+		
+		if(rs.next()==false){
+			String update="UPDATE  CURSO SET NOME='"+curso.getNome()+"' WHERE IDCURSO="+curso.getId();
+			sucesso=dao.dml(update);
+		}
+		
+		return sucesso;
+	}
+	
+	public ArrayList<Curso> montarScriptListarCursos() throws ClassNotFoundException, SQLException, ConexaoException{
+		
+		ArrayList<Curso> cursoList =new ArrayList<Curso>();
+		
+		String select= "SELECT * FROM CURSO ";
+		ResultSet rs=dao.dql(select);
+		
+		while(rs.next()){
+			    Curso c= new Curso();
+				c.setNome(rs.getString("NOME"));
+				c.setId(rs.getInt("IDCURSO"));
+				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
+				cursoList.add(c);
+		}
+		DaoGenerico.daoConDQL.desconectar();
+		
+		return cursoList;
+	}
+	
 }

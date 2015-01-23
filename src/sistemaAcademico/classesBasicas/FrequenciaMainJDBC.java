@@ -6,13 +6,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.regrasDeNegocio.RnFrequencia;
 
 
 public class FrequenciaMainJDBC {
 	
 	
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, ConexaoException {
 		
 		 RnFrequencia rn = new RnFrequencia ();
 		 boolean run=true;
@@ -22,14 +23,14 @@ public class FrequenciaMainJDBC {
 				System.out.println("| Para sair do Sistema digite --------> 0 |");
 				System.out.println("| Para Registrar Frequencia ----------> 1 |");
 				System.out.println("| Para Listar Frequencia Digite ------> 2 |");
-				System.out.println("| Para atualizar um curso Digite -----> 3 |");
+				System.out.println("| Para atualizar Frequencia Digite ---> 3 |");
 				System.out.println(" -----------------------------------------\n");
 				Scanner sc1 = new Scanner(System.in);
 				int opcao= sc1.nextInt();
 				
 			switch(opcao){
 			case 1:
-				ArrayList<Frequencia> f = new ArrayList<Frequencia>();
+				
 				Frequencia frequencia1= new Frequencia();
 				Frequencia frequencia2= new Frequencia();
 				Frequencia frequencia3= new Frequencia();
@@ -64,11 +65,19 @@ public class FrequenciaMainJDBC {
 				frequencia3.setPresenca(true);
 				frequencia3.setAvaliacao("ruim");
 				
-				f.add(frequencia1);
-				f.add(frequencia2);
-				f.add(frequencia3);
+				if(rn.montarScriptCadastrarFrequencia(frequencia1)){
+					System.out.println("frequencia realizada com sucesso");
+				}else{
+					System.out.println("frequencia da data informada ja foi realizada");
+				}
 				
-				if(rn.verificarCadastrarFrequencia(f)){
+				if(rn.montarScriptCadastrarFrequencia(frequencia2)){
+					System.out.println("frequencia realizada com sucesso");
+				}else{
+					System.out.println("frequencia da data informada ja foi realizada");
+				}
+				
+				if(rn.montarScriptCadastrarFrequencia(frequencia3)){
 					System.out.println("frequencia realizada com sucesso");
 				}else{
 					System.out.println("frequencia da data informada ja foi realizada");
@@ -76,7 +85,11 @@ public class FrequenciaMainJDBC {
 				
 				break;
 			case 2:
-				ArrayList<Frequencia> f1 =rn.verificarListarFrequencia(new Date());
+				Frequencia frequencia4= new Frequencia();
+				Turma turma= new Turma();
+				turma.setId(117);
+				frequencia4.setTurma(turma);
+				ArrayList<Frequencia> f1 =rn.montarScriptListarFrequencia(frequencia4,new Date());
 				
 				if(!f1.isEmpty()){
 					for(int i = 0; i<f1.size(); i++){
@@ -87,18 +100,18 @@ public class FrequenciaMainJDBC {
 						System.out.println("___________________________________________");
 					}
 				}else{
-					System.out.println("Ainda não foi realaizada a ferquencia para esta data");
+					System.out.println("Ainda não foi realaizada a ferquencia para esta data nesta turma");
 				}
 				break;
 			case 3:
-				Frequencia frequencia4= new Frequencia();
+				Frequencia frequencia5= new Frequencia();
 				Aluno a = new  Aluno();
 				a.setMatricula("2015.2");
-				frequencia4.setAluno(a);
-				frequencia4.setData(new Date());
-				frequencia4.setPresenca(false);
-				frequencia4.setAvaliacao("bom");
-				if(rn.verificarAtualizarFrequencia(frequencia4)){
+				frequencia5.setAluno(a);
+				frequencia5.setData(new Date());
+				frequencia5.setPresenca(false);
+				frequencia5.setAvaliacao("ruim que só");
+				if(rn.montarScriptAtualizarFrequencia(frequencia5)){
 					System.out.println("Presença alterada com sucesso");
 				}else{
 					System.out.println("Ainda não foi realaizada a ferquencia para esta data");

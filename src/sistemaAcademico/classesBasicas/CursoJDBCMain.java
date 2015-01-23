@@ -1,26 +1,17 @@
 package sistemaAcademico.classesBasicas;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-
-
-
-import sistemaAcademico.daoJDBC.DaoConexaoIntJDBC;
-import sistemaAcademico.daoJDBC.DaoConexaoJDBC;
-import sistemaAcademico.daoJDBC.DaoCursoJDBC;
-import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
-import sistemaAcademico.regrasDeNegocio.RnCursoJDBC;
+import sistemaAcademico.regrasDeNegocio.RnCurso;
 
 public class CursoJDBCMain {
 	 public static void main(String[] args) {
 		boolean continuar = true;
-		RnCursoJDBC rn = new RnCursoJDBC();
+		RnCurso rn = new RnCurso();
 		
 		
 		while(continuar){
@@ -50,7 +41,7 @@ public class CursoJDBCMain {
 					Curso c= new Curso(0,nome, d );
 						
 					try{
-						if(rn.verificacaoCadastrarCurso(c)){
+						if(rn.montarScriptCadastrarCurso(c)){
 							System.out.println("Curso Cadastrado com sucesso");
 						}else{
 						System.out.println("Curso Já cadastrado");
@@ -58,13 +49,12 @@ public class CursoJDBCMain {
 					}catch(Exception e){
 						System.out.println(e.getMessage());
 					}
-					
 						
 				}
 				
 				else if(opcao==2){
 					
-					ArrayList<Curso> lista=rn.listar();
+					ArrayList<Curso> lista=rn.montarScriptListarCursos();
 					if(lista.size()!=0){
 						
 						SimpleDateFormat currentYear = new SimpleDateFormat("dd/mm/yyyy");
@@ -91,8 +81,9 @@ public class CursoJDBCMain {
 					int id=sc1.nextInt();
 					
 					try{
-						
-						if(rn.verificacaoExcluirCurso(id)){
+						Curso c= new Curso();
+						c.setId(id);
+						if(rn.montarScriptExcluirCurso(c)){
 							System.out.println("Curso excluido com sucesso");
 						}else{
 							System.out.println("Curso nao exite");
@@ -113,9 +104,10 @@ public class CursoJDBCMain {
 					String nomeNew=sc1.nextLine();
 					Curso curso = new Curso();
 					curso.setNome(nomeNew);
+					curso.setId(id);
 						try{
 							
-							if(rn.verificacaoAlterarCurso(id,curso)){
+							if(rn.montarScriptAlterarCurso(curso)){
 								System.out.println("Curso Alterado com sucesso");
 							}else{
 								System.out.println("Curso a ser alterado nao existe");

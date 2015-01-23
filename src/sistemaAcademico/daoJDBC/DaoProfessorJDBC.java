@@ -143,23 +143,25 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 		}catch (ConexaoException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		return listaprof;
 	
 	}
 
 	@Override
 	public Professor pesquisarprofessor(String matricula)throws ProfessorInexistenteException {
-		    
+	    Professor p = null;
 		ConexaoInt conexao = new Conexao();
-			ArrayList<Professor> retorno = new ArrayList<Professor>();
+			//ArrayList<Professor> retorno = new ArrayList<Professor>();
 			 String sql = "select * from Professor where MatriculaProfessor = ?";
 
 			
 			try {
 				PreparedStatement pst = conexao.conectar().prepareStatement(sql);
-				
+				pst.setString(1, matricula);
 				ResultSet rs = pst.executeQuery();
 	            while (rs.next()) {
-	                Professor p = new Professor();              			
+	                 p = new Professor();              			
 	                p.setMatricula(rs.getString("MatriculaProfessor"));               
 	                p.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
 	                p.setDepartamento(rs.getString("Departamento"));
@@ -171,25 +173,21 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 							
 	                		p.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
 						}
-	                	
-						
+	                							
 					}
-	                retorno.add(p);
-	            }
+	                return p;
+	            }						
+				conexao.desconectar();	
 							
-				
-				
-				conexao.desconectar();
-				
-			
-				
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}catch (ConexaoException e) {
 				System.out.println(e.getMessage());
 			}
+			return p;
+		
 			
-	
+		 
 	}
 	
 	

@@ -27,12 +27,33 @@ public class RnProfessorJDBC {
 	}
 	
 	public void alterar(Professor professor) {
+		try {
+			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
+				dados.alterar(professor);
+				
+			}
+		} catch (ProfessorInexistenteException e) {
+			System.out.println(e.getMessage());
+			
+		}	
+		
+		
 		dados.alterar(professor);
 	}
 	
 	public void remover(Professor professor) {
+		try {
+			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
+				dados.remover(professor);
+				
+			}
+		} catch (ProfessorInexistenteException e) {
+			System.out.println(e.getMessage());
+			
+		}	
 		
-		dados.remover(professor);
+		
+		
 	}
 	
 	

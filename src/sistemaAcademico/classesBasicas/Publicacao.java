@@ -25,8 +25,7 @@ public class Publicacao {
 	}
 	
 	public String toString(){
-		return "Nome: " + nome +
-				"Aluno:" + aluno.getMatricula() + 
+		return "Nome: " + nome + 
 				"Professor: " + professor +
 				"Meio: " + meioDeComunicacao +
 				"Conteudo: " + conteudo;

@@ -5,7 +5,15 @@ public class Disciplina {
 	
 	private int id;
 	private String nome;
-	private double nota;
+	private int cargaHoraria;
+	
+	public Disciplina() {
+	}
+	
+	public Disciplina(String nome, int cargaHoraria){
+		this.nome = nome;
+		this.cargaHoraria = cargaHoraria;
+	}
 	
 	
 	public int getId() {
@@ -20,14 +28,12 @@ public class Disciplina {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public double getNota() {
-		return nota;
-	}
-	public void setNota(double nota) {
-		this.nota = nota;
+	
+	public void setCargaHoraria(int carga){
+		this.cargaHoraria = carga;
 	}
 	
-	
-	
-	
+	public int getCargaHoraria(){
+		return cargaHoraria;
+	}
 }

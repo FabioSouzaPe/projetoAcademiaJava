@@ -9,10 +9,11 @@ import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
+import sistemaAcademico.enuns.SituacaoAluno;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
 
-public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt {
+public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	
 	private ConexaoInt conexao = new Conexao();
 	
@@ -27,8 +28,6 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt {
 			pst.setInt(4, historico.getDisciplina().getId());
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -46,8 +45,6 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt {
 			pst.executeUpdate();
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -70,8 +67,6 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt {
 			pst.setInt(5, historico.getId());
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -83,26 +78,37 @@ public class DaoHistoricoEscolar implements DaoHistoricoEscolarInt {
 	
 	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, SQLException, HistoricoInexistenteException{
 		HistoricoEscolar historico;
+		Aluno aluno;
+		Disciplina disciplina;
 		String sql = "SELECT * FROM historicoescolar INNER JOIN Aluno a ON a.Matricula=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, matricula);
 			ResultSet rs = pst.executeQuery();
 			if(rs.next()){
-				Aluno aluno = new Aluno();
+				aluno = new Aluno();
 				historico = new HistoricoEscolar();
+				disciplina = new Disciplina();
 				aluno.setMatricula(rs.getString("Matricula"));
 				historico.setObs(rs.getString("Observacoes"));
 				historico.setId(rs.getInt("IdHistorico"));
+				historico.setData(rs.getDate("data"));
+				for(SituacaoAluno situacao : SituacaoAluno.values()){
+					if(situacao.getValor() == rs.getInt("Situacao")){
+						historico.setSituacao(situacao.setSituacao(rs.getInt("Situacao")));
+					}
+				}
 				historico.setConficienteRedimento(rs.getDouble("CoeficienteDeRendimento"));
+				disciplina.setNome(rs.getString("Nome"));
+				disciplina.setCargaHoraria(rs.getInt("CargaHoraria"));
+				aluno.setMatricula(rs.getString("Matricula"));
+				historico.setDisciplina(disciplina);
 				historico.setAluno(aluno);
 				return historico;
 			}
 			throw new HistoricoInexistenteException();
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();

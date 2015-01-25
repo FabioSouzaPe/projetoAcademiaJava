@@ -21,21 +21,18 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 		conexao = new Conexao();
 	}
 	
-	public void inserir(Aluno aluno, int chaveHistorico, int chavePessoa) throws ConexaoException, SQLException{
+	public void inserir(Aluno aluno, int chavePessoa) throws ConexaoException, SQLException{
 		java.util.Date data = aluno.getData();
 		Date sqldata = new Date(data.getTime());
-		String sql = "INSERT INTO aluno(matricula, DataAdmissao, IdPessoa, IdHistorico) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO aluno(matricula, DataAdmissao, IdPessoa) VALUES(?,?,?)";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, aluno.getMatricula());
 			pst.setDate(2, sqldata);
-			pst.setInt(3, chaveHistorico);
-			pst.setInt(4, chaveHistorico);
+			pst.setInt(3, chavePessoa);
 			pst.executeUpdate();
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		} catch (SQLException ec) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -54,8 +51,6 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 			pst.executeUpdate();
 		} catch (ConexaoException e) {
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -69,10 +64,9 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 	public Aluno pesquisar(String matricula) throws ConexaoException, AlunoInexistenteException, SQLException{
 		Aluno aluno = null;
 		ArrayList<Publicacao> publicacoes = new ArrayList<Publicacao>();
-		String sqlPubli = "SELECT nome FROM publicacao p "
-				+ "INNER JOIN aluno a ON p.chave = a.matricula WHERE matricula=?";
+		String sqlPubli = "SELECT p.resumo FROM publicacao p INNER JOIN aluno a ON p.MatriculaAluno = a.matricula WHERE a.Matricula=?";
 		
-		String sqlAluno = "SELCT * FROM aluno where matricula=?";
+		String sqlAluno = "SELECT * FROM aluno where Matricula=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sqlAluno);
 			pst.setString(1, matricula);
@@ -80,13 +74,13 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 			if(rs.next()){
 				aluno = new Aluno();
 				aluno.setMatricula(rs.getString("matricula"));
-				aluno.setData(rs.getDate("data"));
+				aluno.setData(rs.getDate("dataadmissao"));
 				PreparedStatement pstP = conexao.conectar().prepareStatement(sqlPubli);
 				pstP.setString(1, matricula);
 				ResultSet rs2 = pstP.executeQuery();
 				while(rs2.next()){
 					Publicacao p = new Publicacao();
-					p.setNome(rs2.getString("nome"));
+					p.setConteudo(rs2.getString("resumo"));
 					publicacoes.add(p);
 				}
 				aluno.setPublicacoes(publicacoes);
@@ -95,8 +89,6 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 			throw new AlunoInexistenteException();
 		}catch(ConexaoException e){
 			throw new ConexaoException();
-		}catch(SQLException e){
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -108,7 +100,7 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 	
 	public void alterar(Aluno aluno) throws ConexaoException, SQLException{
 		
-		String sql = ("UPDATE aluno set data=? where matricula=? ");
+		String sql = ("UPDATE aluno set dataadmissao=? where matricula=? ");
 		try{
 			java.util.Date data = aluno.getData();
 			Date sqldata = new Date(data.getTime());
@@ -116,10 +108,8 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 			pst.setDate(1, sqldata);
 			pst.setString(2, aluno.getMatricula());
 			pst.executeUpdate();
-		} catch (ConexaoException e) {
+		}catch (ConexaoException e) {
 			throw new ConexaoException();
-		} catch (SQLException e) {
-			throw new SQLException();
 		}finally{
 			try{
 				conexao.desconectar();

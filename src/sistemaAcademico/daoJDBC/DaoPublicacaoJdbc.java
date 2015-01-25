@@ -5,29 +5,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.enuns.Meio;
 
-public class DaoPublicacaoJdbc {
+public class DaoPublicacaoJdbc implements DaoPublicacaoJDBCInt{
 	
 	private ConexaoInt conexao = new Conexao();
 	
 	
-	public void inserir(Publicacao publicao){
-		String sql = "INSERT INTO publicacao (nome, meiopublicacao, matriculaaluno, resumo, matriculaprofessor) VALUES(?,?,?,?,?)";
+	public void inserir(Publicacao publicao) throws SQLException, ConexaoException{
+		String sql = "INSERT INTO publicacao (Nome, MeioPublicacao, matriculaaluno, resumo, matriculaprofessor) VALUES(?,?,?,?,?)";
 		try {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, publicao.getNome());
-			pst.setString(2, publicao.getConteudo());
+			pst.setString(4, publicao.getConteudo());
 			pst.setString(3, publicao.getAluno().getMatricula());
-			pst.setString(4, publicao.getProfessor().getMatricula());
-			pst.setInt(5, publicao.getMeioDeComunicacao().getValor());
+			pst.setString(5, publicao.getProfessor().getMatricula());
+			pst.setInt(2, publicao.getMeioDeComunicacao().getValor());
 			pst.executeUpdate();
-		} catch (SQLException | ConexaoException e) {
-			e.printStackTrace();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -37,10 +36,11 @@ public class DaoPublicacaoJdbc {
 		}
 	}
 	
-	public Publicacao pesquisar(String nome){
+	public Publicacao pesquisar(String nome) throws PublicacaoInexistenteException, ConexaoException,SQLException{
 		String sql = "SELECT * FROM publicacao WHERE nome=?";
 		Publicacao publicacao;
 		Aluno aluno;
+		
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, nome);
@@ -48,22 +48,32 @@ public class DaoPublicacaoJdbc {
 			if(rs.next()){
 				aluno = new Aluno();
 				publicacao = new Publicacao();
-				publicacao.setId(rs.getInt("idnome"));
+				publicacao.setId(rs.getInt("idPublicacao"));
 				publicacao.setNome(rs.getString("nome"));
 				publicacao.setConteudo(rs.getString("resumo"));
-				//publicacao.setMeioDeComunicacao(rs.getInt("meiopublicacao"));
-				aluno.setMatricula(rs.getString("matriculaaluno"));
-				
+				for(Meio meio : Meio.values()){
+					if(meio.getValor() == rs.getInt("MeioPublicacao")){
+						publicacao.setMeioDeComunicacao(meio.setMeio(rs.getInt("MeioPublicacao")));
+					}
+				}
+			aluno.setMatricula(rs.getString("matriculaaluno"));
+			return publicacao;	
 			}
+			throw new PublicacaoInexistenteException();
 		} catch (SQLException | ConexaoException e){
-			e.printStackTrace();
+			throw e;
+		}finally{
+			try{
+				conexao.desconectar();
+			}catch(ConexaoException ee){
+				throw ee;
+			}
 		}
-		return null;
 	}
 	
-	public void alterar(Publicacao publicacao){
+	public void alterar(Publicacao publicacao) throws ConexaoException, SQLException{
 		String sql = "UPDATE Publicacao set nome=?, meiopublicacao=?, matriculaaluno=?"
-				+ ",resumo=?, matriculaprofesso? WHERE idnome=?";
+				+ ",resumo=?, matriculaprofesso? WHERE idPublicacao=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, publicacao.getNome());
@@ -73,34 +83,34 @@ public class DaoPublicacaoJdbc {
 			pst.setString(5, publicacao.getProfessor().getMatricula());
 			pst.executeUpdate();
 		}catch(ConexaoException e){
-			System.out.println(e.getMessage());
+			throw e;
 		} catch (SQLException ec) {
-			System.out.println(ec.getMessage());
+			throw ec;
 		}finally{
 			try{
 				conexao.desconectar();
 			}catch(ConexaoException e){
-				System.out.println(e.getMessage());
+				throw e;
 			}
 		}
 		
 	}
 	
-	public void remover(Publicacao publicacao){
-		String sql = "DELET FROM publicacao WHERE IdNome=?";
+	public void remover(Publicacao publicacao) throws ConexaoException, SQLException{
+		String sql = "DELETE FROM publicacao WHERE IdPublicacao=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setInt(1, publicacao.getId());
 			pst.executeUpdate();
 		}catch(ConexaoException e){
-			System.out.println(e.getMessage());
+			throw e;
 		} catch (SQLException ec) {
-			System.out.println(ec.getMessage());
+			throw ec;
 		}finally{
 			try{
 				conexao.desconectar();
 			}catch(ConexaoException e){
-				System.out.println(e.getMessage());
+				throw e;
 			}
 		}
 		

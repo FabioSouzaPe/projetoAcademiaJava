@@ -13,6 +13,7 @@ import com.mysql.jdbc.Statement;
 import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
+import sistemaAcademico.conexao.Conexao;
 
 public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
@@ -75,76 +76,52 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 	@Override
 	public void addPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException {
-
-		DaoConexaoIntJDBC c = new DaoConexaoJDBC();
-
+		Conexao c = new Conexao();
 		try {
-
 			Connection cn = c.conectar();
-
 			int id;
 			String insertSQL;
 			PreparedStatement pStmt;
 			ResultSet rs;
-
 			insertSQL = "insert into `sistema_academico`.`pessoa` (`nome`, `cpf`, `sexo`) VALUES (?,?,?)";
-
 			pStmt = cn.prepareStatement(insertSQL,
 					Statement.RETURN_GENERATED_KEYS);
-
 			pStmt.setString(1, pessoa.getNome());
 			pStmt.setString(2, pessoa.getCpf());
 			pStmt.setString(3, String.valueOf(pessoa.getSexo()));
-
 			pStmt.executeUpdate();
-
 			rs = pStmt.getGeneratedKeys();
-			
 			rs.next();
 			id = rs.getInt(1);
 			rs.close();
-			
 			insertSQL = "insert into `sistema_academico`.`endereco` (`logradouro`, `bairro`, `numero`, `cidade`, "
 					+ "`uf`, `id_pessoa` ) VALUES (?,?,?,?,?,?)";
 
 			pStmt = cn.prepareStatement(insertSQL);
-
 			pStmt.setString(1, pessoa.getEndereco().getLogradouro());
 			pStmt.setString(2, pessoa.getEndereco().getBairro());
 			pStmt.setString(3, pessoa.getEndereco().getNumero());
 			pStmt.setString(4, pessoa.getEndereco().getCidade());
 			pStmt.setString(5, pessoa.getEndereco().getUf());
 			pStmt.setInt(6, id);
-			
 			pStmt.executeUpdate();
-
 			Iterator<Fone> it = pessoa.getFones().iterator();
-			
 			Fone f;
-			
 			insertSQL = "insert into `sistema_academico`.`fone` (`ddd`, `numero`, `id_pessoa`) VALUES (?,?,?)";
-			
 			pStmt = cn.prepareStatement(insertSQL);
-
 			while (it.hasNext()) {
-				
 				f = it.next();
-
 				pStmt.setString(1, f.getDdd());
 				pStmt.setString(2, f.getFone());
-				pStmt.setInt(3, id);
-				
+				pStmt.setInt(3, id);	
 				pStmt.executeUpdate();
 			}
-
 			cn.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		}finally {
 			c.desconectar();
 		}
-
 	}
 
 	@Override

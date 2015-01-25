@@ -25,76 +25,69 @@ public class FrequenciaMain {
 				System.out.println("| Para Listar Frequencia Digite ------> 2 |");
 				System.out.println("| Para atualizar Frequencia Digite ---> 3 |");
 				System.out.println(" -----------------------------------------\n");
-				Scanner sc1 = new Scanner(System.in);
-				int opcao= sc1.nextInt();
+				Scanner scanner = new Scanner(System.in);
+				int opcao= scanner.nextInt();
 				
 			switch(opcao){
 			case 1:
 				
-				Frequencia frequencia1= new Frequencia();
-				Frequencia frequencia2= new Frequencia();
-				Frequencia frequencia3= new Frequencia();
+				Scanner sc1 = new Scanner(System.in);
 				
-				//ALUNO 1
-				Aluno a1= new Aluno("2015.1", null, new Date());
+				
+				//ALUNO 
+				System.out.println("Digite a Matrícula do aluno");
+				String matricula = sc1.next();
+				System.out.println("Digite o ID da turma");
+				int tur= sc1.nextInt();
+				System.out.println("Digite o ID da disciplina");
+				int disciplina= sc1.nextInt();
+				System.out.println("Aluno Presente?");
+				boolean presenca= sc1.nextBoolean();
+				System.out.println("Atribua uma avaliação");
+				String avaliacao = sc1.next();
+				
+				Aluno a1= new Aluno(matricula, null, new Date(),null);
 				Turma t1 = new Turma();
-				t1.setId(117);
-				frequencia1.setData(new Date());
-				frequencia1.setAluno(a1);
-				frequencia1.setTurma(t1);
-				frequencia1.setPresenca(true);
-				frequencia1.setAvaliacao("Bom");
+				t1.setId(tur);
+				Disciplina d= new Disciplina();
+				d.setId(disciplina);
 				
-				//ALUNO 2
-				Aluno a2= new Aluno("2015.2", null, new Date());
-				Turma t2 = new Turma();
-				t2.setId(117);
-				frequencia2.setData(new Date());
-				frequencia2.setAluno(a2);
-				frequencia2.setTurma(t2);
-				frequencia2.setPresenca(false);
-				frequencia2.setAvaliacao("Bom");
+				Frequencia frequencia= new Frequencia(0, new Date(), t1, a1,  presenca,  avaliacao,  d);
 				
-				//ALUNO 3
-				Aluno a3= new Aluno("2015.3", null, new Date());
-				Turma t3 = new Turma();
-				t3.setId(117);
-				frequencia3.setData(new Date());
-				frequencia3.setAluno(a3);
-				frequencia3.setTurma(t3);
-				frequencia3.setPresenca(true);
-				frequencia3.setAvaliacao("ruim");
 				
-				if(rn.montarScriptCadastrarFrequencia(frequencia1)){
+				if(rn.montarScriptCadastrarFrequencia(frequencia)){
 					System.out.println("frequencia realizada com sucesso");
 				}else{
 					System.out.println("frequencia da data informada ja foi realizada");
 				}
 				
-				if(rn.montarScriptCadastrarFrequencia(frequencia2)){
-					System.out.println("frequencia realizada com sucesso");
-				}else{
-					System.out.println("frequencia da data informada ja foi realizada");
-				}
 				
-				if(rn.montarScriptCadastrarFrequencia(frequencia3)){
-					System.out.println("frequencia realizada com sucesso");
-				}else{
-					System.out.println("frequencia da data informada ja foi realizada");
-				}
 				
 				break;
 			case 2:
-				Frequencia frequencia4= new Frequencia();
-				Turma turma= new Turma();
-				turma.setId(117);
-				frequencia4.setTurma(turma);
-				ArrayList<Frequencia> f1 =rn.montarScriptListarFrequencia(frequencia4,new Date());
+				Scanner sc2 = new Scanner(System.in);
+				Frequencia frequencia2= new Frequencia();
+				Turma tur2= new Turma();
+				Disciplina disciplina2=new Disciplina();
+				
+				System.out.println("Digite o ID da tumra que deseja consultar afrequencia");
+				tur2.setId(sc2.nextInt());
+				System.out.println("Agora digite o ID da disciplina que deseja consultar afrequencia");
+				int idDisc=sc2.nextInt();
+				if(idDisc!=0){
+					disciplina2.setId(idDisc);
+				}else{
+					disciplina2=null;
+				}
+				frequencia2.setTurma(tur2);
+				frequencia2.setDisciplina(disciplina2);
+				ArrayList<Frequencia> f1 =rn.montarScriptListarFrequencia(frequencia2,new Date());
 				
 				if(!f1.isEmpty()){
 					for(int i = 0; i<f1.size(); i++){
 						System.out.println("___________________________________________");
-						System.out.println("Aluno: "+f1.get(i).getAluno().getMatricula());
+						System.out.println("Aluno: "+f1.get(i).getAluno().getPessoa().getNome());
+						System.out.println("Disciplina: "+f1.get(i).getDisciplina().getNome());
 						System.out.println("Presença: "+f1.get(i).getPresenca());
 						System.out.println("Avaliação: "+f1.get(i).getAvaliacao());
 						System.out.println("___________________________________________");
@@ -104,14 +97,28 @@ public class FrequenciaMain {
 				}
 				break;
 			case 3:
-				Frequencia frequencia5= new Frequencia();
-				Aluno a = new  Aluno();
-				a.setMatricula("2015.2");
-				frequencia5.setAluno(a);
-				frequencia5.setData(new Date());
-				frequencia5.setPresenca(false);
-				frequencia5.setAvaliacao("ruim que só");
-				if(rn.montarScriptAtualizarFrequencia(frequencia5)){
+				Scanner sc3 = new Scanner(System.in);
+				
+				System.out.println("Digite a Matrícula do aluno");
+				String matricula3 = sc3.nextLine();
+				System.out.println("Digite o ID da turma");
+				int tur3= sc3.nextInt();
+				System.out.println("Digite o ID da disciplina");
+				int disciplina3= sc3.nextInt();
+				System.out.println("Aluno Presente?");
+				boolean presenca3= sc3.nextBoolean();
+				System.out.println("Atribua uma avaliação");
+				String avaliacao3 = sc3.next();
+				
+				Aluno a3= new Aluno(matricula3, null, new Date(),null);
+				Turma t3 = new Turma();
+				t3.setId(tur3);
+				Disciplina d3= new Disciplina();
+				d3.setId(disciplina3);
+				
+				Frequencia frequencia3 = new Frequencia(0, new Date(), t3, a3,  presenca3,  avaliacao3,  d3);
+				
+				if(rn.montarScriptAtualizarFrequencia(frequencia3)){
 					System.out.println("Presença alterada com sucesso");
 				}else{
 					System.out.println("Ainda não foi realaizada a ferquencia para esta data");
@@ -119,7 +126,7 @@ public class FrequenciaMain {
 				
 				break;
 			case 0:
-				sc1.close();
+				scanner.close();
 				run=false;
 				break;
 			default:

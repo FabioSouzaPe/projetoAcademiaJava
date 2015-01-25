@@ -8,11 +8,21 @@ public class Aluno{
 	private String matricula;
 	private ArrayList<Publicacao> publicacoes;
 	private Date data;
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
+	private Pessoa pessoa;
 	
-	public Aluno(String matricula, ArrayList<Publicacao> publicacoes, Date data){
+	public Aluno(String matricula, ArrayList<Publicacao> publicacoes, Date data, Pessoa pesspa){
 		this.matricula = matricula;
 		this.publicacoes = this.publicacoes;
 		this.data = data;
+		this.pessoa = pessoa;
 	}
 	
 	public Aluno(){

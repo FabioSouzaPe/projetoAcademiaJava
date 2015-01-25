@@ -63,10 +63,7 @@ public class Pessoa {
 		return escolaridade;
 	}
 
-<<<<<<< HEAD
-	
-	
-=======
+
 	public void setEscolaridade(Escolaridade escolaridade) {
 		this.escolaridade = escolaridade;
 	}
@@ -76,5 +73,5 @@ public class Pessoa {
 	public void addFones(Fone fone) {
 		this.fones.add(fone);
 	}
->>>>>>> origin/projetoAcademiaJava_16012015_mackson
+
 }

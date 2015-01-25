@@ -10,10 +10,13 @@ public class Frequencia {
 	private Aluno aluno;
 	private Boolean presenca;
 	private String avaliacao;
+	private Disciplina disciplina;
 	
+	
+
 	public Frequencia(){}
 
-	public Frequencia(int id, Date data, Turma turma, Aluno aluno, Boolean presenca, String avaliacao) {
+	public Frequencia(int id, Date data, Turma turma, Aluno aluno, Boolean presenca, String avaliacao, Disciplina disciplina) {
 		
 		this.id = id;
 		this.data = data;
@@ -21,6 +24,7 @@ public class Frequencia {
 		this.aluno = aluno;
 		this.presenca = presenca;
 		this.avaliacao = avaliacao;
+		this.disciplina = disciplina;
 	}
 
 	public int getId() {
@@ -71,7 +75,13 @@ public class Frequencia {
 		this.avaliacao = avaliacao;
 	}
 
-	
+	public Disciplina getDisciplina() {
+		return disciplina;
+	}
+
+	public void setDisciplina(Disciplina disciplina) {
+		this.disciplina = disciplina;
+	}
 	
 	
 }

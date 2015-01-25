@@ -10,6 +10,8 @@ import sistemaAcademico.exceptions.ConexaoException;
 
 public class DaoGenerico implements IDaoGenerico{
 		
+        /*foi necessario criar essa variável aqui pois o metodo dql retorna um Result set
+		e se a conexão fosse fechada antes do retorno, as inofrmações seriam perdidas*/
 		public static ConexaoInt daoConDQL= new Conexao();
 	
 	//método genérico usado pela DQL do Sql (SELECT)

@@ -1,11 +1,13 @@
 package sistemaAcademico.classesBasicas;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import sistemaAcademico.exceptions.CursoException;
 import sistemaAcademico.regrasDeNegocio.RnCurso;
 
 public class CursoMain {
@@ -37,19 +39,17 @@ public class CursoMain {
 					sc1.nextLine();
 					String nome=sc1.nextLine();
 					Date d = new Date();
-					List<Turma> t= new ArrayList<Turma>();
 					Curso c= new Curso(0,nome, d );
 						
 					try{
 						if(rn.montarScriptCadastrarCurso(c)){
 							System.out.println("Curso Cadastrado com sucesso");
-						}else{
-						System.out.println("Curso Já cadastrado");
 						}
-					}catch(Exception e){
+					}catch(CursoException e){
+						System.out.println(e.getMensagem());
+					}catch(SQLException e){
 						System.out.println(e.getMessage());
-					}
-						
+					}	
 				}
 				
 				else if(opcao==2){
@@ -85,12 +85,11 @@ public class CursoMain {
 						c.setId(id);
 						if(rn.montarScriptExcluirCurso(c)){
 							System.out.println("Curso excluido com sucesso");
-						}else{
-							System.out.println("Curso nao exite");
 						}
 						
-						
-					}catch(Exception e){
+					}catch(CursoException e){
+						System.out.println(e.getMensagem());
+					}catch(SQLException e){
 						System.out.println(e.getMessage());
 					}
 					
@@ -109,14 +108,12 @@ public class CursoMain {
 							
 							if(rn.montarScriptAlterarCurso(curso)){
 								System.out.println("Curso Alterado com sucesso");
-							}else{
-								System.out.println("Curso a ser alterado nao existe");
 							}
-						}catch(Exception e){
+						}catch(CursoException e){
+							System.out.println(e.getMensagem());
+						}catch(SQLException e){
 							System.out.println(e.getMessage());
 						}
-						
-					
 					
 				}
 				

@@ -8,8 +8,6 @@ public class Curso {
 	private String nome;
 	private Date data;
 	
-	
-	
 	public Curso(){	}
 
 

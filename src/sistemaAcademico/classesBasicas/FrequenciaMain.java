@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.FrequenciaException;
 import sistemaAcademico.regrasDeNegocio.RnFrequencia;
 
 
@@ -54,16 +55,18 @@ public class FrequenciaMain {
 				
 				Frequencia frequencia= new Frequencia(0, new Date(), t1, a1,  presenca,  avaliacao,  d);
 				
-				
-				if(rn.montarScriptCadastrarFrequencia(frequencia)){
-					System.out.println("frequencia realizada com sucesso");
-				}else{
-					System.out.println("frequencia da data informada ja foi realizada");
+				try{
+					if(rn.montarScriptCadastrarFrequencia(frequencia)){
+						System.out.println("frequencia realizada com sucesso");
+					}
+				}catch(FrequenciaException e){
+					System.out.println(e.getMensagem());
+				}catch(SQLException e){
+					System.out.println(e.getMessage());
 				}
 				
-				
-				
 				break;
+				
 			case 2:
 				Scanner sc2 = new Scanner(System.in);
 				Frequencia frequencia2= new Frequencia();
@@ -96,6 +99,7 @@ public class FrequenciaMain {
 					System.out.println("Ainda não foi realaizada a ferquencia para esta data nesta turma");
 				}
 				break;
+				
 			case 3:
 				Scanner sc3 = new Scanner(System.in);
 				
@@ -117,18 +121,24 @@ public class FrequenciaMain {
 				d3.setId(disciplina3);
 				
 				Frequencia frequencia3 = new Frequencia(0, new Date(), t3, a3,  presenca3,  avaliacao3,  d3);
-				
-				if(rn.montarScriptAtualizarFrequencia(frequencia3)){
-					System.out.println("Presença alterada com sucesso");
-				}else{
-					System.out.println("Ainda não foi realaizada a ferquencia para esta data");
+				try{
+					if(rn.montarScriptAtualizarFrequencia(frequencia3)){
+						System.out.println("Presença alterada com sucesso");
+					}
+				}catch(FrequenciaException e){
+					System.out.println(e.getMensagem());
+				}catch(SQLException e){
+					System.out.println(e.getMessage());
 				}
 				
+				
 				break;
+				
 			case 0:
 				scanner.close();
 				run=false;
 				break;
+				
 			default:
 				System.out.println("Opição inválida");
 				break;

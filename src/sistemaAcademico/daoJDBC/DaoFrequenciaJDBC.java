@@ -1,4 +1,4 @@
-package sistemaAcademico.dao.JDBC;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,9 @@ import java.util.Date;
 
 import sistemaAcademico.classesBasicas.Frequencia;
 import sistemaAcademico.classesBasicas.Turma;
+import sistemaAcademico.conexao.Conexao;
+import sistemaAcademico.conexao.ConexaoInt;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class DaoFrequenciaJDBC implements DaoFrequenciaJDBCInt{
 
@@ -14,20 +17,23 @@ public class DaoFrequenciaJDBC implements DaoFrequenciaJDBCInt{
 	public boolean cadastrarFrequencia(Frequencia frequencia) throws SQLException, ClassNotFoundException {
 		
 		boolean sucesso=false;
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
+		ConexaoInt conexao = new Conexao();
 		java.util.Date dataUtil = frequencia.getData(); 
 		java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 		
-		
-		PreparedStatement pStmt = conexao.prepareStatement("INSERT INTO CURSO ( DATA, AVALIACAO, TURMA_ID, ALUNO_ID, PRESENCA) VALUES (?,?,?,?,?)") ;
+		try {
+		PreparedStatement pStmt =  conexao.conectar().prepareStatement("INSERT INTO CURSO ( DATA, AVALIACAO, TURMA_ID, ALUNO_ID, PRESENCA) VALUES (?,?,?,?,?)") ;
 		pStmt.setDate(1,dataSql);
 		//pStmt.setString(1,frequencia.getAvaliacao());
 		
 		int rows = pStmt.executeUpdate();
-		conexao.commit();
-		DaoConexaoJDBC.fecharConexao();
+	
+		conexao.desconectar();;
 		if(rows==1){
 			sucesso=true;
+		}} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	return sucesso;

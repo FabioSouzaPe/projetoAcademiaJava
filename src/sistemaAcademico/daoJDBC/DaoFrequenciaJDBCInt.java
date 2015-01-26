@@ -1,4 +1,4 @@
-package sistemaAcademico.dao.JDBC;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.SQLException;
 import java.util.Date;

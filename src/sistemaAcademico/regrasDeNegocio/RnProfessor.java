@@ -1,6 +1,6 @@
 package sistemaAcademico.regrasDeNegocio;
 
-import com.sun.org.apache.bcel.internal.generic.DADD;
+
 
 import sistemAcademico.exceptions.ErroConexaoException;
 import sistemAcademico.exceptions.ProfessorExistenteException;
@@ -10,7 +10,8 @@ import sistemaAcademico.dao.DaoProfessor;
 import sistemaAcademico.dao.DaoProfessorInt;
 import sistemaAcademico.daoJDBC.DaoProfessorIntJDBC;
 import sistemaAcademico.daoJDBC.DaoProfessorJDBC;
-import sistemaAcademico.enuns.Titulo;
+import sistemaAcademico.exceptions.ConexaoException;
+
 
 
 
@@ -18,7 +19,7 @@ import sistemaAcademico.enuns.Titulo;
 public class RnProfessor {
 	//DaoProfessorInt dadosint = new DaoProfessor();
 	
-	DaoProfessorIntJDBC dadosint = new DaoProfessorJDBC();
+	DaoProfessorInt dadosint = new DaoProfessor();
 		
 	//Verificação
 	
@@ -41,7 +42,7 @@ public class RnProfessor {
 	
 }
 	//Cadastrar
-	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException, ErroConexaoException{
+	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException, ErroConexaoException, ConexaoException{
 		try {
 			if(dadosint.pesquisarprofessor(professor.getMatricula()) == null){
 				dadosint.cadastrarProfessor(professor);

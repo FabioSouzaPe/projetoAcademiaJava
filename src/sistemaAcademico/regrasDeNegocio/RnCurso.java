@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.CursoException;
 import sistemaAcademico.classesBasicas.Curso;
+import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.daoJDBC.DaoGenerico;
 import sistemaAcademico.daoJDBC.IDaoGenerico;
 
@@ -86,7 +87,7 @@ public class RnCurso {
 		
 		ArrayList<Curso> cursoList =new ArrayList<Curso>();
 		
-		String select= "SELECT * FROME CURSO ";
+		String select= "SELECT * FROM CURSO ";
 		ResultSet rs=dao.dql(select);
 		
 		while(rs.next()){
@@ -100,6 +101,31 @@ public class RnCurso {
 		DaoGenerico.daoConDQL.desconectar();
 		
 		return cursoList;
+	}
+	
+	//metodo para listar todas as turmas por curso
+	public Curso  montarScriptListarTurmasPorCurso(Curso curso) throws ClassNotFoundException, ConexaoException, SQLException{
+		
+		ArrayList<Turma> turmaPorCursoList =new ArrayList<Turma>();
+		
+		String select= "SELECT TURMA.IDTURMA, TURMA.NOME, CURSO.NOME FROM TURMA INNER JOIN CURSO ON TURMA.IDCURSO=CURSO.IDCURSO WHERE TURMA.IDCURSO="+curso.getId();
+		ResultSet rs=dao.dql(select);
+		Curso cursoRetorno= new Curso();
+		String nomeCurso="";
+		while(rs.next()){
+			    nomeCurso=rs.getString("CURSO.NOME");
+			    Turma t= new Turma();
+			    t.setNomeDaTurma(rs.getString("TURMA.NOME"));
+			    t.setId(rs.getInt("TURMA.IDTURMA"));
+			    turmaPorCursoList.add(t);
+		}
+		cursoRetorno.setTurma(turmaPorCursoList);
+		cursoRetorno.setId(curso.getId());
+		cursoRetorno.setNome(nomeCurso);
+		//desliga a conexao aberta em DaoGenerico no metodo dql
+		DaoGenerico.daoConDQL.desconectar();
+		
+		return cursoRetorno;
 	}
 	
 }

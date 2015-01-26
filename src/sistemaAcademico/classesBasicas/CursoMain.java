@@ -26,6 +26,7 @@ public class CursoMain {
 			System.out.println("| Para Listar Cursos Digite ----------> 2 |");
 			System.out.println("| Para excluir um curso Digite -------> 3 |");
 			System.out.println("| Para atualizar um curso Digite -----> 4 |");
+			System.out.println("| Para Listar Turmas por Curso Digite > 5 |");
 			System.out.println(" -----------------------------------------\n");
 			
 			
@@ -39,7 +40,7 @@ public class CursoMain {
 					sc1.nextLine();
 					String nome=sc1.nextLine();
 					Date d = new Date();
-					Curso c= new Curso(0,nome, d );
+					Curso c= new Curso(0,nome, d,null );
 						
 					try{
 						if(rn.montarScriptCadastrarCurso(c)){
@@ -115,6 +116,26 @@ public class CursoMain {
 							System.out.println(e.getMessage());
 						}
 					
+				}else if(opcao==5){
+					Curso curso= new Curso();
+					curso.setId(1);
+					Curso cursoRetorno =rn.montarScriptListarTurmasPorCurso(curso);
+					ArrayList<Turma> lista =cursoRetorno.getTurma();
+					if(lista.size()!=0){
+								System.out.println("--------"+cursoRetorno.getNome()+"--------");
+						for(int i=0; i<lista.size();i++){
+							System.out.println("____________________________________");
+							System.out.println("ID: "+lista.get(i).getId());
+							System.out.println("Curso: "+lista.get(i).getNomeDaTurma());
+							System.out.println("____________________________________");
+						}
+					}else{
+						System.out.println("Nenhuma Turma para este curso no momento");
+					}
+				}else if(opcao==0){
+					continuar=false;
+					System.out.println("Até logo");
+					sc1.close();
 				}
 				
 			}catch(Exception e){

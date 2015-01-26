@@ -1,44 +1,63 @@
 package sistemaAcademico.regrasDeNegocio;
 
 
+import java.sql.SQLException;
+
+import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.DisciplinaExistenteException;
 import sistemaAcademico.exceptions.DisciplinaInexistenteException;
 import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.dao.DaoDisciplina;
 import sistemaAcademico.dao.DaoDisciplinaInt;
+import sistemaAcademico.daoJDBC.DaoDisciplinaJDBC;
+import sistemaAcademico.daoJDBC.DaoDisciplinaJDBCInt;
 
 
 public class RnDisciplina  {
 
 	
-	DaoDisciplinaInt dao;
-	DaoDisciplina d = new DaoDisciplina();	
+	DaoDisciplinaJDBCInt dao;
+	DaoDisciplinaJDBC d = new DaoDisciplinaJDBC();	
 	
-	public void cadastrar (String novaDisciplina) throws DisciplinaExistenteException{
+	public void cadastrar (Disciplina novaDisciplina) throws DisciplinaExistenteException{
 		
-		if (d.pesquisarDisciplina(novaDisciplina) != null) {
-			
-			d.cadastrarDisciplina(novaDisciplina);
-			
-		} else throw new DisciplinaExistenteException();
+		try {
+			if (d.pesquisarDisciplina(novaDisciplina.getNome()) != null) {
+				
+				d.cadastrarDisciplina(novaDisciplina);
+				
+			} else throw new DisciplinaExistenteException();
+		} catch (SQLException | ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
 	public void remover (Disciplina d) throws DisciplinaInexistenteException {
 		
-		if (dao.pesquisarDisciplina(d.getNome()) != null) {
-	
-			dao.removerDisciplina(d);
-		} else throw new DisciplinaInexistenteException();
+		try {
+			if (dao.pesquisarDisciplina(d.getNome()) != null) {
+
+				dao.removerDisciplina(d);
+			} else throw new DisciplinaInexistenteException();
+		} catch (SQLException | ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
-	public void alterar ( String novoNome, Disciplina d) throws DisciplinaInexistenteException {
+	public void alterar (Disciplina d) throws DisciplinaInexistenteException {
 		
-		if (dao.pesquisarDisciplina(novoNome) != null) {
-			
-			dao.alterarDisciplina(novoNome,d);
-		} else throw new DisciplinaInexistenteException();
+		try {
+			if (dao.pesquisarDisciplina(d.getNome()) != null) {
+				dao.alterarDisciplina(d);
+			} else throw new DisciplinaInexistenteException();
+		} catch (SQLException | ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

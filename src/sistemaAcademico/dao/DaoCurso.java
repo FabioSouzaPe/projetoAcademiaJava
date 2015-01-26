@@ -36,9 +36,10 @@ public class DaoCurso implements DaoCursoInt{
 	}
 
 	@Override
-	public  List<Turma> consultarTurmas(int index, Curso Curso) {
-		
-		return DaoCurso.curso.get(index).getTurma();
+	public List<Turma> consultarTurmas(int index, Curso Curso) {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 
 }

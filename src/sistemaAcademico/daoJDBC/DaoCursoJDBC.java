@@ -1,4 +1,4 @@
-package sistemaAcademico.dao.JDBC;
+package sistemaAcademico.daoJDBC;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,18 +11,26 @@ import java.util.List;
 
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
+import sistemaAcademico.conexao.Conexao;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class DaoCursoJDBC implements DaoCursoJDBCInt{
 
-	
-	
+	Conexao conexao = new Conexao();
+	PreparedStatement pStmt;
 	@Override
 	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException {
 		
-		Connection conexao =  DaoConexaoJDBC.abrirConexao();
-		PreparedStatement pStmt = conexao.prepareStatement(select) ;
-		ResultSet rs = pStmt.executeQuery();
-		conexao.commit();
+	
+		ResultSet rs = null;
+		try {
+			pStmt = conexao.conectar().prepareStatement(select);
+			rs = pStmt.executeQuery();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 		return rs;
 	}
 
@@ -36,7 +44,7 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	public boolean cadastrar(Curso curso) throws ClassNotFoundException, SQLException {
 		
 			boolean sucesso=false;
-			Connection conexao =  DaoConexaoJDBC.abrirConexao();
+			pStmt = conexao.conectar().prepareStatement(select);
 			java.util.Date dataUtil = curso.getData(); 
 			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
 			
@@ -46,7 +54,6 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 			pStmt.setDate(2,dataSql);
 			
 			int rows = pStmt.executeUpdate();
-			conexao.commit();
 			DaoConexaoJDBC.fecharConexao();
 			if(rows==1){
 				sucesso=true;

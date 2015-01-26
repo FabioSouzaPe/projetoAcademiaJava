@@ -6,21 +6,22 @@ import java.util.Scanner;
 
 import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.enuns.Escolaridade;
+import sistemaAcademico.exceptions.TurmaInexistenteException;
 import sistemaAcademico.regrasDeNegocio.RnPessoa;
 
 public class TelaTeste {
 
-	public static void main(String[] args) throws PessoaInexistenteException {
+	public static void main(String[] args) throws TurmaInexistenteException {
 
 		int opcao;
 		Scanner ler = new Scanner(System.in);
 
 		do {
 			System.out.println("Opcões:\n");
-			System.out.println("1 - Cadastrar pessoa");
-			System.out.println("2 - Consultar pessoas cadastradas");
-			System.out.println("3 - Pesquisar pessoa cadastrada");
-			System.out.println("3 - Remover pessoa cadastrada");
+			System.out.println("1 - Cadastrar Turma");
+			System.out.println("2 - Pesquisar uma Turma");
+			System.out.println("3 - Remover uma turma");
+			System.out.println("3 - Matricular um aluno em turma");
 			System.out.println("9 - Sair");
 			
 			opcao = Integer.valueOf(ler.nextInt());

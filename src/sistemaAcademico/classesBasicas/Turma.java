@@ -6,20 +6,57 @@ import sistemaAcademico.enuns.Turno;
 
 public class Turma {
 
-private int id;	
+private int idTurma;	
 private String nomeDaTurma;
 private Professor professorDaTurma;
+private int idProfessor;
 private Turno turnoDaTurma;
-private List <Disciplina> disciplinasDaTurma;
+private int idDisciplina;
+private Curso curso;
+private int idCurso;
+
+
+public int getIdCurso() {
+	return idCurso;
+}
+public void setIdCurso(int idCurso) {
+	this.idCurso = idCurso;
+}
+public int getIdDisciplina() {
+	return idDisciplina;
+}
+public void setDisciplina(int disciplina) {
+	this.idDisciplina = disciplina;
+}
+public Curso getCurso() {
+	return curso;
+}
+public void setCurso(Curso curso) {
+	this.curso = curso;
+}
+public int getIdTurma() {
+	return idTurma;
+}
+public void setIdTurma(int idTurma) {
+	this.idTurma = idTurma;
+}
+public int getIdProfessor() {
+	return idProfessor;
+}
+public void setIdProfessor(int idProfessor) {
+	this.idProfessor = idProfessor;
+}
+
+
 private String periodoAtual;
 private List <Aluno> alunosDaTurma;
 
 
 public int getId() {
-	return id;
+	return idTurma;
 }
 public void setId(int id) {
-	this.id = id;
+	this.idTurma = id;
 }
 public String getNomeDaTurma() {
 	return nomeDaTurma;
@@ -31,19 +68,16 @@ public Professor getProfessorDaTurma() {
 	return professorDaTurma;
 }
 public void setProfessorDaTurma(Professor professorDaTurma) {
+	
 	this.professorDaTurma = professorDaTurma;
+	
 }
+
 public Turno getTurnoDaTurma() {
 	return turnoDaTurma;
 }
 public void setTurnoDaTurma(Turno turnoDaTurma) {
 	this.turnoDaTurma = turnoDaTurma;
-}
-public List<Disciplina> getDisciplinasDaTurma() {
-	return disciplinasDaTurma;
-}
-public void setDisciplinasDaTurma(List<Disciplina> disciplinasDaTurma) {
-	this.disciplinasDaTurma = disciplinasDaTurma;
 }
 public String getPeriodoAtual() {
 	return periodoAtual;
@@ -56,6 +90,11 @@ public List<Aluno> getAlunosDaTurma() {
 }
 public void setAlunosDaTurma(List<Aluno> alunosDaTurma) {
 	this.alunosDaTurma = alunosDaTurma;
+}
+
+public int getIdProfessor (Professor professorTurma) {
+	
+	return professorTurma.getId();
 }
 
 

@@ -15,7 +15,7 @@ public class Conexao implements ConexaoInt{
     public Conexao(){
     	url = "jdbc:mysql://localhost:3306/sistema_academico";
     	user = "root";
-    	pass = "root";
+    	pass = "teste";
     }
 	
 	@Override

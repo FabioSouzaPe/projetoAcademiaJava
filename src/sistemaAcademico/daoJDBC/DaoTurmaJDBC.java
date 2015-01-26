@@ -1,238 +1,268 @@
 package sistemaAcademico.daoJDBC;
 
-import java.net.ConnectException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sistemaAcademico.classesBasicas.Aluno;
-import sistemaAcademico.classesBasicas.Disciplina;
-import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Turma;
-import sistemaAcademico.dao.DaoTurmaInt;
+import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.enuns.Turno;
+import sistemaAcademico.exceptions.ConexaoException;
 
-public class DaoTurmaJDBC implements DaoTurmaInt{
+public class DaoTurmaJDBC implements DaoTurmaJDBCInt{
 
-	
-	private DaoConexao conexao = new DaoConexao();
+
+	private Conexao conexao = new Conexao();
 	private PreparedStatement pst;
-	private String SQLDelete = "Delete FROM Turma WHERE nomeTurma = ? ";
-	private String SQLInsert = "INSERT INTO Turma (nomeTurma,professorTurma,turnoTurma,periodoTurma)values (?,?,?,?)";
-	private String SQLSelectOne = "SELECT * FROM Turma where nomeTurma = ?";
-	private String SQLSelectAll = "SELECT * FROM Turma";
-	private String SQLUpdate = "UPDATE Turma SET nomeTurma = ?,professorTurma = ?, turnoTurma = ?, periodoTurma = ?";
+	private String SQLDelete = "Delete FROM Turma WHERE nome = ? ";
+	private String SQLInsert = "INSERT INTO Turma (idCurso,nome,turno,periodo)values (?,?,?,?)";
+	private String SQLSelectOne = "SELECT * FROM Turma where nome = ?";
+	private String SQLUpdate = "UPDATE Turma SET nome = ?, turno = ?, periodo = ? where idTurma = ?";
+	private String SQLSelectAllALuno = "SELECT nome,matricula,CPF,Sexo FROM ALUNO a INNER JOIN PESSOA p on a.idPessoa = p.idPessoa";
+	//private String SQLUpdateTurnoTurma = "UPDATE Turma SET turno = ?";
+	private String SQLInsertAluno = "UPDATE ALUNO set idTurma = ? WHERE matricula = ?";
+	private String SQLDeleteAluno = "UPDATE Aluno set idTurma = ? WHERE matricula = ? ";
+
 	@Override
-	public void cadastrarTurma(List<Aluno> a, String nome, Professor p,
-			List<Disciplina> d, String periodo, Turno t) {
-		
+	public void cadastrarTurma(Turma turma) throws ConexaoException, SQLException {
+
+		pst = conexao.conectar().prepareStatement(SQLInsert);
+
+		//System.out.println(turma.getNomeDaTurma());
+		pst.setInt(1, turma.getCurso().getId());
+		//pst.setString(2,turma.getProfessorDaTurma().getMatricula());
+		pst.setString(2, turma.getNomeDaTurma());
+		pst.setString(3, turma.getTurnoDaTurma().name());
+		pst.setString(4, turma.getPeriodoAtual());
+		pst.executeUpdate();
+
 		try {
-			pst = conexao.conectar().prepareStatement(SQLInsert);
-			System.out.println("Conectou");
-			pst.setString(1, nome);
-			pst.setString(2,p.getProf());
-			pst.setString(3, t.name());
-			pst.setString(4, periodo);
-			pst.executeUpdate();
-			
-		} catch (SQLException e) {
+			conexao.desconectar();
+		} catch (ConexaoException e) {
 			// TODO Auto-generated catch block
-			//System.out.println("audyvysa");
-			//System.out.println(e.getMessage());
+			throw new ConexaoException();
 		} 
-		
-		finally {
-			
-			try {
-				
-				conexao.desconectar();
-			} catch (SQLException e){
-				
-				
-					}
-		}
 	}
 
+
 	@Override
-	public void removerTurma(Turma turmaRemovida) {
-		
+	public void removerTurma(Turma turmaRemovida) throws ConexaoException, SQLException{
+
 		try {
-			pst = conexao.conectar().prepareStatement(SQLDelete);
+			try {
+				pst = conexao.conectar().prepareStatement(SQLDelete);
+
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
+
 			pst.setString(1, turmaRemovida.getNomeDaTurma());
 			pst.executeUpdate();
-			
+
 		}  catch (SQLException e) {
-		
-			System.out.println(e.getMessage());
-		}
-		
-		finally {
-			
-			try {
-				
-				conexao.desconectar();
-			} catch (SQLException e){
-				System.out.println(e.getMessage());
+
+			throw new SQLException();
 		}
 
+		finally {
+
+			try {
+				conexao.desconectar();
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
 		}
 	}
-		
-		
 
 	@Override
-	public Turma consultarTurma(String nome) {
-		
+	public Turma consultarTurma(String nome) throws ConexaoException, SQLException {
+
 		Turma turmaResultante = new Turma();
-		
+		Turno aux;
 		try {
-			
-			pst = conexao.conectar().prepareStatement(SQLSelectOne);
+
+			try {
+				pst = conexao.conectar().prepareStatement(SQLSelectOne);
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
+
 			pst.setString(1, nome);
 			ResultSet s = pst.executeQuery();
+			
 			if (s.next()){
-			System.out.println(s.getString("nomeTurma"));
-			turmaResultante.setNomeDaTurma(s.getString("nomeTurma"));
-			//turmaResultante.setProfessorDaTurma((Professor) s.getObject("nomeProfessor"));
-			turmaResultante.setPeriodoAtual(s.getString("periodoTurma"));
-			//turmaResultante.setTurnoDaTurma((Turno) s.getObject("turnoTurma"));
+				turmaResultante.setId(s.getInt("IdTurma"));
+				turmaResultante.setNomeDaTurma(s.getString("nome"));
+				turmaResultante.setPeriodoAtual(s.getString("periodo"));
+				turmaResultante.setIdCurso(s.getInt("Idcurso"));
+				
+				if (s.getString("turno").equalsIgnoreCase("manhã")) {
+					turmaResultante.setTurnoDaTurma(Turno.MANHÃ);
+				}
+				if (s.getString("turno").equalsIgnoreCase("tarde")) {
+					turmaResultante.setTurnoDaTurma(Turno.TARDE);
+				}
+				if (s.getString("turno").equalsIgnoreCase("noite")) {
+					turmaResultante.setTurnoDaTurma(Turno.NOITE);
+				}
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			
-		} 
-		
-		finally {
-			
-			try {
-				
-				conexao.desconectar();
-			} catch (SQLException e){
+			throw new SQLException();
 
-				System.out.println(e.getMessage());
-		}
-			
+		} 	
+		finally {
+
+			try {
+
+				conexao.desconectar();
+			} catch (ConexaoException e){
+
+				throw new ConexaoException();
+			}
+
 		}
 		return turmaResultante;
 	}
 
 	@Override
-	public List<Turma> consultarTurmas() {
+	public void alterarTurma(Turma turmaAtual) throws SQLException, ConexaoException {
 		// TODO Auto-generated method stub
-		ResultSet st = null;
-		List<Turma> t = new ArrayList();
-		Turma turma = new Turma();	
+		Connection c;
+		
 		try {
-			pst = conexao.conectar().prepareStatement(SQLSelectAll);
-			//pst.setString(1, turmaRemovida.getNomeDaTurma());
-			st = pst.executeQuery();
-			
-		}  catch (SQLException e) {
-		
-			System.out.println(e.getMessage());
-		}
-		
-		finally {
-			
-			try {
-				
-				conexao.desconectar();
-			} catch (SQLException e){
-				System.out.println(e.getMessage());
+			pst = conexao.conectar().prepareStatement(SQLUpdate);
+			pst.setString(1, turmaAtual.getNomeDaTurma());
+			pst.setString(2, turmaAtual.getTurnoDaTurma().name());
+			pst.setString(3, turmaAtual.getPeriodoAtual());
+			pst.setInt(4, turmaAtual.getId());
+			pst.executeUpdate();
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			throw new ConexaoException();
 		}
 
-		}
-		
 		try {
-			int i =0;
-			while (st.next()) {
-				
-				turma.setNomeDaTurma(st.getString("nomeTurma"));
-				turma.setPeriodoAtual(st.getString("periodoTurma"));
-				//turma.setProfessorDaTurma(st.get);
-				//t.set(i, element);
-				
-				
-			}
-			
-		} catch (SQLException e) {
+			conexao.desconectar();
+		} catch (ConexaoException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return t;
+			throw new ConexaoException();
+		} 
 	}
 
 	@Override
-	public void alterarTurma(Turma turmaAtual, String novoNome,
-			Professor novoProfessor, Turno novoTurno, String novoPeriodo) {
-		// TODO Auto-generated method stub
-		//ResultSet st;
+	public void matricularAluno(Aluno aluno,Turma turma) throws ConexaoException, SQLException {
+		// TODO Auto-generated method stub	
+
 		try {
-			pst = conexao.conectar().prepareStatement(SQLUpdate);
-			//pst.setString(1, turmaRemovida.getNomeDaTurma());
-			pst.executeQuery();
+			try {
+				pst = conexao.conectar().prepareStatement(SQLInsertAluno);
+
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
 			
+			pst.setInt(1, turma.getId());
+			pst.setString(2, aluno.getMatricula());;
+			pst.executeUpdate();
+
 		}  catch (SQLException e) {
-		
-			System.out.println(e.getMessage());
+
+			throw new SQLException();
 		}
+			
+		//turma.setAlunosDaTurma(aluno);
 		
 		finally {
-			
+
 			try {
-				
 				conexao.desconectar();
-			} catch (SQLException e){
-				System.out.println(e.getMessage());
-		}
-		
-		if (novoNome != null) {
-			
-			try {
-				pst.setString(1, turmaAtual.getNomeDaTurma());
-			} catch (SQLException e) {
+			} catch (ConexaoException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new ConexaoException();
 			}
-			
-		} else {
-			
-			try {
-				pst.setString(1, novoNome);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if (novoProfessor != null) {
-				
-				try {
-					pst.setString(2, turmaAtual.getProfessorDaTurma().getProf());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			} else {
-				
-				try {
-					pst.setString(2, novoProfessor.getProf());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
+
+
 		}
-			
-			
+
 	}
 
+	@Override
+	public void removerAluno(Aluno aluno, Turma turma) throws SQLException, ConexaoException {
+		// TODO Auto-generated method stub
+
+		try {
+			try {
+				pst = conexao.conectar().prepareStatement(SQLDeleteAluno);
+
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
+
+			pst.setString(1, null);
+			pst.setString(2, aluno.getMatricula());;
+			pst.executeUpdate();
+
+		}  catch (SQLException e) {
+
+			throw new SQLException();
+		}
+
+		finally {
+
+			try {
+				conexao.desconectar();
+			} catch (ConexaoException e) {
+				// TODO Auto-generated catch block
+				throw new ConexaoException();
+			}
+
+
+		}
+
+	}
+
+	public List<HashMap> listarAlunosDaturma (Turma turma) throws SQLException, ConexaoException {
+		
+		//String SQLAux; 
+		
+		
+		List<HashMap> alunos = new ArrayList();
+		Aluno aluno = new Aluno();
+		
+		
+		pst = conexao.conectar().prepareStatement(SQLSelectAllALuno);
+		//pst.setInt(1, turma.getIdTurma());
+		//System.out.println("dada");
+		ResultSet s = pst.executeQuery();
+		
+		while (s.next()) {
 	
-	
+		HashMap<Integer, String> mapa = new HashMap();
+		
+		mapa.put(1, s.getString("nome"));
+		mapa.put(2, s.getString("matricula"));
+		mapa.put(3, s.getString("CPF"));
+		mapa.put(4, s.getString(("Sexo")));
+		
+		alunos.add(mapa);
+		}
+		
+		return alunos;
+		
 	}
 	
+
 }

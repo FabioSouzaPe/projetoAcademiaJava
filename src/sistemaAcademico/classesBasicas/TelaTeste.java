@@ -1,15 +1,13 @@
 package sistemaAcademico.classesBasicas;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-
 import sistemAcademico.exceptions.PessoaInexistenteException;
-import sistemaAcademico.enuns.Escolaridade;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.regrasDeNegocio.RnPessoa;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class TelaTeste {
 
@@ -58,6 +56,7 @@ public class TelaTeste {
 			}
 			
 		} while (opcao != 9);
+		ler.close();
 	}
 
 	private static void removerPessoa() {
@@ -77,6 +76,12 @@ public class TelaTeste {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -177,6 +182,12 @@ public class TelaTeste {
 		} catch (ConexaoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -212,6 +223,12 @@ public class TelaTeste {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -272,10 +289,16 @@ public class TelaTeste {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new MySQLIntegrityConstraintViolationException();
+			//e.printStackTrace();
 		} catch (ClassNotFoundException e){
 			e.printStackTrace();
 		} catch (ConexaoException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

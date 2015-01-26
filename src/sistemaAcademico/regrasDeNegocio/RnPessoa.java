@@ -1,9 +1,8 @@
 package sistemaAcademico.regrasDeNegocio;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.swing.text.html.Option;
 
 import sistemAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Endereco;
@@ -16,8 +15,6 @@ import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
 import sistemaAcademico.exceptions.ConexaoException;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import com.sun.corba.se.impl.io.OptionalDataException;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class RnPessoa {
 	
@@ -33,7 +30,7 @@ public class RnPessoa {
 		int digitoCPF;
 		String nDigResult;
 		
-		cpf = cpf.replaceAll("[^0-9]", "");
+		cpf = deixaSoNumericos(cpf);
 		
 		if (cpf.length() < 11) {
 			return false;
@@ -79,7 +76,7 @@ public class RnPessoa {
 		}
 	}
 	
-	public static int adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException, ConexaoException{
+	public static int adicionaPessoa(Pessoa pessoa) throws SQLException, ClassNotFoundException, MySQLIntegrityConstraintViolationException, ConexaoException, IllegalArgumentException, IllegalAccessException{
 		int id = 0;
 		
 		/*Tenta encontrar a pessoa pelo cpf, se não encontrar
@@ -87,8 +84,16 @@ public class RnPessoa {
 		 * 
 		*/ 
 		
+		pessoa.setCpf(deixaSoNumericos(pessoa.getCpf()));
+		pessoa.getEndereco().setCep(deixaSoNumericos(pessoa.getEndereco().getCep()));
+		
+		for(int i = 0; i < pessoa.getFones().size(); i++){
+			pessoa.getFones().get(i).setDdd(deixaSoNumericos(pessoa.getFones().get(i).getDdd()));
+			pessoa.getFones().get(i).setFone(deixaSoNumericos(pessoa.getFones().get(i).getFone()));
+		}
+		
 		try {
-			boolean b = pesquisarPessoa(pessoa.getCpf()) == null;
+			pesquisarPessoa(pessoa.getCpf());
 		} catch (PessoaInexistenteException e) {
 			id = daoPessoaJDBC.addPessoa(pessoa);
 		}
@@ -113,7 +118,7 @@ public class RnPessoa {
 		return daoPessoaJDBC.getListaPessoas();
 	}
 	
-	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException {
+	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException {
 
 		Pessoa pessoaAchada = null;
 		
@@ -122,7 +127,8 @@ public class RnPessoa {
 		 * Em seguida tentará buscar por uma pessoa no banco
 		 * usando o número do CPF como parâmetro
 		 */
-
+		cpf = deixaSoNumericos(cpf);
+		
 		pessoaAchada = daoPessoaJDBC.buscaPorCpf(cpf);
 		if (pessoaAchada.getId() != 0){
 			return pessoaAchada;
@@ -133,17 +139,33 @@ public class RnPessoa {
 		}
 	}
 
-	public static void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException, ConexaoException {
+	public static void alterarPessoa(Endereco endereco) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException {
+		
+		endereco.setCep(deixaSoNumericos(endereco.getCep()));
+		
 		daoPessoaJDBC.alterarPessoa(endereco);
 	}
-	public static void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException, ConexaoException {
+	public static void alterarPessoa(Fone fone) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException {
+		
+		fone.setDdd(deixaSoNumericos(fone.getDdd()));
+		fone.setFone(deixaSoNumericos(fone.getFone()));
+		
 		daoPessoaJDBC.alterarPessoa(fone);
 	}
-	public static void adicionaFone(Fone fone, int idPessoa) throws ClassNotFoundException, SQLException, ConexaoException{
+	public static void adicionaFone(Fone fone, int idPessoa) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException{
+		
+		fone.setDdd(deixaSoNumericos(fone.getDdd()));
+		fone.setFone(deixaSoNumericos(fone.getFone()));
+		
 		daoPessoaJDBC.adicionaFone(fone, idPessoa);
 	}
 
 	public static void removerPessoa(int idPessoa, int idEndereco) throws ClassNotFoundException, SQLException, ConexaoException {
 		daoPessoaJDBC.removerPessoa(idPessoa, idEndereco);
+	}
+	
+	public static String deixaSoNumericos(String string){
+		
+		return string.replaceAll("[^0-9]", "");
 	}
 }

@@ -14,6 +14,7 @@ import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.regrasDeNegocio.RnPessoa;
 
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
@@ -133,7 +134,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -179,7 +179,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 				preparedStatement = conexao.conectar().prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
 
-				preparedStatement.setString(1, pessoa.getEndereco().getCep());
+				preparedStatement.setString(1, pessoa.getEndereco().getCep().replaceAll("[^0-9]", ""));
 				preparedStatement.setString(2, pessoa.getEndereco().getLogradouro());
 				preparedStatement.setString(3, pessoa.getEndereco().getBairro());
 				preparedStatement.setString(4, pessoa.getEndereco().getNumero());
@@ -207,7 +207,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 			preparedStatement.setString(1, pessoa.getNome());
 			preparedStatement.setString(2, String.valueOf(pessoa.getSexo()));
-			preparedStatement.setString(3, pessoa.getCpf());
+			preparedStatement.setString(3, pessoa.getCpf().replaceAll("[^0-9]", ""));
 			preparedStatement.setInt(4, id);
 
 			preparedStatement.executeUpdate();
@@ -236,8 +236,8 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 				
 				fone = iterator.next();
 
-				preparedStatement.setString(1, fone.getDdd());
-				preparedStatement.setString(2, fone.getFone());
+				preparedStatement.setString(1, fone.getDdd().replaceAll("[^0-9]", ""));
+				preparedStatement.setString(2, fone.getFone().replaceAll("[^0-9]", ""));
 				preparedStatement.setInt(3, id);
 				
 				preparedStatement.executeUpdate();
@@ -276,7 +276,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 			
 			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(updateSQL);
 
-			preparedStatement.setString(1, endereco.getCep());
+			preparedStatement.setString(1, endereco.getCep().replaceAll("[^0-9]", ""));
 			preparedStatement.setString(2, endereco.getLogradouro());
 			preparedStatement.setString(3, endereco.getBairro());
 			preparedStatement.setString(4, endereco.getNumero());
@@ -291,7 +291,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -319,8 +318,8 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 			PreparedStatement preparedStatement = conexao.conectar().prepareStatement(updateSQL);
 
-			preparedStatement.setString(1, fone.getDdd());
-			preparedStatement.setString(2, fone.getFone());
+			preparedStatement.setString(1, fone.getDdd().replaceAll("[^0-9]", ""));
+			preparedStatement.setString(2, fone.getFone().replaceAll("[^0-9]", ""));
 			preparedStatement.setInt(3, fone.getId());
 			
 			preparedStatement.executeUpdate();
@@ -330,7 +329,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -354,7 +352,7 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 
 		try {
 
-			String selectSQL = "SELECT * FROM busca_pessoa where cpf = '" + cpf + "'";
+			String selectSQL = "SELECT * FROM busca_pessoa where cpf = '" + cpf/*.replaceAll("[^0-9]", "")*/ + "'";
 			
 			String countSQL = "select count(idpessoa) from fone where IdPessoa = ?";
 			
@@ -426,7 +424,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -500,7 +497,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();
@@ -556,7 +552,6 @@ public class DaoPessoaJDBC implements DaoPessoaIntJDBC {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			conexao.desconectar();

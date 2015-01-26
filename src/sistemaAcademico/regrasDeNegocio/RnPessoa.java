@@ -116,11 +116,19 @@ public class RnPessoa {
 	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException {
 
 		Pessoa pessoaAchada = null;
+		
+		/*
+		 * Criou uma nova pessoa recebendo nulo.
+		 * Em seguida tentará buscar por uma pessoa no banco
+		 * usando o número do CPF como parâmetro
+		 */
 
 		pessoaAchada = daoPessoaJDBC.buscaPorCpf(cpf);
 		if (pessoaAchada.getId() != 0){
 			return pessoaAchada;
 		} else {
+			
+			//Caso não encontre ninguém, lança uma exceção
 			throw new PessoaInexistenteException();
 		}
 	}

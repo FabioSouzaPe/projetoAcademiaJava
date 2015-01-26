@@ -1,8 +1,9 @@
 package sistemaAcademico.classesBasicas;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+
 import java.util.Date;
-import java.util.Iterator;
+
 
 import sistemAcademico.exceptions.ProfessorExistenteException;
 import sistemAcademico.exceptions.ProfessorInexistenteException;
@@ -16,7 +17,7 @@ import sistemaAcademico.regrasDeNegocio.RnProfessorJDBC;
 
 public class Teste {
 	
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		
 		DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
 		Professor professor = new Professor();
@@ -24,12 +25,15 @@ public class Teste {
 		
 		Date data = new Date();
 	
-		professor.setMatricula("12");
+		professor.setMatricula("123");
 	
 		professor.setAdmissao(data);		
 		professor.setDepartamento("QQ");
-		professor.setInstituicao("Unibratec");
+		professor.setInstituicao("FG");
 		professor.setTitulo(Titulo.DOUTORADO);
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(2);
+		professor.setPessoa(pessoa);
 		
 		
 		
@@ -45,22 +49,34 @@ public class Teste {
 		*/
 		
 		
-		 // Teste Cadastrar OK
-	/*	
-	try {
-		regranegocio.cadastrarProfessor(professor);;
-	} catch (ProfessorInexistenteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (ProfessorExistenteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (ConexaoException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
 		
-		*/
+		
+		 // Teste Cadastrar OK
+	
+	
+       	
+			
+				try {
+					regranegocio.cadastrarProfessor(professor);
+				} catch (ProfessorInexistenteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ProfessorExistenteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ConexaoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+	
+		
+
+		
+	
 		
 		//Teste Remover OK
 		/*try {
@@ -71,9 +87,9 @@ public class Teste {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
-	
+	*/
 		//ArrayList<Professor> retorno = new ArrayList<Professor>();
 		//retorno = dados.consultarTudo();
 		
@@ -90,27 +106,29 @@ public class Teste {
 		
 		//Teste do Listar OK
 		/*try {
-			System.out.println(regranegocio.consultarTudo().size());
+			//System.out.println(regranegocio.consultarTudo().size());
 			for (int i = 0; i < regranegocio.consultarTudo().size(); i++) {
-				System.out.println(regranegocio.consultarTudo().get(i).getTitulo());
-				System.out.println(regranegocio.consultarTudo().get(i).getDepartamento());
 				System.out.println(regranegocio.consultarTudo().get(i).getMatricula());
+				System.out.println(regranegocio.consultarTudo().get(i).getDepartamento());
+				System.out.println(regranegocio.consultarTudo().get(i).getTitulo());
+				System.out.println(regranegocio.consultarTudo().get(i).getPessoa().getNome());
 				System.out.println(regranegocio.consultarTudo().get(i).getAdmissao());
 				System.out.println(regranegocio.consultarTudo().get(i).getInstituicao());
-				System.out.println(regranegocio.consultarTudo().get(i).getPessoa().getNome());
+				
 			}
 		} catch (ConexaoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		*/
+      */
+		
 		
 		//Teste Pesquisarprofessor OK
-		/*
-		try {
+		
+		/*try {
 			Professor p = dados.pesquisarprofessor(professor.getMatricula());
 			System.out.println(p.getInstituicao());
+			System.out.println(p.getMatricula());
 		} catch (ProfessorInexistenteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,8 +136,8 @@ public class Teste {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		*/
+		
 	}
 
 }

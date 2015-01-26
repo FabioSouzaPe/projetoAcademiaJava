@@ -14,10 +14,10 @@ public class RnProfessorJDBC {
 	 DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
 	 
 	 //Cadastrar
-	public void cadastrarProfessor(Professor professor) throws ProfessorInexistenteException, ProfessorExistenteException, ConexaoException{
+	public void cadastrarProfessor(Professor professor) throws ProfessorInexistenteException, ProfessorExistenteException, ConexaoException, SQLException{
 		try {
-			//Verifica se  a matricula for igual a null ele cadastra
-			if(dados.pesquisarprofessor(professor.getMatricula()) == null){
+//Este trecho de codigo ele verifica se o professor é Inexistente ou não, caso for podera ser cadastro.  
+			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
 				dados.cadastrarProfessor(professor);	
 				
 			}else{
@@ -26,14 +26,14 @@ public class RnProfessorJDBC {
 			
 		} catch (ProfessorInexistenteException e) {
 			dados.cadastrarProfessor(professor);
-		} 
+		}  
 		
 	}
 	
 	//Alterar
 	public void alterar(Professor professor) throws Exception,ProfessorInexistenteException {
 		try {
-		//Verifica se  a matriculo for diferente de null professor existente e pode ser Alterado  
+//Este trecho de codigo ele verifica se o professor é existente ou não, caso ele seja existente pode ser removido.  
 			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
 				dados.alterar(professor);
 				
@@ -47,10 +47,9 @@ public class RnProfessorJDBC {
 	//Remover
 	public void remover(Professor professor)throws ProfessorInexistenteException, SQLException, ConexaoException {
 		try {
-		//Verifica se a matriculo for diferente de null professor existente e pode ser removido  	
+//Este trecho de codigo ele verifica se o professor é existente ou não, caso ele seja existente pode ser Alterado.  
 			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
 				dados.remover(professor);
-				
 			}
 		} catch (ProfessorInexistenteException e) {
 			System.out.println(e.getMessage());
@@ -59,15 +58,8 @@ public class RnProfessorJDBC {
 	}
 	
 	//Listar
-	public ArrayList<Professor>consultarTudo() throws ConexaoException{
-		
+	public ArrayList<Professor>consultarTudo() throws ConexaoException, SQLException{
 			return dados.consultarTudo();
-	}
-	
-	
-	
-		
-	  
-	      
+	}	      
 
 }

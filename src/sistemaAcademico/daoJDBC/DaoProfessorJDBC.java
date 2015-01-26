@@ -19,12 +19,11 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	
 		
 	 ArrayList< Professor> listaprof = new ArrayList<Professor>();
-	
-	
+	 
 	@Override
 	public void cadastrarProfessor(Professor professor) throws ConexaoException{
 		 ConexaoInt conexao = new Conexao();
-		String sql="insert into professor(MatriculaProfessor,Admissao,Departamento,Instituicao,Titulo) values(?,?,?,?,?);";
+		String sql="INSERT INTO Professor(Matricula,DataAdmissao,Departamento,Instituicao,Titulo,IdPessoa) values(?,?,?,?,?,?);";
 		
 		//Comando para poder set a data de Admissão
 				java.util.Date dataUtil = professor.getAdmissao(); 
@@ -36,13 +35,14 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			pst.setString(3,professor.getDepartamento());
 			pst.setString(4,professor.getInstituicao());
 			pst.setInt(5,professor.getTitulo().getcodigo());
+			pst.setInt(6,professor.getPessoa().getId());
 						
 			pst.executeUpdate();
 			System.out.println("Cadastrado com sucesso");
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			throw new ConexaoException();
+			System.out.println(e.getMessage());
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
@@ -50,23 +50,18 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 
 	@Override
 	public void alterar(Professor professor) throws ConexaoException {
+		
 		 ConexaoInt conexao = new Conexao();
-		String sql="update Professor  set Departamento=?,Instituicao=?,Titulo= ? where MatriculaProfessor = ? ";
-		
-		//Comando para poder set a data de Admissão
-		//java.util.Date dataUtil = professor.getAdmissao(); 
-		//java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
-		
+		 
+		String sql="update Professor  set Departamento=?,Instituicao=?,Titulo= ? where Matricula = ? ";
+	
 		try {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
-			
-			
 			pst.setString(1,professor.getDepartamento());
 			pst.setString(2,professor.getInstituicao());
-			
 			pst.setInt(3,professor.getTitulo().getcodigo());			
 			pst.setString(4,professor.getMatricula());	            
-						
+					
 			pst.executeUpdate();
 			System.out.println("Alterado com sucesso");
 			conexao.desconectar();
@@ -81,8 +76,8 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	@Override
 	public void remover(Professor professor) throws ConexaoException {
 		 ConexaoInt conexao = new Conexao();
-		String sql="DELETE FROM Professor WHERE MatriculaProfessor=?";
-		
+		 
+		String sql="DELETE FROM Professor WHERE Matricula=?";
 		
 		try {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
@@ -98,16 +93,15 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
-		
 	}
 
-	public ArrayList<Professor> consultarTudo() throws ConexaoException {
+	public ArrayList<Professor> consultarTudo() throws ConexaoException, SQLException {
 		ConexaoInt conexao = new Conexao();
+		Professor professor;
 		
 		ArrayList<Professor> retorno = new ArrayList<Professor>();
-		String sql="select MatriculaProfessor,nome,Admissao,Departamento,Instituicao,titulo from pessoa"
-                +" inner join professor on pessoa.IdPessoa = professor.IdPessoa ";
-		Professor professor;
+		String sql="select Matricula,Nome,DataAdmissao,Departamento,Instituicao,Titulo from Pessoa"
+                +" inner join Professor on pessoa.IdPessoa = professor.IdPessoa ";
 		
 		try {
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
@@ -115,41 +109,31 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			ResultSet rs = pst.executeQuery(sql);
             while (rs.next()) {
                 professor = new Professor();              			
-                professor.setMatricula(rs.getString("MatriculaProfessor"));               
-                professor.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
+                professor.setMatricula(rs.getString("Matricula"));               
+                professor.setAdmissao(new java.util.Date (rs.getDate("DataAdmissao").getTime()));
                 professor.setDepartamento(rs.getString("Departamento"));
                 professor.setInstituicao(rs.getString("Instituicao"));
                 Pessoa pessoa= new Pessoa();
                 pessoa.setNome((rs.getString("Nome")));
-                professor.setPessoa(pessoa);
-               
-                //Para pode listar os Titulos. realizando uma veirificação
+                professor.setPessoa(pessoa);    
+                //Este trecho de codigo serve para pegar o titulo do professor.
                 for (Titulo tituloAux : Titulo.values()) {
-                	
+
                 	if (tituloAux.getcodigo() == rs.getInt("titulo")) {
 						
                 		professor.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
 					}
-                	
-					
-				}
+				}   
                 retorno.add(professor);
             }
-						
-			
-			
 			conexao.desconectar();
-		
-		
 			
 		} catch (SQLException e) {
-			throw new ConexaoException();
+     throw new SQLException();
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
-		
 		return retorno;
-	
 	}
 
 	@Override
@@ -157,8 +141,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	 
 	    Professor professor  = new Professor(); 
 		ConexaoInt conexao = new Conexao();
-			//ArrayList<Professor> retorno = new ArrayList<Professor>();
-			 String sql = "select * from Professor where MatriculaProfessor = ?";
+			 String sql = "select * from Professor where Matricula = ?";
 
 			 try {
 				PreparedStatement pst = conexao.conectar().prepareStatement(sql);
@@ -166,8 +149,8 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 				ResultSet rs = pst.executeQuery();
 	            while (rs.next()) {
 	            	             			
-	            	professor.setMatricula(rs.getString("MatriculaProfessor"));               
-	            	professor.setAdmissao(new java.util.Date (rs.getDate("Admissao").getTime()));
+	            	professor.setMatricula(rs.getString("Matricula"));               
+	            	professor.setAdmissao(new java.util.Date (rs.getDate("DataAdmissao").getTime()));
 	            	professor.setDepartamento(rs.getString("Departamento"));
 	                professor.setInstituicao(rs.getString("Instituicao"));
 	                //Para pode listar os Titulos. realizando uma veirificação
@@ -176,10 +159,8 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	                	if (tituloAux.getcodigo() == rs.getInt("titulo")) {
 							
 	                		professor.setTitulo(tituloAux.getName((rs.getInt("titulo"))));
-						}
-	                	 				
+						} 				
 					}
-	           
 	            }		
 	            
 				conexao.desconectar();	
@@ -190,12 +171,5 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 				throw new ConexaoException();
 			}
 			return professor;
-		
-			
-		 
 	}
-	
-	
-	
-
 }

@@ -17,7 +17,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	
 	private ConexaoInt conexao = new Conexao();
 	
-	public void inserir(HistoricoEscolar historico, int chaveDis) throws ConexaoException, SQLException{
+	public void inserir(HistoricoEscolar historico) throws ConexaoException, SQLException{
 		String sql = "INSERT INTO historicoescolar (observacoes, coeficientederedimento, situacao,"
 				+ "IdDisciplina) VALUES (?,?,?,?)";
 		try{
@@ -26,8 +26,8 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 			pst.setDouble(2, historico.getConficienteRedimento());
 			pst.setInt(3, historico.getSituacao().getValor());
 			pst.setInt(4, historico.getDisciplina().getId());
-		}catch(ConexaoException e){
-			throw new ConexaoException();
+		}catch(SQLException e){
+			throw new SQLException(e);
 		}finally{
 			try{
 				conexao.desconectar();
@@ -38,13 +38,13 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	}
 	
 	public void remover(HistoricoEscolar historico) throws ConexaoException, SQLException{
-		String sql = "DELET FROM HistoricoEscolar WHERE IdHistorico=?";
+		String sql = "DELETE FROM HistoricoEscolar WHERE IdHistorico=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setInt(1, historico.getId());
 			pst.executeUpdate();
-		}catch(ConexaoException e){
-			throw new ConexaoException();
+		}catch(SQLException e){
+			throw new SQLException(e);
 		}finally{
 			try{
 				conexao.desconectar();
@@ -65,8 +65,8 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 			pst.setDouble(3, historico.getConficienteRedimento());
 			pst.setInt(4, historico.getDisciplina().getId());
 			pst.setInt(5, historico.getId());
-		}catch(ConexaoException e){
-			throw new ConexaoException();
+		}catch(SQLException e){
+			throw new SQLException(e);
 		}finally{
 			try{
 				conexao.desconectar();
@@ -107,8 +107,8 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 				return historico;
 			}
 			throw new HistoricoInexistenteException();
-		}catch(ConexaoException e){
-			throw new ConexaoException();
+		}catch(SQLException e){
+			throw new SQLException(e);
 		}finally{
 			try{
 				conexao.desconectar();

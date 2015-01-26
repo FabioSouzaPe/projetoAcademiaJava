@@ -13,6 +13,7 @@ import sistemaAcademico.enuns.Meio;
 import sistemaAcademico.exceptions.AlunoExistenteException;
 import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.regrasDeNegocio.RnAlunoJDBC;
 
 
@@ -39,7 +40,27 @@ public class Teste {
 		DaoPublicacaoJdbc dao2 = new DaoPublicacaoJdbc();
 		
 		
-		//Publicacao pu = dao2.pesquisar("Isso aqui vai longe");
+		try {
+			dao2.listar();
+			for (int i = 0; i < dao2.listar().size(); i++) {
+				System.out.println(dao2.listar().get(i).getNome()
+						+ dao2.listar().get(i).getConteudo() +
+						dao2.listar().get(i).getMeioDeComunicacao()+
+						dao2.listar().get(i).getAluno().getPessoa().getNome());
+			}
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			//try {
+			//	Publicacao pu = dao2.pesquisar("nome");
+			//	System.out.print(pu.toString());
+			//} catch (PublicacaoInexistenteException | ConexaoException | SQLException e) {
+			//	// TODO Auto-generated catch block
+			//	System.out.print(e.getMessage());
+			//}
+		
 		//System.out.println(pu.toString());
 		//dao2.remover(pu);
 		

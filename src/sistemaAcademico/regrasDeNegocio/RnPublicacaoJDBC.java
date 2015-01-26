@@ -1,6 +1,7 @@
 package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.daoJDBC.DaoPublicacaoJDBCInt;
@@ -36,6 +37,10 @@ public class RnPublicacaoJDBC {
 	
 	public void alterar(Publicacao publicacao) throws ConexaoException, SQLException{
 		dao.alterar(publicacao);
+	}
+	
+	public ArrayList<Publicacao> listarPublicacoes() throws ConexaoException, SQLException{
+		return dao.listar();
 	}
 
 }

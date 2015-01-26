@@ -25,10 +25,12 @@ public class Publicacao {
 	}
 	
 	public String toString(){
-		return "Nome: " + nome + 
-				"Professor: " + professor +
-				"Meio: " + meioDeComunicacao +
-				"Conteudo: " + conteudo;
+		return "Nome: " + nome + "\n" + 
+				" Matricula Professor: " + professor.getMatricula() + "\n" +
+				" Professor Departamento: " + professor.getDepartamento() + "\n" +
+				" Matricula aluno: " + aluno.getMatricula() + "\n" +
+				" Meio: " + meioDeComunicacao + "\n" +
+				" Conteudo : " + conteudo;
 	}
 
 	public int getId() {

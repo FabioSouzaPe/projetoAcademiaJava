@@ -2,6 +2,7 @@ package sistemaAcademico.classesBasicas;
 
 public class Endereco {
 	private int id;
+	private String cep;
 	private String logradouro;
 	private String bairro;
 	private String numero;
@@ -10,10 +11,11 @@ public class Endereco {
 	
 	public Endereco(){}
 	
-	public Endereco(int id, String logradouro, String bairro, String numero,
+	public Endereco(int id, String cep, String logradouro, String bairro, String numero,
 			String cidade, String uf) {
 		super();
 		this.id = id;
+		this.setCep(cep);
 		this.logradouro = logradouro;
 		this.bairro = bairro;
 		this.numero = numero;
@@ -56,5 +58,10 @@ public class Endereco {
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
-	
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
 }

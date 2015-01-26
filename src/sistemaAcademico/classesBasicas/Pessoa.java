@@ -10,21 +10,23 @@ public class Pessoa {
 	private String cpf;
 	private char sexo;
 	private Endereco endereco;
-	private Escolaridade escolaridade;
 	private ArrayList<Fone> fones = new ArrayList<Fone>();
 	private ArrayList<Aluno> alunos = new ArrayList<Aluno>();
 	private ArrayList<Professor> professores = new ArrayList<Professor>();
 
 	public Pessoa(int id, String nome, String cpf, char sexo,
-			Endereco endereco, Escolaridade escolaridade, ArrayList<Fone> fones) {
+			Endereco endereco,Fone... fones) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.sexo = sexo;
 		this.endereco = endereco;
-		this.escolaridade = escolaridade;
-		this.fones = fones;
+		
+		for (Fone fone : fones) {
+			addFones(fone);
+		}
+		
 	}
 	
 	public Pessoa(){}
@@ -59,6 +61,7 @@ public class Pessoa {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
+<<<<<<< HEAD
 	public Escolaridade getEscolaridade() {
 		return escolaridade;
 	}
@@ -66,6 +69,8 @@ public class Pessoa {
 	public void setEscolaridade(Escolaridade escolaridade) {
 		this.escolaridade = escolaridade;
 	}
+=======
+>>>>>>> origin/projetoAcademiaJava_22012015_mackson
 	public ArrayList<Fone> getFones() {
 		return fones;
 	}

@@ -35,11 +35,15 @@ public class DaoCurso implements DaoCursoInt{
 		
 	}
 
+<<<<<<< HEAD
 	@Override
 	public List<Turma> consultarTurmas(int index, Curso Curso) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+=======
+	
+>>>>>>> origin/projetoAcademiaJava_21012015_edson
 
 
 }

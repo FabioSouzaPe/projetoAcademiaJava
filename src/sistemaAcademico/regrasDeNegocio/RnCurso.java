@@ -1,107 +1,131 @@
 package sistemaAcademico.regrasDeNegocio;
 
 
-
-
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-import sistemaAcademico.exceptions.CursoExistenteException;
-import sistemaAcademico.exceptions.CursoInexistenteException;
+import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.CursoException;
 import sistemaAcademico.classesBasicas.Curso;
-import sistemaAcademico.dao.DaoCurso;
-import sistemaAcademico.dao.DaoCursoInt;
-import sistemaAcademico.daoJDBC.DaoCursoJDBC;
+import sistemaAcademico.classesBasicas.Turma;
+import sistemaAcademico.daoJDBC.DaoGenerico;
+import sistemaAcademico.daoJDBC.IDaoGenerico;
 
 public class RnCurso {
 	
-	DaoCursoInt dao = new DaoCurso();
+	IDaoGenerico dao = new DaoGenerico();
 		
-	public int quantidadeDeTurmas(String nomeCurso)throws  CursoInexistenteException{
-		int qtd=0;
+	
+	public boolean montarScriptCadastrarCurso(Curso curso)throws CursoException, ClassNotFoundException, ConexaoException, SQLException{
+		
 		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					qtd=dao.consultarTurmas(i, dao.consultarTudo().get(i)).size();
-					sucesso=true;
-				}
-			}
+		
+		//verfica de o obje crso está vazio
+		if(curso!=null){
+			java.util.Date dataUtil = curso.getData(); 
+			java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime()); 
+			
+			String insert=("INSERT INTO CURSO ( NOME,DATA) VALUES ('"+curso.getNome()+"','"+dataSql+"')") ;
+			
+			/*
+			 * não foi necessario uma verificação se o nome do curso já está cadastrado ,
+			 *  pois o atributo NOME está como UNIQUE no Banco.
+			 */
+			sucesso=dao.dml(insert);
 			if(sucesso==false){
-				throw new  CursoInexistenteException();
+				throw new CursoException("Esse curso já foi cadastrado");
 			}
-		}
-		return qtd;
-	}
-	
-	
-	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
-		boolean sucesso=false;
-		
-		if(dao.consultarTudo().size()!=0){
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(!curso.getNome().equals(dao.consultarTudo().get(i).getNome())){
-					dao.cadastrar(curso);
-					sucesso=true;
-				}
-					
-			}
-			
 		}else{
-			dao.cadastrar(curso);
-			sucesso=true;
+			throw new CursoException("Valor nulo passado");
 		}
-		
 		
 		return sucesso;
 	}
 	
-	public boolean verificacaoExcluirCurso(String nomeCurso)throws CursoInexistenteException {
+	public boolean montarScriptExcluirCurso(Curso curso)throws CursoException, ClassNotFoundException, ConexaoException, SQLException {
 		
 		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
-		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				if(nomeCurso.equals(dao.consultarTudo().get(i).getNome())){
-					dao.excluir(dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
+		//verfica de o obje crso está vazio
+		if(curso!=null){
+			String delete="DELETE FROM CURSO WHERE IDCURSO="+curso.getId();
+			sucesso=dao.dml(delete);
 			if(sucesso==false){
-				throw new  CursoInexistenteException();
+				throw new CursoException("Esse curso não existe");
 			}
-		}
-		
-		return sucesso;
-		
-	}
-	
-	
-	public boolean verificacaoAlterarCurso(String nomeOld, String nomeNew)throws CursoInexistenteException {
-		
-		boolean sucesso=false;
-		if(dao.consultarTudo().size()==0){
-			throw new  CursoInexistenteException();
 		}else{
-			
-			for(int i =0; i<dao.consultarTudo().size();i++){
-				
-				if(nomeOld.equals(dao.consultarTudo().get(i).getNome())){
-					
-					dao.consultarTudo().get(i).setNome(nomeNew);
-					dao.alterar(i,dao.consultarTudo().get(i));
-					sucesso=true;
-				}
-			}
-			if(sucesso==false){
-				throw new  CursoInexistenteException();
-			}
+			throw new CursoException("Valor nulo passado");
 		}
 		
 		return sucesso;
 	}
+	
+	
+	public boolean montarScriptAlterarCurso( Curso curso)throws CursoException, ClassNotFoundException, ConexaoException, SQLException {
+		
+		boolean sucesso=false;
+		//verfica de o obje crso está vazio
+		if(curso!=null){
+			/*
+			 * não foi necessario uma verificação se já existe o nome do curso passado para ser alterado ,
+			 *  pois o atributo NOME está como UNIQUE no Banco.
+			 */
+			String update="UPDATE  CURSO SET NOME='"+curso.getNome()+"' WHERE IDCURSO="+curso.getId();
+			sucesso=dao.dml(update);
+			
+			if(sucesso==false){
+				throw new CursoException("Esse curso não existe");
+			}
+			
+		}else{
+			throw new CursoException("Valor nulo passado");
+		}
+		return sucesso;
+	}
+	
+	public ArrayList<Curso> montarScriptListarCursos() throws ClassNotFoundException, ConexaoException, SQLException{
+		
+		ArrayList<Curso> cursoList =new ArrayList<Curso>();
+		
+		String select= "SELECT * FROM CURSO ";
+		ResultSet rs=dao.dql(select);
+		
+		while(rs.next()){
+			    Curso c= new Curso();
+				c.setNome(rs.getString("NOME"));
+				c.setId(rs.getInt("IDCURSO"));
+				c.setData( new java.util.Date (rs.getDate("DATA").getTime()));
+				cursoList.add(c);
+		}
+		//desliga a conexao aberta em DaoGenerico no metodo dql
+		DaoGenerico.daoConDQL.desconectar();
+		
+		return cursoList;
+	}
+	
+	//metodo para listar todas as turmas por curso
+	public Curso  montarScriptListarTurmasPorCurso(Curso curso) throws ClassNotFoundException, ConexaoException, SQLException{
+		
+		ArrayList<Turma> turmaPorCursoList =new ArrayList<Turma>();
+		
+		String select= "SELECT TURMA.IDTURMA, TURMA.NOME, CURSO.NOME FROM TURMA INNER JOIN CURSO ON TURMA.IDCURSO=CURSO.IDCURSO WHERE TURMA.IDCURSO="+curso.getId();
+		ResultSet rs=dao.dql(select);
+		Curso cursoRetorno= new Curso();
+		String nomeCurso="";
+		while(rs.next()){
+			    nomeCurso=rs.getString("CURSO.NOME");
+			    Turma t= new Turma();
+			    t.setNomeDaTurma(rs.getString("TURMA.NOME"));
+			    t.setId(rs.getInt("TURMA.IDTURMA"));
+			    turmaPorCursoList.add(t);
+		}
+		cursoRetorno.setTurma(turmaPorCursoList);
+		cursoRetorno.setId(curso.getId());
+		cursoRetorno.setNome(nomeCurso);
+		//desliga a conexao aberta em DaoGenerico no metodo dql
+		DaoGenerico.daoConDQL.desconectar();
+		
+		return cursoRetorno;
+	}
+	
 }

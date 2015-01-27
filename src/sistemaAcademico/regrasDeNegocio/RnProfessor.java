@@ -2,9 +2,9 @@ package sistemaAcademico.regrasDeNegocio;
 
 
 
-import sistemAcademico.exceptions.ErroConexaoException;
-import sistemAcademico.exceptions.ProfessorExistenteException;
-import sistemAcademico.exceptions.ProfessorInexistenteException;
+
+import sistemaAcademico.exceptions.ProfessorExistenteException;
+import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.dao.DaoProfessor;
 import sistemaAcademico.dao.DaoProfessorInt;
@@ -42,7 +42,7 @@ public class RnProfessor {
 	
 }
 	//Cadastrar
-	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException, ErroConexaoException, ConexaoException{
+	public void cadastrarProfessor(Professor professor) throws ProfessorExistenteException,  ConexaoException{
 		try {
 			if(dadosint.pesquisarprofessor(professor.getMatricula()) == null){
 				dadosint.cadastrarProfessor(professor);

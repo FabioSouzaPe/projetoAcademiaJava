@@ -2,17 +2,17 @@ package sistemaAcademico.regrasDeNegocio;
 
 import java.util.List;
 
-import sistemaAcademico.exceptions.AlunoMatriculadoTurmaException;
-import sistemaAcademico.exceptions.CursoCheioException;
-import sistemaAcademico.exceptions.TurmaCheiaException;
-import sistemaAcademico.exceptions.TurmaExistenteException;
-import sistemaAcademico.exceptions.TurmaInexistenteException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.dao.DaoTurma;
 import sistemaAcademico.dao.DaoTurmaInt;
 import sistemaAcademico.enuns.Turno;
+import sistemaAcademico.exceptions.AlunoMatriculadoTurmaException;
+import sistemaAcademico.exceptions.CursoCheioException;
+import sistemaAcademico.exceptions.TurmaCheiaException;
+import sistemaAcademico.exceptions.TurmaExistenteException;
+import sistemaAcademico.exceptions.TurmaInexistenteException;
 
 
 public class RnTurma {
@@ -30,7 +30,7 @@ public class RnTurma {
 		
 		if (dao.consultarTurma(turma.getNomeDaTurma()) != null) {
 			
-			dao.cadastrarTurma(turma.getAlunosDaTurma(),turma.getNomeDaTurma(),turma.getProfessorDaTurma(), turma.getDisciplinasDaTurma(), turma.getPeriodoAtual(), turma.getTurnoDaTurma());
+			//dao.cadastrarTurma(turma.getAlunosDaTurma(),turma.getNomeDaTurma(),turma.getProfessorDaTurma(),  turma.getPeriodoAtual(), turma.getTurnoDaTurma());
 
 		} else throw new TurmaExistenteException();
 		

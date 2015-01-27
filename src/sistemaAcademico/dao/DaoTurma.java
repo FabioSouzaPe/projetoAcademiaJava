@@ -16,7 +16,7 @@ public class DaoTurma implements DaoTurmaInt{
 		//Falta exceção
 			
 		novaTurma.setAlunosDaTurma(a);
-		novaTurma.setDisciplinasDaTurma(d);
+		//novaTurma.setDisciplinasDaTurma(d);
 		novaTurma.setNomeDaTurma(nome);
 		novaTurma.setProfessorDaTurma(p);
 		novaTurma.setTurnoDaTurma(t.MANHÃ);

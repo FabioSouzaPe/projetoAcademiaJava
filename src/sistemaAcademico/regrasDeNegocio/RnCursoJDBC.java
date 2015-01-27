@@ -7,17 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import sistemaAcademico.exceptions.ConexaoException;
-import sistemaAcademico.exceptions.CursoExistenteException;
-import sistemaAcademico.exceptions.CursoInexistenteException;
 import sistemaAcademico.classesBasicas.Curso;
-import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
-import sistemaAcademico.dao.DaoCurso;
-import sistemaAcademico.daoJDBC.DaoConexaoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBC;
 import sistemaAcademico.daoJDBC.DaoCursoJDBCInt;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class RnCursoJDBC {
 	
@@ -25,7 +20,7 @@ public class RnCursoJDBC {
 		
 	
 	
-	public boolean verificacaoCadastrarCurso(Curso curso)throws CursoExistenteException, ClassNotFoundException, SQLException{
+	public boolean verificacaoCadastrarCurso(Curso curso)throws  ClassNotFoundException, SQLException{
 		ConexaoInt conexao = new Conexao();
 		boolean sucesso=false;
 		try{
@@ -46,7 +41,7 @@ public class RnCursoJDBC {
 		return sucesso;
 	}
 	
-	public boolean verificacaoExcluirCurso(int id)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+	public boolean verificacaoExcluirCurso(int id)throws  ClassNotFoundException, SQLException, ConexaoException {
 		
 		boolean sucesso=false;
 		
@@ -59,7 +54,7 @@ public class RnCursoJDBC {
 	}
 	
 	
-	public boolean verificacaoAlterarCurso(int id, Curso curso)throws CursoInexistenteException, ClassNotFoundException, SQLException {
+	public boolean verificacaoAlterarCurso(int id, Curso curso)throws  ClassNotFoundException, SQLException {
 		
 		boolean sucesso=false;
 		try{

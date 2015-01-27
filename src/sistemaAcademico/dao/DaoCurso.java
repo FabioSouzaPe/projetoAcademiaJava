@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import sistemaAcademico.exceptions.CursoInexistenteException;
+
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
 
@@ -35,15 +35,13 @@ public class DaoCurso implements DaoCursoInt{
 		
 	}
 
-<<<<<<< HEAD
+
 	@Override
 	public List<Turma> consultarTurmas(int index, Curso Curso) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-=======
-	
->>>>>>> origin/projetoAcademiaJava_21012015_edson
+
 
 
 }

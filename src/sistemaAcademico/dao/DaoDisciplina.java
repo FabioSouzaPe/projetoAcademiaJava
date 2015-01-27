@@ -15,7 +15,7 @@ public class DaoDisciplina implements DaoDisciplinaInt{
 		Disciplina novaDisciplina = new Disciplina();
 		
 			novaDisciplina.setNome(novoNome);
-			novaDisciplina.setNota(0);
+		
 		
 	}
 

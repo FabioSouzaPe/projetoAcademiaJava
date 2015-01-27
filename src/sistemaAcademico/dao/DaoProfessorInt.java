@@ -2,7 +2,7 @@ package sistemaAcademico.dao;
 
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.ProfessorInexistenteException;
+import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 
 public interface DaoProfessorInt {

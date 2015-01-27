@@ -12,13 +12,14 @@ import java.util.List;
 import sistemaAcademico.classesBasicas.Curso;
 import sistemaAcademico.classesBasicas.Turma;
 import sistemaAcademico.conexao.Conexao;
+import sistemaAcademico.exceptions.ConexaoException;
 
 public class DaoCursoJDBC implements DaoCursoJDBCInt{
 
 	Conexao conexao = new Conexao();
 	
 	@Override
-	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException {
+	public ResultSet consultar(String select) throws ClassNotFoundException, SQLException, ConexaoException {
 		PreparedStatement pStmt = conexao.conectar().prepareStatement(select) ;
 		ResultSet rs = pStmt.executeQuery();
 		return rs;
@@ -31,7 +32,7 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean cadastrar(Curso curso) throws ClassNotFoundException, SQLException {
+	public boolean cadastrar(Curso curso) throws ClassNotFoundException, SQLException, ConexaoException {
 		
 			boolean sucesso=false;
 			java.util.Date dataUtil = curso.getData(); 
@@ -52,7 +53,7 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean excluir(int id) throws ClassNotFoundException, SQLException {
+	public boolean excluir(int id) throws ClassNotFoundException, SQLException, ConexaoException {
 		
 		boolean sucesso=false;
 		PreparedStatement pStmt = conexao.conectar().prepareStatement("DELETE FROM CURSO WHERE ID=?");
@@ -68,7 +69,7 @@ public class DaoCursoJDBC implements DaoCursoJDBCInt{
 	}
 
 	@Override
-	public boolean alterar(int id, Curso c) throws ClassNotFoundException, SQLException {
+	public boolean alterar(int id, Curso c) throws ClassNotFoundException, SQLException, ConexaoException {
 
 		boolean sucesso=false;		
 		PreparedStatement pStmt = conexao.conectar().prepareStatement("UPDATE  CURSO SET NOME=? WHERE ID=?");

@@ -13,7 +13,7 @@ public interface DaoCursoJDBCInt {
 	
 	public ResultSet consultar(String select)throws ClassNotFoundException, SQLException, ConexaoException;
 	public List<Turma> consultarTurmas();
-	public boolean cadastrar(Curso curso)throws  ClassNotFoundException, SQLException;
-	public boolean excluir(int id)throws  ClassNotFoundException, SQLException;
-	public boolean alterar(int id, Curso curso)throws  ClassNotFoundException, SQLException;
+	public boolean cadastrar(Curso curso)throws  ClassNotFoundException, SQLException, ConexaoException;
+	public boolean excluir(int id)throws  ClassNotFoundException, SQLException, ConexaoException;
+	public boolean alterar(int id, Curso curso)throws  ClassNotFoundException, SQLException, ConexaoException;
 }

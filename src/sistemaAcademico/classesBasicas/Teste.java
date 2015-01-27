@@ -1,3 +1,5 @@
+/*
+
 package sistemaAcademico.classesBasicas;
 
 import java.sql.SQLException;
@@ -15,6 +17,8 @@ import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.regrasDeNegocio.RnAlunoJDBC;
+
+
 
 
 public class Teste {
@@ -86,6 +90,6 @@ public class Teste {
 			}
 	   **/
 		
-	}
 
-}
+
+

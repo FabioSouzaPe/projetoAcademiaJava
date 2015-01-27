@@ -61,16 +61,7 @@ public class Pessoa {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-<<<<<<< HEAD
-	public Escolaridade getEscolaridade() {
-		return escolaridade;
-	}
 
-	public void setEscolaridade(Escolaridade escolaridade) {
-		this.escolaridade = escolaridade;
-	}
-=======
->>>>>>> origin/projetoAcademiaJava_22012015_mackson
 	public ArrayList<Fone> getFones() {
 		return fones;
 	}

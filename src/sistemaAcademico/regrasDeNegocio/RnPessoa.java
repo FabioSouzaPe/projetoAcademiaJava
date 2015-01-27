@@ -4,12 +4,10 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.List;
 
-import sistemAcademico.exceptions.PessoaInexistenteException;
+import sistemaAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
-import sistemaAcademico.dao.DaoPessoa;
-import sistemaAcademico.dao.DaoPessoaInt;
 import sistemaAcademico.daoJDBC.DaoPessoaIntJDBC;
 import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
 import sistemaAcademico.exceptions.ConexaoException;
@@ -18,7 +16,6 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 public class RnPessoa {
 	
-	static DaoPessoaInt daoPessoa = new DaoPessoa();
 	static DaoPessoaIntJDBC daoPessoaJDBC = new DaoPessoaJDBC();
 
 	public RnPessoa() {}

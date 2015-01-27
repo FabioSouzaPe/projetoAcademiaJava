@@ -47,7 +47,7 @@ public class FrequenciaMain {
 				System.out.println("Atribua uma avaliação");
 				String avaliacao = sc1.next();
 				
-				Aluno a1= new Aluno(matricula, null, new Date(),null);
+				Aluno a1= new Aluno(matricula,null, null, new Date(),null);
 				Turma t1 = new Turma();
 				t1.setId(tur);
 				Disciplina d= new Disciplina();
@@ -114,7 +114,7 @@ public class FrequenciaMain {
 				System.out.println("Atribua uma avaliação");
 				String avaliacao3 = sc3.next();
 				
-				Aluno a3= new Aluno(matricula3, null, new Date(),null);
+				Aluno a3= new Aluno(matricula3, null,null, new Date(),null);
 				Turma t3 = new Turma();
 				t3.setId(tur3);
 				Disciplina d3= new Disciplina();

@@ -3,6 +3,7 @@ package sistemaAcademico.regrasDeNegocio;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.ProfessorExistenteException;
 import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
@@ -14,18 +15,18 @@ public class RnProfessorJDBC {
 	 DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
 	 
 	 //Cadastrar
-	public void cadastrarProfessor(Professor professor) throws ProfessorInexistenteException, ProfessorExistenteException, ConexaoException, SQLException{
+	public void cadastrarProfessor(Professor professor,int chave) throws ProfessorInexistenteException, ProfessorExistenteException, ErroSQLException, ConexaoException{
 		try {
 //Este trecho de codigo ele verifica se o professor é Inexistente ou não, caso for podera ser cadastro.  
 			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
-				dados.cadastrarProfessor(professor);	
+				dados.cadastrarProfessor(professor,chave);	
 				
 			}else{
 				throw new ProfessorExistenteException();
 			}	
 			
 		} catch (ProfessorInexistenteException e) {
-			dados.cadastrarProfessor(professor);
+			dados.cadastrarProfessor(professor,chave);
 		}  
 		
 	}
@@ -45,7 +46,7 @@ public class RnProfessorJDBC {
 	}
 	
 	//Remover
-	public void remover(Professor professor)throws ProfessorInexistenteException, SQLException, ConexaoException {
+	public void remover(Professor professor)throws ProfessorInexistenteException, SQLException, ConexaoException, ErroSQLException {
 		try {
 //Este trecho de codigo ele verifica se o professor é existente ou não, caso ele seja existente pode ser Alterado.  
 			if(dados.pesquisarprofessor(professor.getMatricula()) != null){
@@ -58,7 +59,7 @@ public class RnProfessorJDBC {
 	}
 	
 	//Listar
-	public ArrayList<Professor>consultarTudo() throws ConexaoException, SQLException{
+	public ArrayList<Professor>consultarTudo() throws ConexaoException, SQLException, ErroSQLException{
 			return dados.consultarTudo();
 	}	      
 

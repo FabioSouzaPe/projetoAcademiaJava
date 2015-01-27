@@ -7,6 +7,7 @@ import sistemaAcademico.daoJDBC.DaoProfessorIntJDBC;
 import sistemaAcademico.daoJDBC.DaoProfessorJDBC;
 import sistemaAcademico.enuns.Titulo;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.ProfessorExistenteException;
 import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.regrasDeNegocio.RnProfessorJDBC;
@@ -14,22 +15,23 @@ import sistemaAcademico.regrasDeNegocio.RnProfessorJDBC;
 public class TesteProfessor {
 
 	public static void main(String[] args) throws SQLException {
-		DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
+		//DaoProfessorIntJDBC dados = new DaoProfessorJDBC();
 		Professor professor = new Professor();
 		RnProfessorJDBC regranegocio = new RnProfessorJDBC();
 		
 		Date data = new Date();
 	
-		professor.setMatricula("1234");
+		professor.setMatricula("12345");
 	
 		professor.setAdmissao(data);		
 		professor.setDepartamento("QQ");
 		professor.setInstituicao("FG");
 		professor.setTitulo(Titulo.DOUTORADO);
-		Pessoa pessoa = new Pessoa();
+		
+		/*Pessoa pessoa = new Pessoa();
 		pessoa.setId(2);
 		professor.setPessoa(pessoa);
-		
+		*/
 		
 		
 		//Teste Alterar OK
@@ -51,24 +53,26 @@ public class TesteProfessor {
 	
        	
 			
-			/*	try {
-					regranegocio.cadastrarProfessor(professor);
-				} catch (ProfessorInexistenteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ProfessorExistenteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ConexaoException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		
+					try {
+						regranegocio.cadastrarProfessor(professor, 2);
+					} catch (ProfessorInexistenteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ProfessorExistenteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ErroSQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ConexaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
 			
 	
-		*/
+		
 
 		
 	

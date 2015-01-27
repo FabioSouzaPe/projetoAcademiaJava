@@ -5,13 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.enuns.Titulo;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 
 
 
@@ -21,7 +21,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	 ArrayList< Professor> listaprof = new ArrayList<Professor>();
 	 
 	@Override
-	public void cadastrarProfessor(Professor professor) throws ConexaoException{
+	public void cadastrarProfessor(Professor professor, int chave) throws ConexaoException, ErroSQLException{
 		 ConexaoInt conexao = new Conexao();
 		String sql="INSERT INTO Professor(Matricula,DataAdmissao,Departamento,Instituicao,Titulo,IdPessoa) values(?,?,?,?,?,?);";
 		
@@ -35,21 +35,21 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			pst.setString(3,professor.getDepartamento());
 			pst.setString(4,professor.getInstituicao());
 			pst.setInt(5,professor.getTitulo().getcodigo());
-			pst.setInt(6,professor.getPessoa().getId());
+			pst.setInt(6,chave);
 						
 			pst.executeUpdate();
 			System.out.println("Cadastrado com sucesso");
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ErroSQLException();
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
 	}
 
 	@Override
-	public void alterar(Professor professor) throws ConexaoException {
+	public void alterar(Professor professor) throws ConexaoException, ErroSQLException {
 		
 		 ConexaoInt conexao = new Conexao();
 		 
@@ -62,19 +62,19 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			pst.setInt(3,professor.getTitulo().getcodigo());			
 			pst.setString(4,professor.getMatricula());	            
 					
-			pst.executeUpdate();
+			pst.executeUpdate(); 
 			System.out.println("Alterado com sucesso");
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			throw new ConexaoException();
+			throw new ErroSQLException();
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
 	}
 
 	@Override
-	public void remover(Professor professor) throws ConexaoException {
+	public void remover(Professor professor) throws ConexaoException, ErroSQLException {
 		 ConexaoInt conexao = new Conexao();
 		 
 		String sql="DELETE FROM Professor WHERE Matricula=?";
@@ -89,13 +89,13 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-			throw new ConexaoException();
+			throw new ErroSQLException();
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
 	}
 
-	public ArrayList<Professor> consultarTudo() throws ConexaoException, SQLException {
+	public ArrayList<Professor> consultarTudo() throws ConexaoException, SQLException, ErroSQLException {
 		ConexaoInt conexao = new Conexao();
 		Professor professor;
 		
@@ -129,7 +129,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 			conexao.desconectar();
 			
 		} catch (SQLException e) {
-     throw new SQLException();
+     throw new ErroSQLException();
 		}catch (ConexaoException e) {
 			throw new ConexaoException();
 		}
@@ -137,7 +137,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 	}
 
 	@Override
-	public Professor pesquisarprofessor(String matricula)throws ConexaoException {
+	public Professor pesquisarprofessor(String matricula)throws ConexaoException, ErroSQLException {
 	 
 	    Professor professor  = new Professor(); 
 		ConexaoInt conexao = new Conexao();
@@ -166,7 +166,7 @@ public class DaoProfessorJDBC implements DaoProfessorIntJDBC {
 				conexao.desconectar();	
 							
 			} catch (SQLException e) {
-				throw new ConexaoException();
+				throw new ErroSQLException();
 			}catch (ConexaoException e) {
 				throw new ConexaoException();
 			}

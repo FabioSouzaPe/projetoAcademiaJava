@@ -13,6 +13,7 @@ import sistemaAcademico.enuns.Meio;
 import sistemaAcademico.exceptions.AlunoExistenteException;
 import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.regrasDeNegocio.RnAlunoJDBC;
 
@@ -24,7 +25,7 @@ public class Teste {
 		RnAlunoJDBC rn = new RnAlunoJDBC();
 		ArrayList<Publicacao> publi = new ArrayList<Publicacao>();
 		Aluno a = new Aluno();
-		a.setMatricula("0123");
+		a.setMatricula("000333");
 		Date data = new Date();
 		a.setData(data);
 		
@@ -40,18 +41,60 @@ public class Teste {
 		DaoPublicacaoJdbc dao2 = new DaoPublicacaoJdbc();
 		
 		
+		/*
+		 * teste dos capiroto
+		 */
+		Fone fone = new Fone();
+		fone.setFone("6666-9999");
+		fone.setDdd("81");
+		Endereco end = new Endereco();
+		end.setBairro("bairu");
+		end.setCep("019237191");
+		end.setCidade("prazeres");
+		end.setLogradouro("rua nao sei de que");
+		end.setNumero("37");
+		end.setUf("pe");
+		Pessoa pessoa = new Pessoa();
+		pessoa.addFones(fone);
+		pessoa.setEndereco(end);
+		pessoa.setCpf("08731338462");
+		pessoa.setNome("De morais");
+		pessoa.setSexo('m');
+		DaoPessoaJDBC daoM = new DaoPessoaJDBC();
+		
+		//try {
+		//	int i = daoM.addPessoa(pessoa);
+		//	dao.inserir(a, i);
+		//} catch (ClassNotFoundException | ConexaoException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		
+		HistoricoEscolar e = new HistoricoEscolar();
+		DaoHistoricoEscolarJDBC de = new DaoHistoricoEscolarJDBC();
 		try {
-			dao2.listar();
-			for (int i = 0; i < dao2.listar().size(); i++) {
-				System.out.println(dao2.listar().get(i).getNome()
-						+ dao2.listar().get(i).getConteudo() +
-						dao2.listar().get(i).getMeioDeComunicacao()+
-						dao2.listar().get(i).getAluno().getPessoa().getNome());
-			}
-		} catch (ConexaoException e) {
+			e = de.pesquisar("000333");
+			System.out.println("Nota aluno : " +e.getConficienteRedimento()+ "\n" + "Observaçoes : " +e.getObs()+"\n" + 
+					"Situaçao : "+e.getSituacao()+"\n" + "Matricula : " +e.getAluno().getMatricula() +"\n" +
+					"Nome aluno: "+e.getAluno().getPessoa().getNome()+"\n" +
+					"Nome disciplia : "+e.getDisciplina().getNome()+ "\n" + "Carga horaria : "+e.getDisciplina().getCargaHoraria());
+		} catch (ConexaoException | HistoricoInexistenteException ee) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ee.printStackTrace();
 		}
+		
+		//try {
+		//	dao2.listar();
+		//	for (int i = 0; i < dao2.listar().size(); i++) {
+		//		System.out.println(dao2.listar().get(i).getNome()
+		//				+ dao2.listar().get(i).getConteudo() +
+		//				dao2.listar().get(i).getMeioDeComunicacao()+
+		//				dao2.listar().get(i).getAluno().getPessoa().getNome());
+		//	}
+		//} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
 		
 			//try {
 			//	Publicacao pu = dao2.pesquisar("nome");

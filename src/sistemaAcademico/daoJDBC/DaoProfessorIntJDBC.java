@@ -4,7 +4,7 @@ package sistemaAcademico.daoJDBC;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.ProfessorInexistenteException;
+import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.exceptions.ConexaoException;
 

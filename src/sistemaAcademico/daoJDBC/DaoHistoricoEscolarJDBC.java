@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
+import sistemaAcademico.classesBasicas.Pessoa;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.enuns.SituacaoAluno;
@@ -79,29 +80,39 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, SQLException, HistoricoInexistenteException{
 		HistoricoEscolar historico;
 		Aluno aluno;
+		Pessoa pessoa;
 		Disciplina disciplina;
-		String sql = "SELECT * FROM historicoescolar INNER JOIN Aluno a ON a.Matricula=?";
+		//String sql = "SELECT * FROM historicoescolar INNER JOIN Aluno a ON a.Matricula=?";
+		String sql = "select h.*, a.matricula, p.nome ,d.nome, d.CargaHoraria from historicoescolar h "
+					+ "inner join aluno a on h.idhistoricoescolar = a.idHistorico "+
+				     " inner join pessoa p on a.idpessoa = p.idpessoa "+
+					 " inner join turma t on a.idTurma = t.idTurma "+
+				     " inner join disciplina d on t.IdDisciplina = d.IdDisciplina " +
+					 "WHERE a.matricula = ?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, matricula);
 			ResultSet rs = pst.executeQuery();
 			if(rs.next()){
 				aluno = new Aluno();
+				pessoa = new Pessoa();
 				historico = new HistoricoEscolar();
 				disciplina = new Disciplina();
-				aluno.setMatricula(rs.getString("Matricula"));
-				historico.setObs(rs.getString("Observacoes"));
-				historico.setId(rs.getInt("IdHistorico"));
-				historico.setData(rs.getDate("data"));
+				aluno.setMatricula(rs.getString("a.Matricula"));
+				pessoa.setNome(rs.getString("p.Nome"));
+				historico.setObs(rs.getString("h.Observacoes"));
+				historico.setId(rs.getInt("h.IdHistoricoEscolar"));
+				//historico.setData(rs.getDate("h.data"));
 				for(SituacaoAluno situacao : SituacaoAluno.values()){
-					if(situacao.getValor() == rs.getInt("Situacao")){
+					if(situacao.getValor() == rs.getInt("h.Situacao")){
 						historico.setSituacao(situacao.setSituacao(rs.getInt("Situacao")));
 					}
 				}
-				historico.setConficienteRedimento(rs.getDouble("CoeficienteDeRendimento"));
-				disciplina.setNome(rs.getString("Nome"));
-				disciplina.setCargaHoraria(rs.getInt("CargaHoraria"));
+				historico.setConficienteRedimento(rs.getDouble("h.NotaAluno"));
+				disciplina.setNome(rs.getString("d.Nome"));
+				disciplina.setCargaHoraria(rs.getInt("d.CargaHoraria"));
 				aluno.setMatricula(rs.getString("Matricula"));
+				aluno.setPessoa(pessoa);
 				historico.setDisciplina(disciplina);
 				historico.setAluno(aluno);
 				return historico;

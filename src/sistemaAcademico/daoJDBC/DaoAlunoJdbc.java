@@ -112,7 +112,7 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 	
 	public void alterar(Aluno aluno) throws ConexaoException, SQLException{
 		
-		String sql = ("UPDATE aluno set dataadmissao=? where matricula=? ");
+		String sql = ("UPDATE aluno set dataadmissao=?, where matricula=? ");
 		try{
 			java.util.Date data = aluno.getData();
 			Date sqldata = new Date(data.getTime());

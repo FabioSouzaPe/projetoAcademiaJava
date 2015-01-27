@@ -3,8 +3,8 @@ package sistemaAcademico.regrasDeNegocio;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import sistemAcademico.exceptions.ProfessorExistenteException;
-import sistemAcademico.exceptions.ProfessorInexistenteException;
+import sistemaAcademico.exceptions.ProfessorExistenteException;
+import sistemaAcademico.exceptions.ProfessorInexistenteException;
 import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.daoJDBC.DaoProfessorIntJDBC;
 import sistemaAcademico.daoJDBC.DaoProfessorJDBC;

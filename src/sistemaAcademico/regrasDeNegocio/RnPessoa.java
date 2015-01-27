@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.List;
 
-import sistemAcademico.exceptions.PessoaInexistenteException;
+import sistemaAcademico.exceptions.PessoaInexistenteException;
 import sistemaAcademico.classesBasicas.Endereco;
 import sistemaAcademico.classesBasicas.Fone;
 import sistemaAcademico.classesBasicas.Pessoa;
@@ -118,7 +118,7 @@ public class RnPessoa {
 		return daoPessoaJDBC.getListaPessoas();
 	}
 	
-	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException {
+	public static Pessoa pesquisarPessoa(String cpf) throws ClassNotFoundException, SQLException, ConexaoException, IllegalArgumentException, IllegalAccessException, PessoaInexistenteException {
 
 		Pessoa pessoaAchada = null;
 		

@@ -1,6 +1,7 @@
 package sistemaAcademico.regrasDeNegocio;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.daoJDBC.DaoAlunoJDBCInt;
@@ -8,6 +9,7 @@ import sistemaAcademico.daoJDBC.DaoAlunoJdbc;
 import sistemaAcademico.exceptions.AlunoExistenteException;
 import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 
 public class RnAlunoJDBC {
 	
@@ -17,7 +19,7 @@ public class RnAlunoJDBC {
 		dao = new DaoAlunoJdbc();
 	}
 	
-	public void cadastrarAluno(Aluno aluno, int chave) throws ConexaoException, SQLException, AlunoExistenteException{
+	public void cadastrarAluno(Aluno aluno, int chave) throws ConexaoException, ErroSQLException, AlunoExistenteException{
 		try{
 			Aluno teste = pesquisar(aluno.getMatricula());
 			throw new AlunoExistenteException();
@@ -26,16 +28,20 @@ public class RnAlunoJDBC {
 		}
 	}
 	
-	public Aluno pesquisar(String matricula) throws ConexaoException, AlunoInexistenteException, SQLException{
+	public Aluno pesquisar(String matricula) throws ConexaoException, AlunoInexistenteException, ErroSQLException{
 		return dao.pesquisar(matricula);
 	}
 	
-	public void remover(Aluno aluno) throws ConexaoException, SQLException{
+	public void remover(Aluno aluno) throws ConexaoException, ErroSQLException{
 		dao.remover(aluno);;
 	}
 	
-	public void alterar(Aluno aluno) throws ConexaoException, SQLException{
+	public void alterar(Aluno aluno) throws ConexaoException, ErroSQLException{
 		dao.alterar(aluno);
+	}
+	
+	public ArrayList<Aluno> listar() throws ConexaoException, ErroSQLException{
+		return dao.listar();
 	}
 
 }

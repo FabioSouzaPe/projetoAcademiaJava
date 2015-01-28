@@ -1,16 +1,15 @@
 
 package sistemaAcademico.daoJDBC;
 
-import java.sql.SQLException;
-
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
 
 public interface DaoHistoricoEscolarJDBCInt {
 
-	public void inserir(HistoricoEscolar historico) throws ConexaoException, SQLException;
-	public void remover(HistoricoEscolar historico) throws ConexaoException, SQLException;
-	public void alterar(HistoricoEscolar historico) throws ConexaoException, SQLException;
-	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, SQLException, HistoricoInexistenteException;
+	public void inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
+	public void remover(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
+	public void alterar(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
+	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, ErroSQLException, HistoricoInexistenteException;
 }

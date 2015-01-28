@@ -13,8 +13,10 @@ import sistemaAcademico.enuns.Meio;
 import sistemaAcademico.exceptions.AlunoExistenteException;
 import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.exceptions.PublicacaoInexistenteException;
+import sistemaAcademico.fachada.Fachada;
 import sistemaAcademico.regrasDeNegocio.RnAlunoJDBC;
 
 
@@ -70,18 +72,32 @@ public class Teste {
 		//	e.printStackTrace();
 		//}
 		
-		HistoricoEscolar e = new HistoricoEscolar();
-		DaoHistoricoEscolarJDBC de = new DaoHistoricoEscolarJDBC();
 		try {
-			e = de.pesquisar("000333");
+			HistoricoEscolar e = new HistoricoEscolar();
+			e = Fachada.getInstancia().pesquisarHistorico("000333");
 			System.out.println("Nota aluno : " +e.getConficienteRedimento()+ "\n" + "Observaçoes : " +e.getObs()+"\n" + 
-					"Situaçao : "+e.getSituacao()+"\n" + "Matricula : " +e.getAluno().getMatricula() +"\n" +
-					"Nome aluno: "+e.getAluno().getPessoa().getNome()+"\n" +
-					"Nome disciplia : "+e.getDisciplina().getNome()+ "\n" + "Carga horaria : "+e.getDisciplina().getCargaHoraria());
-		} catch (ConexaoException | HistoricoInexistenteException ee) {
+								"Situaçao : "+e.getSituacao()+"\n" + "Matricula : " +e.getAluno().getMatricula() +"\n" +
+								"Nome aluno: "+e.getAluno().getPessoa().getNome()+"\n" +
+								"Nome disciplia : "+e.getDisciplina().getNome()+ "\n" + "Carga horaria : "+e.getDisciplina().getCargaHoraria());
+					
+		} catch (ConexaoException | ErroSQLException
+				| HistoricoInexistenteException e) {
 			// TODO Auto-generated catch block
-			ee.printStackTrace();
+			e.printStackTrace();
 		}
+		
+		//HistoricoEscolar e = new HistoricoEscolar();
+		//DaoHistoricoEscolarJDBC de = new DaoHistoricoEscolarJDBC();
+		//try {
+		//	e = de.pesquisar("000333");
+		//	System.out.println("Nota aluno : " +e.getConficienteRedimento()+ "\n" + "Observaçoes : " +e.getObs()+"\n" + 
+		//			"Situaçao : "+e.getSituacao()+"\n" + "Matricula : " +e.getAluno().getMatricula() +"\n" +
+		//			"Nome aluno: "+e.getAluno().getPessoa().getNome()+"\n" +
+		//			"Nome disciplia : "+e.getDisciplina().getNome()+ "\n" + "Carga horaria : "+e.getDisciplina().getCargaHoraria());
+		//} catch (ConexaoException | HistoricoInexistenteException ee) {
+		//	// TODO Auto-generated catch block
+		//	ee.printStackTrace();
+		//}
 		
 		//try {
 		//	dao2.listar();

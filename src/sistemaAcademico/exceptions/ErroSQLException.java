@@ -6,7 +6,6 @@ public class ErroSQLException extends Exception{
 
 	
 	public ErroSQLException(){
-		
 		super("Erro na instrucao SQL passada");
 	}
 

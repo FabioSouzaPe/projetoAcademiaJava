@@ -12,23 +12,22 @@ import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
 import sistemaAcademico.enuns.SituacaoAluno;
 import sistemaAcademico.exceptions.ConexaoException;
+import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
 
 public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	
 	private ConexaoInt conexao = new Conexao();
 	
-	public void inserir(HistoricoEscolar historico) throws ConexaoException, SQLException{
-		String sql = "INSERT INTO historicoescolar (observacoes, coeficientederedimento, situacao,"
-				+ "IdDisciplina) VALUES (?,?,?,?)";
+	public void inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
+		String sql = "INSERT INTO historicoescolar (observacoes, coeficientederedimento, situacao) VALUES (?,?,?)";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, historico.getObs());
 			pst.setDouble(2, historico.getConficienteRedimento());
 			pst.setInt(3, historico.getSituacao().getValor());
-			pst.setInt(4, historico.getDisciplina().getId());
 		}catch(SQLException e){
-			throw new SQLException(e);
+			throw new ErroSQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -38,14 +37,14 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 		}
 	}
 	
-	public void remover(HistoricoEscolar historico) throws ConexaoException, SQLException{
+	public void remover(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
 		String sql = "DELETE FROM HistoricoEscolar WHERE IdHistorico=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setInt(1, historico.getId());
 			pst.executeUpdate();
 		}catch(SQLException e){
-			throw new SQLException(e);
+			throw new ErroSQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -55,19 +54,17 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 		}
 	}
 	
-	public void alterar(HistoricoEscolar historico) throws ConexaoException, SQLException{
-		String sql = "UPDATE HistoricoEscolar set Situacao=?, Observacoes=?, CoeficienteDeRendimento=?,"
-				+ "IdDisciplina=? where IdHistorico=?";
+	public void alterar(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
+		String sql = "UPDATE HistoricoEscolar set Situacao=?, Observacoes=?, CoeficienteDeRendimento=? where IdHistorico=?";
 		
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setInt(1, historico.getSituacao().getValor());
 			pst.setString(2, historico.getObs());
 			pst.setDouble(3, historico.getConficienteRedimento());
-			pst.setInt(4, historico.getDisciplina().getId());
-			pst.setInt(5, historico.getId());
+			pst.setInt(4, historico.getId());
 		}catch(SQLException e){
-			throw new SQLException(e);
+			throw new ErroSQLException();
 		}finally{
 			try{
 				conexao.desconectar();
@@ -77,12 +74,11 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 		}
 	}
 	
-	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, SQLException, HistoricoInexistenteException{
+	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, ErroSQLException, HistoricoInexistenteException{
 		HistoricoEscolar historico;
 		Aluno aluno;
 		Pessoa pessoa;
 		Disciplina disciplina;
-		//String sql = "SELECT * FROM historicoescolar INNER JOIN Aluno a ON a.Matricula=?";
 		String sql = "select h.*, a.matricula, p.nome ,d.nome, d.CargaHoraria from historicoescolar h "
 					+ "inner join aluno a on h.idhistoricoescolar = a.idHistorico "+
 				     " inner join pessoa p on a.idpessoa = p.idpessoa "+
@@ -119,7 +115,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 			}
 			throw new HistoricoInexistenteException();
 		}catch(SQLException e){
-			throw new SQLException(e);
+			throw new ErroSQLException();
 		}finally{
 			try{
 				conexao.desconectar();

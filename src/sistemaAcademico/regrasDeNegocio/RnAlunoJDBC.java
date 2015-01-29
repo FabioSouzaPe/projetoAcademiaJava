@@ -19,12 +19,12 @@ public class RnAlunoJDBC {
 		dao = new DaoAlunoJdbc();
 	}
 	
-	public void cadastrarAluno(Aluno aluno, int chave) throws ConexaoException, ErroSQLException, AlunoExistenteException{
+	public void cadastrarAluno(Aluno aluno, int chavePessoa, int chaveHistorico) throws ConexaoException, ErroSQLException, AlunoExistenteException{
 		try{
 			Aluno teste = pesquisar(aluno.getMatricula());
 			throw new AlunoExistenteException();
 		}catch(AlunoInexistenteException e){
-			dao.inserir(aluno, chave);
+			dao.inserir(aluno, chavePessoa, chaveHistorico);
 		}
 	}
 	

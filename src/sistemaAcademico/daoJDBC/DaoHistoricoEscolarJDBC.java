@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.jdbc.Statement;
+
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Disciplina;
 import sistemaAcademico.classesBasicas.HistoricoEscolar;
@@ -19,13 +21,19 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	
 	private ConexaoInt conexao = new Conexao();
 	
-	public void inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
+	public int inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
 		String sql = "INSERT INTO historicoescolar (observacoes, coeficientederedimento, situacao) VALUES (?,?,?)";
+		int id = 0;
 		try{
-			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
+			PreparedStatement pst = conexao.conectar().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pst.setString(1, historico.getObs());
 			pst.setDouble(2, historico.getConficienteRedimento());
 			pst.setInt(3, historico.getSituacao().getValor());
+			pst.executeUpdate();
+			ResultSet rs = pst.getGeneratedKeys();
+			rs.next();
+			id = rs.getInt(1);
+			return id;
 		}catch(SQLException e){
 			throw new ErroSQLException();
 		}finally{

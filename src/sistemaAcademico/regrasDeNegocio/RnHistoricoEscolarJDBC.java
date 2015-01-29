@@ -17,12 +17,13 @@ public class RnHistoricoEscolarJDBC {
 		dao = new DaoHistoricoEscolarJDBC();
 	}
 	
-	public void cadastrarHistorico(HistoricoEscolar historico) throws ConexaoException, ErroSQLException, HistoricoExistenteException{
+	public int cadastrarHistorico(HistoricoEscolar historico) throws ConexaoException, ErroSQLException, HistoricoExistenteException{
 		try{
 			HistoricoEscolar teste = pesquisar(historico.getAluno().getMatricula());
 			throw new HistoricoExistenteException();
 		}catch(HistoricoInexistenteException e){
-			dao.inserir(historico);
+			int i = dao.inserir(historico);
+			return i;
 		}
 	}
 	

@@ -12,6 +12,7 @@ import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.classesBasicas.Aluno;
 import sistemaAcademico.classesBasicas.Pessoa;
+import sistemaAcademico.classesBasicas.Professor;
 import sistemaAcademico.classesBasicas.Publicacao;
 import sistemaAcademico.conexao.Conexao;
 import sistemaAcademico.conexao.ConexaoInt;
@@ -24,15 +25,16 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 		conexao = new Conexao();
 	}
 	
-	public void inserir(Aluno aluno, int chavePessoa) throws ConexaoException, ErroSQLException{
+	public void inserir(Aluno aluno, int chavePessoa, int chaveHistorico) throws ConexaoException, ErroSQLException{
 		java.util.Date data = aluno.getData();
 		Date sqldata = new Date(data.getTime());
-		String sql = "INSERT INTO aluno(matricula, DataAdmissao, IdPessoa) VALUES(?,?,?)";
+		String sql = "INSERT INTO aluno(matricula, DataAdmissao, IdPessoa, IdHistorico) VALUES(?,?,?,?)";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setString(1, aluno.getMatricula());
 			pst.setDate(2, sqldata);
 			pst.setInt(3, chavePessoa);
+			pst.setInt(4, chaveHistorico);
 			pst.executeUpdate();
 		}catch(SQLException e){
 			throw new ErroSQLException();
@@ -68,9 +70,9 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 		Aluno aluno;
 		Pessoa pessoa;
 		ArrayList<Publicacao> publicacoes = new ArrayList<Publicacao>();
-		String sqlPubli = "SELECT p.resumo FROM publicacao p INNER JOIN aluno a ON p.MatriculaAluno = a.matricula WHERE a.Matricula=?";
+		String sqlPubli = "SELECT * FROM publicacao p INNER JOIN aluno a ON p.MatriculaAluno = a.matricula WHERE a.Matricula=?";
 		
-		String sqlAluno = "SELECT * FROM aluno a INNER JOIN Pessoa p ON a.IdPessoa = p.IdPessoa where Matricula=?";
+		String sqlAluno = "SELECT * FROM aluno a INNER JOIN Pessoa p ON a.IdPessoa = p.IdPessoa where MatriculaAluno=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sqlAluno);
 			pst.setString(1, matricula);

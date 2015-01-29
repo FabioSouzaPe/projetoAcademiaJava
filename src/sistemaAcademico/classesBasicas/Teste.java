@@ -15,9 +15,11 @@ import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.ErroSQLException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
+import sistemaAcademico.exceptions.PublicacaoExistenteException;
 import sistemaAcademico.exceptions.PublicacaoInexistenteException;
 import sistemaAcademico.fachada.Fachada;
 import sistemaAcademico.regrasDeNegocio.RnAlunoJDBC;
+import sistemaAcademico.regrasDeNegocio.RnPublicacaoJDBC;
 
 
 public class Teste {
@@ -72,6 +74,30 @@ public class Teste {
 		//	e.printStackTrace();
 		//}
 		
+		RnPublicacaoJDBC rnPublica = new RnPublicacaoJDBC();
+		Aluno aa = new Aluno();
+		Professor professor = new Professor();
+		aa.setMatricula("000333");
+		professor.setMatricula("12234");
+		Publicacao publicacao = new Publicacao();
+		publicacao.setAluno(aa);
+		publicacao.setProfessor(professor);
+		publicacao.setConteudo("testar");
+		publicacao.setNome("Teste2");
+		publicacao.setMeioDeComunicacao(Meio.SITE);
+		
+		
+		try {
+			rnPublica.listarPorMatricula("1");
+		} catch (ConexaoException | ErroSQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PublicacaoInexistenteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/*teste do pesquisarHistorico
 		try {
 			HistoricoEscolar e = new HistoricoEscolar();
 			e = Fachada.getInstancia().pesquisarHistorico("000333");
@@ -82,9 +108,9 @@ public class Teste {
 					
 		} catch (ConexaoException | ErroSQLException
 				| HistoricoInexistenteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());	
 		}
+		*/
 		
 		//HistoricoEscolar e = new HistoricoEscolar();
 		//DaoHistoricoEscolarJDBC de = new DaoHistoricoEscolarJDBC();

@@ -8,7 +8,7 @@ import sistemaAcademico.exceptions.HistoricoInexistenteException;
 
 public interface DaoHistoricoEscolarJDBCInt {
 
-	public void inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
+	public int inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
 	public void remover(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
 	public void alterar(HistoricoEscolar historico) throws ConexaoException, ErroSQLException;
 	public HistoricoEscolar pesquisar(String matricula) throws ConexaoException, ErroSQLException, HistoricoInexistenteException;

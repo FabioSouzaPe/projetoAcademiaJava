@@ -72,7 +72,7 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 		ArrayList<Publicacao> publicacoes = new ArrayList<Publicacao>();
 		String sqlPubli = "SELECT * FROM publicacao p INNER JOIN aluno a ON p.MatriculaAluno = a.matricula WHERE a.Matricula=?";
 		
-		String sqlAluno = "SELECT * FROM aluno a INNER JOIN Pessoa p ON a.IdPessoa = p.IdPessoa where MatriculaAluno=?";
+		String sqlAluno = "SELECT * FROM aluno a INNER JOIN Pessoa p ON a.IdPessoa = p.IdPessoa where a.Matricula=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sqlAluno);
 			pst.setString(1, matricula);
@@ -103,6 +103,7 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 			}
 			throw new AlunoInexistenteException();
 		}catch(SQLException e){
+			System.out.println(e.getMessage());
 			throw new ErroSQLException();
 		}finally{
 			try{
@@ -115,7 +116,7 @@ public class DaoAlunoJdbc implements DaoAlunoJDBCInt{
 	
 	public void alterar(Aluno aluno) throws ConexaoException, ErroSQLException{
 		
-		String sql = ("UPDATE aluno set dataadmissao=?, where matricula=? ");
+		String sql = ("UPDATE aluno set DataAdmissao=?, where matricula=? ");
 		try{
 			java.util.Date data = aluno.getData();
 			Date sqldata = new Date(data.getTime());

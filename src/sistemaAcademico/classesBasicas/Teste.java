@@ -10,10 +10,12 @@ import sistemaAcademico.daoJDBC.DaoHistoricoEscolarJDBC;
 import sistemaAcademico.daoJDBC.DaoPessoaJDBC;
 import sistemaAcademico.daoJDBC.DaoPublicacaoJdbc;
 import sistemaAcademico.enuns.Meio;
+import sistemaAcademico.enuns.SituacaoAluno;
 import sistemaAcademico.exceptions.AlunoExistenteException;
 import sistemaAcademico.exceptions.AlunoInexistenteException;
 import sistemaAcademico.exceptions.ConexaoException;
 import sistemaAcademico.exceptions.ErroSQLException;
+import sistemaAcademico.exceptions.HistoricoExistenteException;
 import sistemaAcademico.exceptions.HistoricoInexistenteException;
 import sistemaAcademico.exceptions.PublicacaoExistenteException;
 import sistemaAcademico.exceptions.PublicacaoInexistenteException;
@@ -25,29 +27,12 @@ import sistemaAcademico.regrasDeNegocio.RnPublicacaoJDBC;
 public class Teste {
 	
 	public static void main(String[] args) throws SQLException{
-		DaoAlunoJdbc dao = new DaoAlunoJdbc();
-		RnAlunoJDBC rn = new RnAlunoJDBC();
-		ArrayList<Publicacao> publi = new ArrayList<Publicacao>();
+		Fachada fachada = Fachada.getInstancia();
 		Aluno a = new Aluno();
-		a.setMatricula("000333");
+		a.setMatricula("000444");
 		Date data = new Date();
 		a.setData(data);
 		
-		
-		Professor pp = new Professor();
-		pp.setMatricula("1111");
-		Publicacao p = new Publicacao();
-		p.setAluno(a);
-		p.setNome("Isso aqui vai longe");
-		p.setConteudo("Conteudo Muito Ruim");
-		p.setMeioDeComunicacao(Meio.SITE);
-		p.setProfessor(pp);
-		DaoPublicacaoJdbc dao2 = new DaoPublicacaoJdbc();
-		
-		
-		/*
-		 * teste dos capiroto
-		 */
 		Fone fone = new Fone();
 		fone.setFone("6666-9999");
 		fone.setDdd("81");
@@ -61,19 +46,33 @@ public class Teste {
 		Pessoa pessoa = new Pessoa();
 		pessoa.addFones(fone);
 		pessoa.setEndereco(end);
-		pessoa.setCpf("08731338462");
-		pessoa.setNome("De morais");
+		pessoa.setCpf("2973384666");
+		pessoa.setNome("De Souza");
 		pessoa.setSexo('m');
 		DaoPessoaJDBC daoM = new DaoPessoaJDBC();
 		
-		//try {
-		//	int i = daoM.addPessoa(pessoa);
-		//	dao.inserir(a, i);
-		//} catch (ClassNotFoundException | ConexaoException e) {
-		//	// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
+		HistoricoEscolar historico = new HistoricoEscolar();
+		historico.setSituacao(SituacaoAluno.ANDAMENTO);
+		historico.setAluno(a);
+		try {
+			//int chavePessoa = daoM.addPessoa(pessoa);
+			//int chaveHistorico = fachada.cadastrarHistorico(historico);
+			//fachada.cadastrarAluno(a, chavePessoa, chaveHistorico)
+			HistoricoEscolar teste = new HistoricoEscolar();
+			teste = fachada.pesquisarHistorico("000444");
+			System.out.println(teste.getSituacao());
+		} catch (ConexaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ErroSQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (HistoricoInexistenteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		/*
 		RnPublicacaoJDBC rnPublica = new RnPublicacaoJDBC();
 		Aluno aa = new Aluno();
 		Professor professor = new Professor();
@@ -85,32 +84,40 @@ public class Teste {
 		publicacao.setConteudo("testar");
 		publicacao.setNome("Teste2");
 		publicacao.setMeioDeComunicacao(Meio.SITE);
-		
-		
-		try {
-			rnPublica.listarPorMatricula("1");
-		} catch (ConexaoException | ErroSQLException e) {
+		*/
+		//Teste da classe publicação. Finalizado?
+		//try {
+		//	rnPublica.listarPorMatricula("000333");
+		//} catch (ConexaoException | ErroSQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PublicacaoInexistenteException e) {
+		//	e.printStackTrace();
+		//} catch (PublicacaoInexistenteException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//	e.printStackTrace();
+		//}
 		
 		/*teste do pesquisarHistorico
 		try {
+			//Fachada fachada = Fachada.getInstancia();
 			HistoricoEscolar e = new HistoricoEscolar();
-			e = Fachada.getInstancia().pesquisarHistorico("000333");
+			//e = fachada.pesquisarHistorico("000333");
+			//e.setObs("Bom demais");
+			//fachada.alterarHistorico(e);
+		e = Fachada.getInstancia().pesquisarHistorico("000333");
 			System.out.println("Nota aluno : " +e.getConficienteRedimento()+ "\n" + "Observaçoes : " +e.getObs()+"\n" + 
 								"Situaçao : "+e.getSituacao()+"\n" + "Matricula : " +e.getAluno().getMatricula() +"\n" +
 								"Nome aluno: "+e.getAluno().getPessoa().getNome()+"\n" +
+								"Data : "+e.getData()+"\n" +
 								"Nome disciplia : "+e.getDisciplina().getNome()+ "\n" + "Carga horaria : "+e.getDisciplina().getCargaHoraria());
 					
-		} catch (ConexaoException | ErroSQLException
-				| HistoricoInexistenteException e) {
+		} catch (ConexaoException | ErroSQLException e) {
 			System.out.println(e.getMessage());	
+		} catch (HistoricoInexistenteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		*/
+		
 		
 		//HistoricoEscolar e = new HistoricoEscolar();
 		//DaoHistoricoEscolarJDBC de = new DaoHistoricoEscolarJDBC();
@@ -124,53 +131,6 @@ public class Teste {
 		//	// TODO Auto-generated catch block
 		//	ee.printStackTrace();
 		//}
-		
-		//try {
-		//	dao2.listar();
-		//	for (int i = 0; i < dao2.listar().size(); i++) {
-		//		System.out.println(dao2.listar().get(i).getNome()
-		//				+ dao2.listar().get(i).getConteudo() +
-		//				dao2.listar().get(i).getMeioDeComunicacao()+
-		//				dao2.listar().get(i).getAluno().getPessoa().getNome());
-		//	}
-		//} catch (ConexaoException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
-		
-			//try {
-			//	Publicacao pu = dao2.pesquisar("nome");
-			//	System.out.print(pu.toString());
-			//} catch (PublicacaoInexistenteException | ConexaoException | SQLException e) {
-			//	// TODO Auto-generated catch block
-			//	System.out.print(e.getMessage());
-			//}
-		
-		//System.out.println(pu.toString());
-		//dao2.remover(pu);
-		
-		
-		
-		
-		/**
-			try {
-				//rn.remover(a);
-				Aluno teste = new Aluno();
-				teste = rn.pesquisar("0123");
-				//rn.cadastrarAluno(a, 0);
-				System.out.println(teste.toString()+" Publicações  : ");
-				for(int i = 0; i < teste.getPublicacoes().size(); i++){
-					System.out.println("Conteudo : "+teste.getPublicacoes().get(i).getConteudo());
-				}
-			} catch (ConexaoException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (AlunoInexistenteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	   **/
-		
 	}
 
 }

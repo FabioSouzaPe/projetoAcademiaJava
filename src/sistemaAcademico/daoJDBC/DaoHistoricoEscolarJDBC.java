@@ -22,7 +22,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	private ConexaoInt conexao = new Conexao();
 	
 	public int inserir(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
-		String sql = "INSERT INTO historicoescolar (observacoes, coeficientederedimento, situacao) VALUES (?,?,?)";
+		String sql = "INSERT INTO historicoescolar (observacoes, NotaAluno, situacao) VALUES (?,?,?)";
 		int id = 0;
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -46,7 +46,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	}
 	
 	public void remover(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
-		String sql = "DELETE FROM HistoricoEscolar WHERE IdHistorico=?";
+		String sql = "DELETE FROM HistoricoEscolar WHERE IdHistoricoEscolar=?";
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
 			pst.setInt(1, historico.getId());
@@ -63,7 +63,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 	}
 	
 	public void alterar(HistoricoEscolar historico) throws ConexaoException, ErroSQLException{
-		String sql = "UPDATE HistoricoEscolar set Situacao=?, Observacoes=?, CoeficienteDeRendimento=? where IdHistorico=?";
+		String sql = "UPDATE HistoricoEscolar set Situacao=?, Observacoes=?, NotaAluno=? where IdHistoricoEscolar=?";
 		
 		try{
 			PreparedStatement pst = conexao.conectar().prepareStatement(sql);
@@ -71,6 +71,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 			pst.setString(2, historico.getObs());
 			pst.setDouble(3, historico.getConficienteRedimento());
 			pst.setInt(4, historico.getId());
+			pst.executeUpdate();
 		}catch(SQLException e){
 			throw new ErroSQLException();
 		}finally{
@@ -87,7 +88,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 		Aluno aluno;
 		Pessoa pessoa;
 		Disciplina disciplina;
-		String sql = "select h.*, a.matricula, p.nome ,d.nome, d.CargaHoraria from historicoescolar h "
+		String sql = "select h.*, a.matricula, p.nome ,d.nome, d.CargaHoraria, a.dataAdmissao from historicoescolar h "
 					+ "inner join aluno a on h.idhistoricoescolar = a.idHistorico "+
 				     " inner join pessoa p on a.idpessoa = p.idpessoa "+
 					 " inner join turma t on a.idTurma = t.idTurma "+
@@ -106,7 +107,7 @@ public class DaoHistoricoEscolarJDBC implements DaoHistoricoEscolarJDBCInt {
 				pessoa.setNome(rs.getString("p.Nome"));
 				historico.setObs(rs.getString("h.Observacoes"));
 				historico.setId(rs.getInt("h.IdHistoricoEscolar"));
-				//historico.setData(rs.getDate("h.data"));
+				historico.setData(rs.getDate("a.dataAdmissao"));
 				for(SituacaoAluno situacao : SituacaoAluno.values()){
 					if(situacao.getValor() == rs.getInt("h.Situacao")){
 						historico.setSituacao(situacao.setSituacao(rs.getInt("Situacao")));

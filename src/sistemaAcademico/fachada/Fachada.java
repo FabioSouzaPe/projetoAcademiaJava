@@ -40,7 +40,7 @@ public class Fachada {
 		return instancia;
 	}
 	
-	public void adicionarAluno(Aluno aluno, int chavePessoa, int chaveHistorico) throws ConexaoException, ErroSQLException, AlunoExistenteException{
+	public void cadastrarAluno(Aluno aluno, int chavePessoa, int chaveHistorico) throws ConexaoException, ErroSQLException, AlunoExistenteException{
 		this.regraAluno.cadastrarAluno(aluno, chavePessoa, chaveHistorico);
 	}
 	

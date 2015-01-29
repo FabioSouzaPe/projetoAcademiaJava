@@ -19,7 +19,7 @@ public class RnHistoricoEscolarJDBC {
 	
 	public int cadastrarHistorico(HistoricoEscolar historico) throws ConexaoException, ErroSQLException, HistoricoExistenteException{
 		try{
-			HistoricoEscolar teste = pesquisar(historico.getAluno().getMatricula());
+			pesquisar(historico.getAluno().getMatricula());
 			throw new HistoricoExistenteException();
 		}catch(HistoricoInexistenteException e){
 			int i = dao.inserir(historico);
